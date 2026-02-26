@@ -19,16 +19,14 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
 
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20
+      - uses: oven-sh/setup-bun@v2
 
       - name: Install dependencies
-        run: npm ci
+        run: bun install
 
       - name: Update version in landing page
         run: |
-          VERSION=$(node -p "require('./package.json').version")
+          VERSION=$(bun -e "console.log(require('./package.json').version)")
           sed -i "s/CURRENT VERSION: [0-9.]*/CURRENT VERSION: $VERSION/g" docs/index.html
           sed -i "s/v[0-9.]*\s*(latest)/v$VERSION (latest)/g" docs/index.html
 
@@ -38,12 +36,12 @@ jobs:
       - name: Run semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: npx semantic-release
+        run: bunx semantic-release
 
       - name: Update major version tag
         if: success()
         run: |
-          VERSION=$(node -p "require('./package.json').version")
+          VERSION=$(bun -e "console.log(require('./package.json').version)")
           MAJOR=$(echo $VERSION | cut -d. -f1)
           git tag -f "v${MAJOR}" HEAD
           git push origin "v${MAJOR}" --force
