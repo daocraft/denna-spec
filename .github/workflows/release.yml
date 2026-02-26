@@ -1,0 +1,51 @@
+name: Release
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+
+jobs:
+  release:
+    name: Semantic Release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Update version in landing page
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          sed -i "s/CURRENT VERSION: [0-9.]*/CURRENT VERSION: $VERSION/g" docs/index.html
+          sed -i "s/v[0-9.]*\s*(latest)/v$VERSION (latest)/g" docs/index.html
+
+      - name: Copy schemas to docs
+        run: cp -r schemas/* docs/schemas/
+
+      - name: Run semantic-release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npx semantic-release
+
+      - name: Update major version tag
+        if: success()
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          MAJOR=$(echo $VERSION | cut -d. -f1)
+          git tag -f "v${MAJOR}" HEAD
+          git push origin "v${MAJOR}" --force
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
