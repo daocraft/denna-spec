@@ -32,8 +32,7 @@
 
     /* Nav */
     nav { position: sticky; top: 0; z-index: 100; background: rgba(15,17,23,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); padding: 0 24px; height: 56px; display: flex; align-items: center; justify-content: space-between; }
-    .nav-brand { font-weight: 700; font-size: 15px; color: var(--text); text-decoration: none; letter-spacing: -0.02em; }
-    .nav-brand span { color: var(--accent); }
+    .nav-brand { text-decoration: none; display: flex; align-items: center; }
     .nav-links { display: flex; align-items: center; gap: 24px; }
     .nav-links a { color: var(--text-muted); text-decoration: none; font-size: 14px; transition: color 0.15s; }
     .nav-links a:hover { color: var(--text); }
@@ -177,13 +176,13 @@
 
 <!-- Nav -->
 <nav>
-  <a href="#" class="nav-brand">denna<span>.</span>io</a>
+  <a href="#" class="nav-brand"><img src="denna-labs-logo.svg" alt="Denna Labs" height="22"></a>
   <div class="nav-links">
     <a href="#why-denna">Why Denna</a>
     <a href="#how-it-works">How it works</a>
     <a href="#ecosystem">Schemas</a>
     <a href="#specification">Specification</a>
-    <a href="https://github.com/denna-spec/denna-spec" target="_blank">GitHub</a>
+    <a href="https://github.com/daocraft/denna-spec" target="_blank">GitHub</a>
     <span class="nav-badge">v1.0.0</span>
   </div>
 </nav>
@@ -661,7 +660,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: denna-spec/denna-spec@v1
+      - uses: daocraft/denna-spec@v1
         with:
           patterns: "**/*.denna-spec.json"
           exclude: "_template/**"</code></pre>
@@ -747,7 +746,7 @@ jobs:
     <p>
       Denna Specification 1.0.0 &nbsp;&middot;&nbsp;
       <a href="https://spec.denna.io/schemas/v1/denna-types.schema.json">Type definitions</a> &nbsp;&middot;&nbsp;
-      <a href="https://github.com/denna-spec/denna-spec">GitHub</a> &nbsp;&middot;&nbsp;
+      <a href="https://github.com/daocraft/denna-spec">GitHub</a> &nbsp;&middot;&nbsp;
       <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>
     </p>
   </div>

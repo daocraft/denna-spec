@@ -4,7 +4,7 @@
   "description": "Denna Specification — a convention for structuring protocol parameters as JSON files validated by JSON Schema.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/denna-spec/denna-spec"
+    "url": "https://github.com/daocraft/denna-spec"
   },
   "license": "CC-BY-4.0",
   "files": [

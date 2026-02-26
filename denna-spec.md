@@ -415,7 +415,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: denna-spec/denna-spec@v1
+      - uses: daocraft/denna-spec@v1
         with:
           patterns: "**/*.denna-spec.json"
           exclude: "_template/**"

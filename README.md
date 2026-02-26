@@ -53,7 +53,7 @@ Import these in your domain schemas via `$ref`:
 Use the Denna validator in your CI pipeline:
 
 ```yaml
-- uses: denna-spec/denna-spec@v1
+- uses: daocraft/denna-spec@v1
   with:
     patterns: "**/*.denna-spec.json"
     exclude: "_template/**"
@@ -74,7 +74,7 @@ Use your own namespace for custom schemas: `io.sky.star.config`, `com.spark.pnl.
 
 ## Official Schema Library
 
-Official Denna schemas are maintained separately at [schemas.denna.io](https://schemas.denna.io) (source: [denna-spec/denna-labs](https://github.com/denna-spec/denna-labs)).
+Official Denna schemas are maintained separately at [schemas.denna.io](https://schemas.denna.io) (source: [denna-spec/denna-labs](https://github.com/daocraft/denna-labs)).
 
 ## License
 
