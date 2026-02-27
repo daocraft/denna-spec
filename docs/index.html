@@ -3,358 +3,687 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Denna Specification</title>
+  <title>Denna Specification 1.0.0</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <script>
+    (function(){var s=localStorage.getItem('denna-theme');if(s==='dark'||(!s&&window.matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark')})();
+  </script>
   <style>
     :root {
-      --bg: #0f1117;
-      --bg-card: #161b27;
-      --bg-card-alt: #1a2035;
-      --bg-code: #0d1117;
-      --border: #2a3044;
-      --border-light: #1e2740;
-      --text: #e2e8f0;
-      --text-muted: #8892a4;
-      --text-faint: #4a5568;
-      --accent: #4f8ef7;
-      --accent-light: #7eb3ff;
-      --accent-dim: #1a3060;
-      --green: #34d399;
-      --green-dim: #0d2e22;
-      --yellow: #fbbf24;
-      --purple: #a78bfa;
-      --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      --font-mono: 'SF Mono', 'Fira Code', 'Roboto Mono', monospace;
-      --max-width: 860px;
-      --radius: 8px;
+      --bg:           #FAFAF8;
+      --text:         #1a1a1a;
+      --text-2:       #444;
+      --text-3:       #777;
+      --border:       #d4d4d0;
+      --border-light: #e8e8e4;
+      --code-bg:      #f0f0ec;
+      --code-border:  #d4d4d0;
+      --hover-row:    #f5f5f2;
+      --badge-req-bg: #e6f4ea; --badge-req-c: #1e7e34; --badge-req-bd: #b7dfbe;
+      --compare-before-bg: #fffbea; --compare-before-c: #856404;
+      --compare-after-bg:  #f0faf2; --compare-after-c:  #155724;
+      --content-w:    60rem;
+      --toc-w:        10rem;
+      --toc-gap:      2rem;
+      --max-w:        calc(var(--content-w) + var(--toc-w) + var(--toc-gap));
+      --font:         'Montserrat', system-ui, sans-serif;
+      --mono:         'JetBrains Mono', 'Fira Code', 'Cascadia Code', ui-monospace, monospace;
+      --syn-key:  #005cc5;
+      --syn-str:  #22863a;
+      --syn-num:  #e36209;
+      --syn-bool: #d73a49;
+      --syn-cmt:  #6a737d;
     }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { background: var(--bg); color: var(--text); font-family: var(--font-sans); font-size: 16px; line-height: 1.7; }
 
-    /* Nav */
-    nav { position: sticky; top: 0; z-index: 100; background: rgba(15,17,23,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); padding: 0 24px; height: 56px; display: flex; align-items: center; justify-content: space-between; }
-    .nav-brand { text-decoration: none; display: flex; align-items: center; }
-    .nav-links { display: flex; align-items: center; gap: 24px; }
-    .nav-links a { color: var(--text-muted); text-decoration: none; font-size: 14px; transition: color 0.15s; }
+    [data-theme="dark"] {
+      --bg:           #141416;
+      --text:         #e4e4e0;
+      --text-2:       #a8a8a4;
+      --text-3:       #706f6f;
+      --border:       #2e2e32;
+      --border-light: #252528;
+      --code-bg:      #1c1c20;
+      --code-border:  #2e2e32;
+      --hover-row:    #1e1e22;
+      --badge-req-bg: #1a2e1f; --badge-req-c: #6fcf7f; --badge-req-bd: #2a4a32;
+      --compare-before-bg: #2a2518; --compare-before-c: #d4a752;
+      --compare-after-bg:  #1a2e1f; --compare-after-c:  #6fcf7f;
+      --syn-key:  #79b8ff;
+      --syn-str:  #85e89d;
+      --syn-num:  #ffab70;
+      --syn-bool: #f97583;
+      --syn-cmt:  #6a737d;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; color-scheme: light; }
+    [data-theme="dark"] { color-scheme: dark; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font);
+      font-size: 0.9375rem;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── NAV ── */
+    .site-nav {
+      border-bottom: 1px solid var(--border);
+      padding: 0.875rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--bg);
+    }
+    .nav-logo { text-decoration: none; display: flex; align-items: center; }
+    .nav-right { display: flex; align-items: center; gap: 1.5rem; }
+    .nav-links { display: flex; align-items: center; gap: 1.25rem; }
+    .nav-links a {
+      color: var(--text-3);
+      text-decoration: none;
+      font-size: 0.813rem;
+      font-weight: 500;
+    }
     .nav-links a:hover { color: var(--text); }
-    .nav-badge { background: var(--accent-dim); color: var(--accent-light); font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 99px; font-family: var(--font-mono); }
+    [data-theme="dark"] .nav-github img { filter: invert(1); }
+    .nav-version {
+      font-family: var(--mono);
+      font-size: 0.688rem;
+      font-weight: 600;
+      color: var(--text-3);
+      border: 1px solid var(--border);
+      padding: 0.125rem 0.5rem;
+      border-radius: 0.188rem;
+      letter-spacing: 0.03em;
+    }
+    .theme-toggle {
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 0.188rem;
+      padding: 0.25rem 0.438rem;
+      cursor: pointer;
+      color: var(--text-3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .theme-toggle:hover { color: var(--text); border-color: var(--text-3); }
+    .theme-toggle svg { width: 0.875rem; height: 0.875rem; }
+    .theme-toggle .icon-moon { display: none; }
+    [data-theme="dark"] .theme-toggle .icon-sun { display: none; }
+    [data-theme="dark"] .theme-toggle .icon-moon { display: block; }
+    .nav-logo .logo-light { display: block; }
+    .nav-logo .logo-dark  { display: none; }
+    [data-theme="dark"] .nav-logo .logo-light { display: none; }
+    [data-theme="dark"] .nav-logo .logo-dark  { display: block; }
+    @media (max-width: 40rem) {
+      .site-nav { padding: 0.75rem 1.25rem; }
+      .nav-links { display: none; }
+    }
 
-    /* Layout */
-    .container { max-width: var(--max-width); margin: 0 auto; padding: 0 24px; }
-    section { padding: 80px 0; }
-    section + section { border-top: 1px solid var(--border-light); }
+    /* ── LAYOUT ── */
+    .doc-wrap {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 2rem;
+      display: grid;
+      grid-template-columns: minmax(0, var(--content-w)) var(--toc-w);
+      column-gap: var(--toc-gap);
+    }
+    .doc-wrap > * { grid-column: 1; min-width: 0; }
+    .doc-header { grid-column: 1 / -1; }
+    @media (max-width: 68.75rem) {
+      .doc-wrap { grid-template-columns: 1fr; max-width: var(--content-w); }
+    }
+    @media (max-width: 37.5rem) { .doc-wrap { padding: 0 1.25rem; } }
 
-    /* Hero */
-    .hero { padding: 100px 0 80px; text-align: center; }
-    .hero-eyebrow { display: inline-block; font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin-bottom: 24px; }
-    .hero h1 { font-size: clamp(32px, 5vw, 52px); font-weight: 800; line-height: 1.15; letter-spacing: -0.03em; color: #fff; margin-bottom: 20px; }
-    .hero h1 em { font-style: normal; background: linear-gradient(135deg, var(--accent-light), var(--purple)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-    .hero-sub { font-size: 18px; color: var(--text-muted); max-width: 580px; margin: 0 auto 40px; line-height: 1.6; }
-    .hero-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
-    .btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: var(--radius); font-size: 14px; font-weight: 600; text-decoration: none; transition: all 0.15s; border: none; cursor: pointer; }
-    .btn-primary { background: var(--accent); color: #fff; }
-    .btn-primary:hover { background: var(--accent-light); }
-    .btn-outline { background: transparent; color: var(--text-muted); border: 1px solid var(--border); }
-    .btn-outline:hover { color: var(--text); border-color: var(--text-muted); }
+    /* ── DOCUMENT HEADER ── */
+    .doc-header {
+      padding: 4rem 0 3rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .doc-header-meta {
+      font-size: 0.688rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-3);
+      margin-bottom: 1rem;
+    }
+    .doc-title {
+      font-size: clamp(1.625rem, 4vw, 2.375rem);
+      font-weight: 700;
+      line-height: 1.15;
+      color: var(--text);
+      margin-bottom: 1.25rem;
+      letter-spacing: -0.02em;
+    }
+    .doc-abstract {
+      font-size: 0.9375rem;
+      color: var(--text-2);
+      line-height: 1.75;
+      max-width: 40rem;
+    }
 
-    /* Section headings */
-    .section-label { font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin-bottom: 12px; }
-    .section-title { font-size: clamp(24px, 3vw, 36px); font-weight: 700; letter-spacing: -0.02em; color: #fff; margin-bottom: 16px; line-height: 1.2; }
-    .section-subtitle { font-size: 17px; color: var(--text-muted); max-width: 600px; line-height: 1.6; }
+    /* ── SIDEBAR TOC ── */
+    .sidebar-toc {
+      grid-column: 2;
+      grid-row: 2 / span 30;
+      position: sticky;
+      top: 1.5rem;
+      align-self: start;
+      padding-top: 1.25rem;
+    }
+    .sidebar-toc-label {
+      font-size: 0.625rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-3);
+      margin-bottom: 0.625rem;
+    }
+    .sidebar-toc a {
+      display: block;
+      font-size: 0.75rem;
+      color: var(--text-3);
+      text-decoration: none;
+      padding: 0.188rem 0 0.188rem 0.75rem;
+      border-left: 1px solid var(--border);
+      line-height: 1.4;
+    }
+    .sidebar-toc a:hover { color: var(--text); }
+    .sidebar-toc a.active { color: var(--text); border-left-color: var(--text); font-weight: 600; }
+    .sidebar-toc a.sub { padding-left: 1.5rem; font-size: 0.719rem; }
+    @media (max-width: 68.75rem) { .sidebar-toc { display: none; } }
 
-    /* Problem grid */
-    .problem-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-top: 40px; }
-    .problem-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; }
-    .problem-icon { font-size: 22px; margin-bottom: 12px; }
-    .problem-card h3 { font-size: 15px; font-weight: 600; color: #fff; margin-bottom: 8px; }
-    .problem-card p { font-size: 14px; color: var(--text-muted); line-height: 1.6; }
+    /* ── SECTIONS ── */
+    .doc-section { padding: 3.25rem 0; border-bottom: 1px solid var(--border-light); }
+    .doc-section:last-of-type { border-bottom: none; }
 
-    /* Mental models */
-    .models-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 40px; }
-    @media (max-width: 640px) { .models-grid { grid-template-columns: 1fr; } }
-    .model-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 28px; position: relative; overflow: hidden; }
-    .model-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; }
-    .model-card.blue::before { background: var(--accent); }
-    .model-card.green::before { background: var(--green); }
-    .model-card.purple::before { background: var(--purple); }
-    .model-card.yellow::before { background: var(--yellow); }
-    .model-analogy { font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 10px; }
-    .model-card.blue .model-analogy { color: var(--accent); }
-    .model-card.green .model-analogy { color: var(--green); }
-    .model-card.purple .model-analogy { color: var(--purple); }
-    .model-card.yellow .model-analogy { color: var(--yellow); }
-    .model-card h3 { font-size: 17px; font-weight: 700; color: #fff; margin-bottom: 10px; line-height: 1.3; }
-    .model-card p { font-size: 14px; color: var(--text-muted); line-height: 1.65; }
+    h2.section-heading {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 1.125rem;
+      letter-spacing: -0.01em;
+      line-height: 1.25;
+      scroll-margin-top: 1.5rem;
+    }
+    h3 { font-size: 0.875rem; font-weight: 700; color: var(--text); margin: 1.75rem 0 0.5rem; }
+    h4 { font-size: 0.813rem; font-weight: 600; color: var(--text-2); margin: 1.25rem 0 0.375rem; }
 
-    /* How it works */
-    .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; margin-top: 40px; }
-    @media (max-width: 640px) { .steps { grid-template-columns: 1fr; } }
-    .step { background: var(--bg-card); border: 1px solid var(--border); padding: 28px; }
-    .step:first-child { border-radius: var(--radius) 0 0 var(--radius); }
-    .step:last-child { border-radius: 0 var(--radius) var(--radius) 0; }
-    .step + .step { border-left: none; }
-    @media (max-width: 640px) { .step { border-radius: 0 !important; border-left: 1px solid var(--border) !important; } .step + .step { border-top: none; } .step:first-child { border-radius: var(--radius) var(--radius) 0 0 !important; } .step:last-child { border-radius: 0 0 var(--radius) var(--radius) !important; } }
-    .step-num { width: 28px; height: 28px; background: var(--accent-dim); color: var(--accent-light); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; margin-bottom: 16px; font-family: var(--font-mono); }
-    .step h3 { font-size: 15px; font-weight: 700; color: #fff; margin-bottom: 8px; }
-    .step p { font-size: 14px; color: var(--text-muted); line-height: 1.6; }
+    p { color: var(--text-2); margin-bottom: 0.875rem; line-height: 1.75; }
+    ul, ol { color: var(--text-2); padding-left: 1.375rem; margin-bottom: 0.875rem; }
+    li { margin-bottom: 0.313rem; line-height: 1.7; }
+    a { color: var(--text); }
+    a:hover { color: var(--text-3); }
+    strong { color: var(--text); }
 
-    /* Before/After */
-    .compare { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 40px; }
-    @media (max-width: 640px) { .compare { grid-template-columns: 1fr; } }
-    .compare-panel { border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border); }
-    .compare-header { padding: 10px 16px; font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; display: flex; align-items: center; gap: 8px; }
-    .compare-header.before { background: #1a1208; color: var(--yellow); border-bottom: 1px solid var(--border); }
-    .compare-header.after { background: var(--green-dim); color: var(--green); border-bottom: 1px solid var(--border); }
-    .compare-dot { width: 8px; height: 8px; border-radius: 50%; }
-    .compare-header.before .compare-dot { background: var(--yellow); }
-    .compare-header.after .compare-dot { background: var(--green); }
+    /* ── NARRATIVE SECTIONS ── */
+    .doc-section.narrative { padding: 3.75rem 0; }
+    .doc-section.narrative .section-heading { font-size: 1.5rem; margin-bottom: 0.75rem; }
+    .doc-section.narrative > p {
+      font-size: 1.063rem;
+      line-height: 1.85;
+      max-width: 40rem;
+    }
+    .doc-section.narrative .problem-card h3,
+    .doc-section.narrative .model-card h3 { font-size: 0.938rem; margin-bottom: 0.5rem; }
+    .doc-section.narrative .problem-card p,
+    .doc-section.narrative .model-card p { font-size: 0.875rem; line-height: 1.7; }
+    .doc-section.narrative .step-row h3 { font-size: 1rem; }
+    .doc-section.narrative .step-row p { font-size: 0.938rem; line-height: 1.75; }
 
-    /* Ecosystem */
-    .ecosystem-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 40px; }
-    @media (max-width: 640px) { .ecosystem-grid { grid-template-columns: 1fr; } }
-    .ecosystem-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 28px; }
-    .ecosystem-card h3 { font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 6px; }
-    .ecosystem-card .eco-sub { font-size: 13px; color: var(--text-muted); margin-bottom: 16px; }
-    .kind-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
-    .kind-list li { font-size: 13px; font-family: var(--font-mono); color: var(--text-muted); padding: 6px 10px; background: var(--bg-code); border-radius: 4px; border: 1px solid var(--border-light); }
-    .kind-list li span { color: var(--accent-light); }
+    /* ── CODE ── */
+    code { font-family: var(--mono); font-size: 0.83em; }
+    p code, li code {
+      background: var(--code-bg);
+      border: 1px solid var(--code-border);
+      padding: 1px 0.313rem;
+      border-radius: 0.188rem;
+      color: var(--text);
+    }
+    pre {
+      background: var(--code-bg);
+      border: 1px solid var(--code-border);
+      border-radius: 0.25rem;
+      padding: 1.125rem 1.25rem;
+      overflow-x: auto;
+      margin: 0.875rem 0;
+      font-size: 0.781rem;
+      line-height: 1.75;
+    }
+    pre code { background: none; border: none; padding: 0; font-size: inherit; color: inherit; }
 
-    /* Callout */
-    .callout { border-radius: var(--radius); padding: 16px 20px; margin: 20px 0; font-size: 14px; line-height: 1.65; border-left: 3px solid; }
-    .callout.blue { background: var(--accent-dim); border-color: var(--accent); color: #aac4f0; }
-    .callout strong { color: #fff; }
+    /* syntax tokens */
+    .jk { color: var(--syn-key); }
+    .js { color: var(--syn-str); }
+    .jn { color: var(--syn-num); }
+    .jb { color: var(--syn-bool); }
+    .jc { color: var(--syn-cmt); font-style: italic; }
 
-    /* Spec content */
-    .spec-content h2 { font-size: 26px; font-weight: 700; letter-spacing: -0.02em; color: #fff; margin: 48px 0 16px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    /* ── TABLES ── */
+    .table-wrap { overflow-x: auto; margin: 0.875rem 0; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.813rem; }
+    th {
+      text-align: left;
+      padding: 0.438rem 0.75rem;
+      background: var(--code-bg);
+      color: var(--text-3);
+      font-size: 0.625rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      border: 1px solid var(--border);
+    }
+    td {
+      padding: 0.5rem 0.75rem;
+      border: 1px solid var(--border-light);
+      color: var(--text-2);
+      vertical-align: top;
+      line-height: 1.55;
+    }
+    td:first-child { font-family: var(--mono); font-size: 0.75rem; color: var(--text); }
+    tr:hover td { background: var(--hover-row); }
+
+    /* ── BADGES ── */
+    .badge {
+      display: inline-block;
+      font-family: var(--mono);
+      font-size: 0.625rem;
+      padding: 1px 0.375rem;
+      border-radius: 0.188rem;
+      vertical-align: middle;
+    }
+    .badge-req { background: var(--badge-req-bg); color: var(--badge-req-c); border: 1px solid var(--badge-req-bd); }
+    .badge-opt { background: var(--code-bg); color: var(--text-3); border: 1px solid var(--border); }
+
+    /* ── PROBLEM GRID ── */
+    .problem-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      border: 1px solid var(--border);
+      margin-top: 1.5rem;
+    }
+    @media (max-width: 31.25rem) { .problem-grid { grid-template-columns: 1fr; } }
+    .problem-card { padding: 1.5rem; background: var(--bg); }
+    .problem-card:nth-child(2) { border-left: 1px solid var(--border); }
+    .problem-card:nth-child(3),
+    .problem-card:nth-child(4) { border-top: 1px solid var(--border); }
+    .problem-card:nth-child(4) { border-left: 1px solid var(--border); }
+    @media (max-width: 31.25rem) {
+      .problem-card:nth-child(2),
+      .problem-card:nth-child(4) { border-left: none; }
+      .problem-card + .problem-card { border-top: 1px solid var(--border); }
+    }
+    .problem-card h3 { font-size: 0.813rem; font-weight: 700; color: var(--text); margin: 0 0 0.438rem; }
+    .problem-card p { font-size: 0.813rem; color: var(--text-3); line-height: 1.6; margin: 0; }
+
+    /* ── STEPS ── */
+    .steps-list { margin-top: 1.5rem; display: flex; flex-direction: column; gap: 1.25rem; }
+    .step-row { display: grid; grid-template-columns: 2rem 1fr; gap: 1rem; align-items: start; }
+    .step-num-badge {
+      font-family: var(--mono);
+      font-size: 0.688rem;
+      font-weight: 700;
+      color: var(--text-3);
+      border: 1px solid var(--border);
+      width: 1.625rem;
+      height: 1.625rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 0.125rem;
+    }
+    .step-row h3 { font-size: 0.875rem; margin: 0 0 0.375rem; }
+    .step-row p { font-size: 0.844rem; margin: 0; }
+
+    /* ── BEFORE/AFTER ── */
+    .compare-wrap { margin-top: 2.25rem; }
+    .compare-title { font-size: 1rem; font-weight: 700; margin-bottom: 0.25rem; color: var(--text); }
+    .compare-sub { font-size: 0.813rem; color: var(--text-3); margin-bottom: 0.875rem; }
+    .compare {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      border: 1px solid var(--border);
+      overflow: auto;
+    }
+    @media (max-width: 31.25rem) { .compare { grid-template-columns: 1fr; } }
+    .compare-panel { background: var(--bg); }
+    .compare-panel + .compare-panel { border-left: 1px solid var(--border); }
+    @media (max-width: 31.25rem) {
+      .compare-panel + .compare-panel { border-left: none; border-top: 1px solid var(--border); }
+    }
+    .compare-header {
+      padding: 0.438rem 1rem;
+      font-family: var(--mono);
+      font-size: 0.688rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      border-bottom: 1px solid var(--border);
+    }
+    .compare-header.before { color: var(--compare-before-c); background: var(--compare-before-bg); }
+    .compare-header.after  { color: var(--compare-after-c); background: var(--compare-after-bg); }
+    .compare-panel pre { margin: 0; border: none; border-radius: 0; background: transparent; }
+
+    /* ── MENTAL MODELS ── */
+    .models-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      border: 1px solid var(--border);
+      margin-top: 1.5rem;
+    }
+    @media (max-width: 31.25rem) { .models-grid { grid-template-columns: 1fr; } }
+    .model-card { padding: 1.5rem; background: var(--bg); }
+    .model-card:nth-child(2) { border-left: 1px solid var(--border); }
+    .model-card:nth-child(3),
+    .model-card:nth-child(4) { border-top: 1px solid var(--border); }
+    .model-card:nth-child(4) { border-left: 1px solid var(--border); }
+    @media (max-width: 31.25rem) {
+      .model-card:nth-child(2),
+      .model-card:nth-child(4) { border-left: none; }
+      .model-card + .model-card { border-top: 1px solid var(--border); }
+    }
+    .model-tag {
+      font-size: 0.625rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-3);
+      margin-bottom: 0.5rem;
+    }
+    .model-card h3 { font-size: 0.813rem; font-weight: 700; margin: 0 0 0.5rem; color: var(--text); }
+    .model-card p { font-size: 0.813rem; color: var(--text-3); line-height: 1.65; margin: 0; }
+
+    /* ── ECOSYSTEM ── */
+    .ecosystem-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      border: 1px solid var(--border);
+      margin-top: 1.5rem;
+    }
+    @media (max-width: 31.25rem) { .ecosystem-grid { grid-template-columns: 1fr; } }
+    .ecosystem-card { padding: 1.5rem; background: var(--bg); }
+    .ecosystem-card + .ecosystem-card { border-left: 1px solid var(--border); }
+    @media (max-width: 31.25rem) {
+      .ecosystem-card + .ecosystem-card { border-left: none; border-top: 1px solid var(--border); }
+    }
+    .ecosystem-card h3 { font-size: 0.813rem; font-weight: 700; margin: 0 0 0.25rem; }
+    .eco-sub { font-size: 0.813rem; color: var(--text-3); margin-bottom: 0.875rem; line-height: 1.5; }
+    .eco-sub code { font-size: 0.85em; }
+    .kind-list { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 0.313rem; }
+    .kind-list li {
+      font-family: var(--mono);
+      font-size: 0.719rem;
+      color: var(--text-2);
+      padding: 0.313rem 0.625rem;
+      background: var(--code-bg);
+      border: 1px solid var(--code-border);
+      border-radius: 0.188rem;
+    }
+    .kind-list li span { font-weight: 700; color: var(--text); }
+
+    /* ── CALLOUT ── */
+    .callout {
+      margin-top: 1.25rem;
+      padding: 0.875rem 1.125rem;
+      border-left: 0.188rem solid var(--border);
+      background: var(--code-bg);
+      font-size: 0.844rem;
+      color: var(--text-2);
+      line-height: 1.75;
+    }
+    .callout code { font-size: 0.85em; }
+
+    /* spec typography */
+    .spec-content h2 {
+      font-size: 1.063rem;
+      font-weight: 700;
+      color: var(--text);
+      margin: 2.75rem 0 0.75rem;
+      padding-bottom: 0.625rem;
+      border-bottom: 1px solid var(--border-light);
+      scroll-margin-top: 1.5rem;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+    }
     .spec-content h2:first-child { margin-top: 0; }
-    .spec-content h3 { font-size: 18px; font-weight: 600; color: #fff; margin: 32px 0 12px; }
-    .spec-content h4 { font-size: 15px; font-weight: 600; color: var(--text); margin: 24px 0 8px; }
-    .spec-content p { color: var(--text-muted); margin-bottom: 16px; line-height: 1.7; }
-    .spec-content ul, .spec-content ol { color: var(--text-muted); padding-left: 24px; margin-bottom: 16px; }
-    .spec-content li { margin-bottom: 6px; line-height: 1.65; }
-    .spec-content a { color: var(--accent-light); text-decoration: none; }
-    .spec-content a:hover { text-decoration: underline; }
+    .spec-content h3 { font-size: 0.844rem; font-weight: 700; margin: 1.5rem 0 0.5rem; color: var(--text); }
+    .spec-content h4 { font-size: 0.813rem; font-weight: 600; color: var(--text-2); margin: 1.125rem 0 0.375rem; }
+    .spec-content p { color: var(--text-2); margin-bottom: 0.75rem; line-height: 1.75; }
+    .spec-content ul,
+    .spec-content ol { color: var(--text-2); padding-left: 1.25rem; margin-bottom: 0.75rem; }
+    .spec-content li { margin-bottom: 0.313rem; line-height: 1.7; }
+    .spec-content a { color: var(--text); }
+    .spec-content p code,
+    .spec-content li code { font-size: 0.82em; }
 
-    /* Code */
-    pre { background: var(--bg-code); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; overflow-x: auto; margin: 16px 0; font-size: 13px; line-height: 1.6; }
-    code { font-family: var(--font-mono); font-size: 0.875em; color: var(--text); }
-    p code, li code { background: var(--bg-card); border: 1px solid var(--border); padding: 1px 5px; border-radius: 4px; color: var(--accent-light); font-size: 0.85em; }
-    .json-key { color: #7eb3ff; }
-    .json-str { color: #a5d6a7; }
-    .json-num { color: #ffb74d; }
-    .json-bool { color: #f48fb1; }
-    .json-comment { color: #546e7a; font-style: italic; }
+    /* ── FAQ ── */
+    .faq-list { margin-top: 1.5rem; }
+    .faq-item { border-bottom: 1px solid var(--border-light); }
+    .faq-item:first-child { border-top: 1px solid var(--border-light); }
+    .faq-q {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1.25rem;
+      padding: 1.125rem 0;
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--text-2);
+      cursor: pointer;
+      user-select: none;
+    }
+    .faq-q:hover { color: var(--text); }
+    .faq-item.open .faq-q { color: var(--text); }
+    .faq-icon {
+      width: 1.125rem;
+      height: 1.125rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-3);
+      flex-shrink: 0;
+      transition: transform 0.2s;
+    }
+    .faq-item.open .faq-icon { transform: rotate(45deg); }
+    .faq-a { overflow: hidden; max-height: 0; transition: max-height 0.3s ease; }
+    .faq-item.open .faq-a { max-height: 37.5rem; }
+    .faq-a-inner {
+      padding: 0 0 1.125rem;
+      font-size: 0.875rem;
+      color: var(--text-3);
+      line-height: 1.75;
+    }
+    .faq-a-inner code { font-size: 0.83em; }
 
-    /* Tables */
-    .table-wrap { overflow-x: auto; margin: 16px 0; }
-    table { width: 100%; border-collapse: collapse; font-size: 14px; }
-    th { text-align: left; padding: 10px 14px; background: var(--bg-card-alt); color: var(--text-muted); font-size: 12px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; border-bottom: 1px solid var(--border); }
-    td { padding: 10px 14px; border-bottom: 1px solid var(--border-light); color: var(--text-muted); vertical-align: top; }
-    td:first-child { font-family: var(--font-mono); font-size: 13px; color: var(--accent-light); }
-    tr:last-child td { border-bottom: none; }
-
-    /* Badges */
-    .badge { display: inline-block; font-size: 11px; font-weight: 600; padding: 2px 7px; border-radius: 4px; font-family: var(--font-mono); }
-    .badge-required { background: #1a2e1a; color: var(--green); border: 1px solid #1e3e1e; }
-    .badge-optional { background: var(--bg-card-alt); color: var(--text-faint); border: 1px solid var(--border); }
-
-    /* FAQ */
-    .faq-item { border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 12px; overflow: hidden; }
-    .faq-q { padding: 18px 20px; font-size: 15px; font-weight: 600; color: #fff; cursor: pointer; display: flex; justify-content: space-between; align-items: center; background: var(--bg-card); transition: background 0.15s; }
-    .faq-q:hover { background: var(--bg-card-alt); }
-    .faq-a { padding: 0 20px; max-height: 0; overflow: hidden; transition: max-height 0.3s ease, padding 0.3s ease; font-size: 14px; color: var(--text-muted); line-height: 1.7; background: var(--bg-card); }
-    .faq-item.open .faq-a { max-height: 500px; padding: 16px 20px 20px; border-top: 1px solid var(--border); }
-    .faq-chevron { transition: transform 0.3s; color: var(--text-muted); flex-shrink: 0; }
-    .faq-item.open .faq-chevron { transform: rotate(180deg); }
-
-    /* Footer */
-    footer { border-top: 1px solid var(--border); padding: 32px 24px; text-align: center; font-size: 13px; color: var(--text-faint); }
-    footer a { color: var(--text-muted); text-decoration: none; }
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 1.375rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      font-size: 0.75rem;
+      color: var(--text-3);
+    }
+    .footer-links { display: flex; gap: 1.25rem; }
+    footer a { color: var(--text-3); text-decoration: none; }
     footer a:hover { color: var(--text); }
+    .powered-by {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.75rem;
+      color: var(--text-3);
+    }
+    .powered-by .logo-light { display: inline; }
+    .powered-by .logo-dark  { display: none; }
+    [data-theme="dark"] .powered-by .logo-light { display: none; }
+    [data-theme="dark"] .powered-by .logo-dark  { display: inline; }
+    @media (max-width: 40rem) { footer { padding: 1.125rem 1.25rem; } }
   </style>
 </head>
 <body>
 
-<!-- Nav -->
-<nav>
-  <a href="#" class="nav-brand"><img src="denna-labs-logo.svg" alt="Denna Labs" height="22"></a>
-  <div class="nav-links">
-    <a href="#why-denna">Why Denna</a>
-    <a href="#how-it-works">How it works</a>
-    <a href="#ecosystem">Schemas</a>
-    <a href="#specification">Specification</a>
-    <a href="https://github.com/daocraft/denna-spec" target="_blank">GitHub</a>
-    <span class="nav-badge">v1.0.0</span>
+<nav class="site-nav">
+  <a href="#" class="nav-logo">
+    <img class="logo-light" src="public/denna-spec-logo.svg" alt="Denna" height="40">
+    <img class="logo-dark"  src="public/denna-spec-logo-dark.svg"  alt="Denna" height="40">
+  </a>
+  <div class="nav-right">
+    <div class="nav-links">
+      <a href="#introduction">Introduction</a>
+      <a href="#how-it-works">How It Works</a>
+      <a href="#specification">Specification</a>
+      <a href="https://github.com/daocraft/denna-spec" target="_blank" class="nav-github" aria-label="GitHub"><img src="public/github-142-svgrepo-com.svg" alt="GitHub" width="18" height="18"></a>
+    </div>
+    <span class="nav-version">v1.0.0</span>
+    <button class="theme-toggle" aria-label="Toggle theme" onclick="toggleTheme()">
+      <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+    </button>
   </div>
 </nav>
 
-<!-- Hero -->
-<div class="hero">
-  <div class="container">
-    <span class="hero-eyebrow">Open Standard · Built on JSON Schema</span>
-    <h1>Give your protocol's data<br>a <em>permanent home</em></h1>
-    <p class="hero-sub">
-      Denna Spec is an open standard for storing protocol configuration, parameters,
-      and governance documents as structured, validated, and publicly versioned JSON files.
-    </p>
-    <div class="hero-actions">
-      <a href="#how-it-works" class="btn btn-primary">See how it works</a>
-      <a href="#specification" class="btn btn-outline">Read the specification</a>
-    </div>
-  </div>
-</div>
+<div class="doc-wrap">
 
-<!-- The Problem -->
-<section id="why-denna">
-  <div class="container">
-    <p class="section-label">The Problem</p>
-    <h2 class="section-title">Critical data living in the wrong places</h2>
-    <p class="section-subtitle">
-      Every DeFi protocol manages data that is too important to live in a spreadsheet —
-      wallet addresses, rate spreads, eligibility rules, governance articles.
-      Yet that is exactly where most of it ends up.
+  <!-- ── HEADER ── -->
+  <header class="doc-header">
+    <div class="doc-header-meta">Open Standard &middot; Built on JSON Schema &middot; CC BY 4.0</div>
+    <h1 class="doc-title">Denna Specification</h1>
+    <p class="doc-abstract">
+      An open standard for storing protocol configuration, parameters, and governance
+      documents as structured, validated, and publicly versioned JSON files. Denna Spec
+      is a thin convention layer on top of JSON Schema and Git  giving critical protocol
+      data an audit trail, validation, and a format any tool can read.
     </p>
+  </header>
+
+  <!-- ── SIDEBAR TOC ── -->
+  <nav class="sidebar-toc" aria-label="Table of contents">
+    <div class="sidebar-toc-label">Contents</div>
+    <a href="#introduction">Introduction</a>
+    <a href="#the-problem">The Problem</a>
+    <a href="#mental-models">Mental Models</a>
+    <a href="#how-it-works">How It Works</a>
+    <a href="#schema-ecosystem">Schema Ecosystem</a>
+    <a href="#specification">Specification</a>
+    <a href="#spec-summary" class="sub">Summary</a>
+    <a href="#spec-1" class="sub">1. File Naming</a>
+    <a href="#spec-2" class="sub">2. File Structure</a>
+    <a href="#spec-3" class="sub">3. Kind Identifiers</a>
+    <a href="#spec-4" class="sub">4. Semantic Types</a>
+    <a href="#spec-5" class="sub">5. Domain Schemas</a>
+    <a href="#spec-6" class="sub">6. Schema Ecosystem</a>
+    <a href="#spec-7" class="sub">7. Versioning</a>
+    <a href="#spec-8" class="sub">8. Validation</a>
+    <a href="#spec-example" class="sub">Complete Example</a>
+    <a href="#faq">FAQ</a>
+  </nav>
+
+  <!-- ── INTRODUCTION ── -->
+  <section class="doc-section narrative">
+    <h2 class="section-heading" id="introduction">Introduction</h2>
+    <p>Protocol configuration  wallet addresses, rate parameters, governance articles  is too important to live in spreadsheets and Notion pages. Denna Spec gives it structure, validation, and a permanent audit trail.</p>
+    <p>A <code>.denna-spec.json</code> file is a self-describing JSON document validated by <a href="https://json-schema.org/">JSON Schema</a> and versioned through Git. Denna is the thin convention layer that makes it all work together.</p>
+  </section>
+
+  <!-- ── THE PROBLEM ── -->
+  <section class="doc-section narrative">
+    <h2 class="section-heading" id="the-problem">The Problem</h2>
+    <p>Critical protocol data lives in the wrong places.</p>
     <div class="problem-grid">
       <div class="problem-card">
-        <div class="problem-icon">📋</div>
         <h3>No audit trail</h3>
-        <p>When a rate changes, who changed it? When? Why? Spreadsheets and Notion pages don't answer these questions. Git does.</p>
+        <p>Who changed this rate? When? Why? Spreadsheets don't tell you.</p>
       </div>
       <div class="problem-card">
-        <div class="problem-icon">⚠️</div>
         <h3>No validation</h3>
-        <p>A typo in a wallet address or an out-of-range rate can go unnoticed for weeks. Without a schema, there is no automated check.</p>
+        <p>A typo in a wallet address can go unnoticed for weeks.</p>
       </div>
       <div class="problem-card">
-        <div class="problem-icon">🔌</div>
         <h3>No interoperability</h3>
-        <p>Every team that wants to consume your parameters builds a custom integration. There is no standard format to build tools against.</p>
+        <p>Every consumer builds a custom integration. There's no standard format.</p>
       </div>
       <div class="problem-card">
-        <div class="problem-icon">🔒</div>
         <h3>Data you don't own</h3>
-        <p>Notion, Google Sheets, and Confluence store your data on their servers. Your protocol's parameters shouldn't depend on a SaaS vendor.</p>
+        <p>Your protocol's parameters shouldn't depend on a SaaS vendor.</p>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- Mental Models -->
-<section id="mental-models">
-  <div class="container">
-    <p class="section-label">Mental Models</p>
-    <h2 class="section-title">Four ways to think about Denna</h2>
-    <p class="section-subtitle">
-      Not a developer? Here are four analogies that capture what Denna does and why it matters
-      for protocols and financial systems.
-    </p>
+  <!-- ── MENTAL MODELS ── -->
+  <section class="doc-section narrative">
+    <h2 class="section-heading" id="mental-models">Mental Models</h2>
+    <p>Four analogies that capture what Denna does.</p>
     <div class="models-grid">
-
-      <div class="model-card blue">
-        <div class="model-analogy">Like IBAN for bank accounts</div>
+      <div class="model-card">
+        <div class="model-tag">Like IBAN for bank accounts</div>
         <h3>A universal standard for protocol data</h3>
-        <p>
-          Before IBAN, every bank had its own account number format. After IBAN,
-          any bank software anywhere in the world could validate an account number and understand
-          its structure without needing custom logic per country or institution.
-          Denna does the same for protocol data: any tool that understands Denna can read
-          and validate any Denna file, regardless of which protocol created it.
-        </p>
+        <p>Before IBAN, every bank had its own format. After IBAN, any software could validate any account. Denna does the same for protocol data.</p>
       </div>
-
-      <div class="model-card green">
-        <div class="model-analogy">Like Git for your parameters</div>
-        <h3>Every change is reviewed, approved, and permanent</h3>
-        <p>
-          When a developer changes code, it goes through a pull request: a description of
-          what changed, a review by a teammate, and a permanent record of who approved it and when.
-          Denna brings this same discipline to data. When a rate changes or a wallet address is
-          updated, it goes through a pull request — reviewed, automatically validated, and
-          recorded forever in a public history that anyone can audit.
-        </p>
+      <div class="model-card">
+        <div class="model-tag">Like Git for your parameters</div>
+        <h3>Every change is reviewed and permanent</h3>
+        <p>Code changes go through pull requests. With Denna, data changes do too  reviewed, validated, and recorded forever.</p>
       </div>
-
-      <div class="model-card purple">
-        <div class="model-analogy">Inspired by the AT Protocol</div>
-        <h3>Plug and play — build once, use everywhere</h3>
-        <p>
-          AT Protocol powers Bluesky. Its core insight: standardize how data is structured,
-          and any app built on that standard gains interoperability for free.
-          Denna applies this idea to protocol configuration. Build a governance UI once
-          and it works with any protocol that publishes Denna files.
-          Build a risk dashboard once and it connects to any Denna-powered parameter store —
-          no custom integration per protocol.
-        </p>
+      <div class="model-card">
+        <div class="model-tag">Inspired by the AT Protocol</div>
+        <h3>Build once, use everywhere</h3>
+        <p>Standardize how data is structured, and any tool built on that standard works with any protocol. No custom integrations.</p>
       </div>
-
-      <div class="model-card yellow">
-        <div class="model-analogy">The constitution stored as code</div>
+      <div class="model-card">
+        <div class="model-tag">The constitution stored as code</div>
         <h3>Governance documents that tools can read</h3>
-        <p>
-          Sky's Atlas is a constitutional document for a DeFi protocol.
-          Today it is a website — readable by humans but invisible to software.
-          With Denna, each article and clause becomes a structured data point
-          that governance tools can query, reference, and validate against.
-          The constitution becomes machine-readable without losing human readability.
-          Any change to any article goes through a pull request with full review history.
-        </p>
+        <p>Articles and clauses become structured data that tools can query and validate  without losing human readability.</p>
       </div>
-
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- How It Works -->
-<section id="how-it-works">
-  <div class="container">
-    <p class="section-label">How It Works</p>
-    <h2 class="section-title">Three pieces, working together</h2>
-    <p class="section-subtitle">
-      Denna Spec is built on GitHub and JSON Schema — two technologies already trusted
-      by millions of developers and organizations worldwide.
-    </p>
-
-    <div class="steps">
-      <div class="step">
-        <div class="step-num">1</div>
-        <h3>Write a <code>.denna-spec.json</code> file</h3>
-        <p>
-          Your data — wallet addresses, rates, governance articles — goes into a structured
-          JSON file. It includes a <code>metadata</code> block that identifies what it is
-          and a <code>$schema</code> pointer that says what rules it must follow.
-        </p>
+  <!-- ── HOW IT WORKS ── -->
+  <section class="doc-section narrative">
+    <h2 class="section-heading" id="how-it-works">How It Works</h2>
+    <p>Built on GitHub and JSON Schema. Three pieces work together.</p>
+    <div class="steps-list">
+      <div class="step-row">
+        <div class="step-num-badge">1</div>
+        <div>
+          <h3>Write a <code>.denna-spec.json</code> file</h3>
+          <p>Your data goes into a structured JSON file with a <code>metadata</code> block and a <code>$schema</code> pointer that says what rules it must follow.</p>
+        </div>
       </div>
-      <div class="step">
-        <div class="step-num">2</div>
-        <h3>A schema defines the rules</h3>
-        <p>
-          A JSON Schema file defines exactly what your data must look like: which fields
-          are required, what format addresses must use, what range a rate must fall within.
-          Use official Denna schemas or write your own.
-        </p>
+      <div class="step-row">
+        <div class="step-num-badge">2</div>
+        <div>
+          <h3>A schema defines the rules</h3>
+          <p>Required fields, address formats, value ranges  all defined in a JSON Schema. Use official Denna schemas or write your own.</p>
+        </div>
       </div>
-      <div class="step">
-        <div class="step-num">3</div>
-        <h3>GitHub validates every change</h3>
-        <p>
-          A GitHub Action runs on every pull request and checks every
-          <code>.denna-spec.json</code> file against its schema automatically.
-          Invalid changes are rejected. Valid ones go through your normal review and
-          approval process, creating a permanent audit trail.
-        </p>
+      <div class="step-row">
+        <div class="step-num-badge">3</div>
+        <div>
+          <h3>GitHub validates every change</h3>
+          <p>A GitHub Action validates every <code>.denna-spec.json</code> file on each pull request. Invalid data can't be merged.</p>
+        </div>
       </div>
     </div>
 
-    <!-- Before / After comparison -->
-    <div style="margin-top: 48px;">
-      <h3 style="color: #fff; font-size: 18px; font-weight: 600; margin-bottom: 8px; letter-spacing: -0.01em;">From a markdown table to structured data</h3>
-      <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 20px;">The same rate parameters — before Denna and after.</p>
+    <div class="compare-wrap">
+      <h3 class="compare-title">From a markdown table to structured data</h3>
+      <p class="compare-sub">The same rate parameters  before Denna and after.</p>
       <div class="compare">
         <div class="compare-panel">
-          <div class="compare-header before">
-            <div class="compare-dot"></div>
-            Before &mdash; rates.md
-          </div>
-          <pre style="margin:0; border-radius:0; border:none; font-size:12px;"><code><span class="json-comment">## SSR Spread
+          <div class="compare-header before">Before  rates.md</div>
+          <pre><code><span class="jc">## SSR Spread
 
 | Parameter        | Value | Description     |
 |------------------|-------|-----------------|
@@ -366,40 +695,31 @@ No validation. No history.
 No tool can parse this reliably.</span></code></pre>
         </div>
         <div class="compare-panel">
-          <div class="compare-header after">
-            <div class="compare-dot"></div>
-            After &mdash; rates.denna-spec.json
-          </div>
-          <pre style="margin:0; border-radius:0; border:none; font-size:12px;"><code>{
-  <span class="json-key">"$schema"</span>: <span class="json-str">"../schemas/rates.schema.json"</span>,
-  <span class="json-key">"metadata"</span>: {
-    <span class="json-key">"id"</span>: <span class="json-str">"shared-rates"</span>,
-    <span class="json-key">"kind"</span>: <span class="json-str">"io.denna.defi.rates"</span>,
-    <span class="json-key">"lastUpdated"</span>: <span class="json-str">"2026-02-21"</span>
+          <div class="compare-header after">After  rates.denna-spec.json</div>
+          <pre><code>{
+  <span class="jk">"$schema"</span>: <span class="js">"../schemas/rates.schema.json"</span>,
+  <span class="jk">"metadata"</span>: {
+    <span class="jk">"id"</span>: <span class="js">"shared-rates"</span>,
+    <span class="jk">"kind"</span>: <span class="js">"io.denna.defi.rates"</span>,
+    <span class="jk">"lastUpdated"</span>: <span class="js">"2026-02-21"</span>
   },
-  <span class="json-key">"rates"</span>: {
-    <span class="json-key">"ssrSpread"</span>: { <span class="json-key">"value"</span>: <span class="json-num">30</span>, <span class="json-key">"unit"</span>: <span class="json-str">"bps"</span> },
-    <span class="json-key">"fallbackSsr"</span>: { <span class="json-key">"value"</span>: <span class="json-num">4.5</span>, <span class="json-key">"unit"</span>: <span class="json-str">"percent"</span> }
+  <span class="jk">"rates"</span>: {
+    <span class="jk">"ssrSpread"</span>:   { <span class="jk">"value"</span>: <span class="jn">30</span>,  <span class="jk">"unit"</span>: <span class="js">"bps"</span>     },
+    <span class="jk">"fallbackSsr"</span>: { <span class="jk">"value"</span>: <span class="jn">4.5</span>, <span class="jk">"unit"</span>: <span class="js">"percent"</span> }
   }
 }</code></pre>
         </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- Schema Ecosystem -->
-<section id="ecosystem">
-  <div class="container">
-    <p class="section-label">Schema Ecosystem</p>
-    <h2 class="section-title">Official schemas and your own</h2>
-    <p class="section-subtitle">
-      Denna Spec's schema ecosystem is open. Use official schemas from Denna as a starting point,
-      extend them, or build entirely custom ones for your protocol — no central registry required.
-    </p>
+  <!-- ── SCHEMA ECOSYSTEM ── -->
+  <section class="doc-section narrative">
+    <h2 class="section-heading" id="schema-ecosystem">Schema Ecosystem</h2>
+    <p>Use official schemas, extend them, or build your own  no central registry required.</p>
     <div class="ecosystem-grid">
       <div class="ecosystem-card">
-        <h3>Official &mdash; Denna</h3>
+        <h3>Official  Denna</h3>
         <p class="eco-sub">Maintained at <code>schemas.denna.io</code>. Uses the <code>io.denna.*</code> namespace.</p>
         <ul class="kind-list">
           <li><span>io.denna.defi</span>.prime-config</li>
@@ -409,7 +729,7 @@ No tool can parse this reliably.</span></code></pre>
         </ul>
       </div>
       <div class="ecosystem-card">
-        <h3>Custom &mdash; Your Protocol</h3>
+        <h3>Custom  Your Protocol</h3>
         <p class="eco-sub">Your own schemas using your reverse-domain namespace. Host them anywhere accessible by URL.</p>
         <ul class="kind-list">
           <li><span>io.sky</span>.prime.config</li>
@@ -419,237 +739,208 @@ No tool can parse this reliably.</span></code></pre>
         </ul>
       </div>
     </div>
-    <div class="callout blue">
+    <div class="callout">
       <strong>Kind identifiers use a reverse-domain convention.</strong>
       The first two segments identify the schema publisher (<code>io.denna</code>, <code>io.sky</code>, <code>com.spark</code>).
-      This makes kinds globally unique without a central registry — the same approach used by AT Protocol.
+      This makes kinds globally unique without a central registry  the same approach used by AT Protocol.
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- Full Specification -->
-<section id="specification">
-  <div class="container">
-    <p class="section-label">The Standard</p>
-    <h2 class="section-title">Denna Specification 1.0.0</h2>
-    <p class="section-subtitle" style="margin-bottom: 40px;">
-      The complete technical specification. Uses RFC&nbsp;2119 keywords (MUST, SHOULD, MAY).
-    </p>
+  <!-- ── SPECIFICATION ── -->
+  <section class="doc-section">
+    <h2 class="section-heading" id="specification">Denna Specification 1.0.0</h2>
+    <p>The complete technical specification. Uses RFC&nbsp;2119 keywords (MUST, SHOULD, MAY).</p>
 
     <div class="spec-content">
 
-      <h2>Summary</h2>
-      <p>
-        Denna Spec is a convention for expressing any structured data as self-describing JSON files validated
-        by <a href="https://json-schema.org/">JSON Schema</a>.
-        A Denna file (<code>.denna-spec.json</code>) is a JSON document containing a metadata block
-        that identifies what it is, and any number of domain-defined fields containing the actual data.
-        Its structure is validated by a standard JSON Schema referenced via the <code>$schema</code> field.
-      </p>
-      <p>
-        Denna does not replace JSON Schema — it is a thin orchestration layer on top of it.
-        JSON Schema handles all structural validation. Denna defines the conventions JSON Schema
-        alone cannot express: file naming, a standard metadata block, semantic value types,
-        a schema namespace convention, and organizational guidance.
-      </p>
+        <h2 id="spec-summary">Summary</h2>
+        <p>Denna Spec is a convention for expressing any structured data as self-describing JSON files validated by <a href="https://json-schema.org/">JSON Schema</a>. A Denna file (<code>.denna-spec.json</code>) is a JSON document containing a metadata block that identifies what it is, and any number of domain-defined fields containing the actual data. Its structure is validated by a standard JSON Schema referenced via the <code>$schema</code> field.</p>
+        <p>Denna does not replace JSON Schema  it is a thin orchestration layer on top of it. JSON Schema handles all structural validation. Denna defines the conventions JSON Schema alone cannot express: file naming, a standard metadata block, semantic value types, a schema namespace convention, and organizational guidance.</p>
 
-      <h2>1. File Naming</h2>
-      <ol>
-        <li>A Denna file MUST use the extension <code>.denna-spec.json</code>.</li>
-        <li>The file name SHOULD be descriptive and use kebab-case. Examples: <code>config.denna-spec.json</code>, <code>pnl-params.denna-spec.json</code>, <code>stablecoin-addresses.denna-spec.json</code>.</li>
-        <li>Files intended to be validated by automated tooling MUST use the <code>.denna-spec.json</code> extension to be discovered by validators and CI pipelines.</li>
-      </ol>
+        <h2 id="spec-1">1. File Naming</h2>
+        <ol>
+          <li>A Denna file MUST use the extension <code>.denna-spec.json</code>.</li>
+          <li>The file name SHOULD be descriptive and use kebab-case. Examples: <code>config.denna-spec.json</code>, <code>pnl-params.denna-spec.json</code>, <code>stablecoin-addresses.denna-spec.json</code>.</li>
+          <li>Files intended to be validated by automated tooling MUST use the <code>.denna-spec.json</code> extension to be discovered by validators and CI pipelines.</li>
+        </ol>
 
-      <h2>2. File Structure</h2>
-      <p>A Denna file MUST be a valid JSON object containing the following top-level fields:</p>
-      <pre><code>{
-  <span class="json-key">"$schema"</span>: <span class="json-str">"path/or/uri/to/schema.json"</span>,
-  <span class="json-key">"metadata"</span>: { }
+        <h2 id="spec-2">2. File Structure</h2>
+        <p>A Denna file MUST be a valid JSON object containing the following top-level fields:</p>
+        <pre><code>{
+  <span class="jk">"$schema"</span>: <span class="js">"path/or/uri/to/schema.json"</span>,
+  <span class="jk">"metadata"</span>: { }
 }</code></pre>
-      <p>
-        Beyond <code>$schema</code> and <code>metadata</code>, all other fields are defined by the
-        domain schema referenced in <code>$schema</code>. The domain schema MAY define any additional
-        fields using any names.
-      </p>
+        <p>Beyond <code>$schema</code> and <code>metadata</code>, all other fields are defined by the domain schema referenced in <code>$schema</code>. The domain schema MAY define any additional fields using any names.</p>
 
-      <h3>2.1. <code>$schema</code> <span class="badge badge-required">REQUIRED</span></h3>
-      <p>
-        A string containing a relative path or absolute URI to a JSON Schema file that validates the
-        entire Denna file. This is standard JSON Schema behavior — it enables IDE auto-completion,
-        inline validation, and tells validators which schema to use.
-        The referenced schema MUST validate the complete file including <code>metadata</code> and
-        all domain content fields.
-      </p>
+        <h3>2.1. <code>$schema</code> <span class="badge badge-req">REQUIRED</span></h3>
+        <p>A string containing a relative path or absolute URI to a JSON Schema file that validates the entire Denna file. This is standard JSON Schema behavior  it enables IDE auto-completion, inline validation, and tells validators which schema to use. The referenced schema MUST validate the complete file including <code>metadata</code> and all domain content fields.</p>
 
-      <h3>2.2. <code>metadata</code> <span class="badge badge-required">REQUIRED</span></h3>
-      <p>An object describing the file's identity and provenance.</p>
-      <div class="table-wrap">
-        <table>
-          <thead><tr><th>Field</th><th>Type</th><th>Required</th><th>Description</th></tr></thead>
-          <tbody>
-            <tr><td>id</td><td>string</td><td><span class="badge badge-required">REQUIRED</span></td><td>Unique kebab-case identifier within the repository. Pattern: <code>^[a-z0-9]+(-[a-z0-9]+)*$</code></td></tr>
-            <tr><td>name</td><td>string</td><td><span class="badge badge-required">REQUIRED</span></td><td>Human-readable display name.</td></tr>
-            <tr><td>kind</td><td>string</td><td><span class="badge badge-required">REQUIRED</span></td><td>Reverse-domain kind identifier. See Section 3.</td></tr>
-            <tr><td>description</td><td>string</td><td><span class="badge badge-optional">OPTIONAL</span></td><td>Brief description of the file contents.</td></tr>
-            <tr><td>version</td><td>string</td><td><span class="badge badge-optional">OPTIONAL</span></td><td>Semantic Version of the data (e.g., <code>1.0.0</code>). SHOULD be incremented when data changes.</td></tr>
-            <tr><td>lastUpdated</td><td>date</td><td><span class="badge badge-optional">OPTIONAL</span></td><td>ISO 8601 date when data was last verified (<code>YYYY-MM-DD</code>).</td></tr>
-            <tr><td>tags</td><td>string[]</td><td><span class="badge badge-optional">OPTIONAL</span></td><td>Freeform tags for categorization and filtering.</td></tr>
-            <tr><td>source</td><td>object</td><td><span class="badge badge-optional">OPTIONAL</span></td><td>Provenance. MAY contain <code>repository</code> (string) and <code>references</code> (array; use <code>file:line</code> format, e.g., <code>src/lib/constants.ts:17</code>).</td></tr>
-          </tbody>
-        </table>
-      </div>
+        <h3>2.2. <code>metadata</code> <span class="badge badge-req">REQUIRED</span></h3>
+        <p>An object describing the file's identity and provenance.</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Field</th><th>Type</th><th>Required</th><th>Description</th></tr></thead>
+            <tbody>
+              <tr><td>id</td><td>string</td><td><span class="badge badge-req">REQUIRED</span></td><td>Unique kebab-case identifier within the repository. Pattern: <code>^[a-z0-9]+(-[a-z0-9]+)*$</code></td></tr>
+              <tr><td>name</td><td>string</td><td><span class="badge badge-req">REQUIRED</span></td><td>Human-readable display name.</td></tr>
+              <tr><td>kind</td><td>string</td><td><span class="badge badge-req">REQUIRED</span></td><td>Reverse-domain kind identifier. See Section 3.</td></tr>
+              <tr><td>description</td><td>string</td><td><span class="badge badge-opt">OPTIONAL</span></td><td>Brief description of the file contents.</td></tr>
+              <tr><td>version</td><td>string</td><td><span class="badge badge-opt">OPTIONAL</span></td><td>Semantic Version of the data (e.g., <code>1.0.0</code>). SHOULD be incremented when data changes.</td></tr>
+              <tr><td>lastUpdated</td><td>date</td><td><span class="badge badge-opt">OPTIONAL</span></td><td>ISO 8601 date when data was last verified (<code>YYYY-MM-DD</code>).</td></tr>
+              <tr><td>tags</td><td>string[]</td><td><span class="badge badge-opt">OPTIONAL</span></td><td>Freeform tags for categorization and filtering.</td></tr>
+              <tr><td>source</td><td>object</td><td><span class="badge badge-opt">OPTIONAL</span></td><td>Provenance. MAY contain <code>repository</code> (string) and <code>references</code> (array; use <code>file:line</code> format, e.g., <code>src/lib/constants.ts:17</code>).</td></tr>
+            </tbody>
+          </table>
+        </div>
 
-      <h3>2.3. Domain Content Fields</h3>
-      <p>Any fields beyond <code>$schema</code> and <code>metadata</code> are defined by the domain schema. Common naming conventions:</p>
-      <div class="table-wrap">
-        <table>
-          <thead><tr><th>Field Name</th><th>Typical Use</th></tr></thead>
-          <tbody>
-            <tr><td>parameters</td><td>Numeric configuration values, rates, flags</td></tr>
-            <tr><td>addresses</td><td>Contract or token address registries</td></tr>
-            <tr><td>chains</td><td>Blockchain network configuration</td></tr>
-            <tr><td>allocations</td><td>Asset positions or fund deployments</td></tr>
-            <tr><td>content</td><td>Document body or article text</td></tr>
-            <tr><td>sections</td><td>Governance document sections or clauses</td></tr>
-          </tbody>
-        </table>
-      </div>
+        <h3>2.3. Domain Content Fields</h3>
+        <p>Any fields beyond <code>$schema</code> and <code>metadata</code> are defined by the domain schema. Common naming conventions:</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Field Name</th><th>Typical Use</th></tr></thead>
+            <tbody>
+              <tr><td>parameters</td><td>Numeric configuration values, rates, flags</td></tr>
+              <tr><td>addresses</td><td>Contract or token address registries</td></tr>
+              <tr><td>chains</td><td>Blockchain network configuration</td></tr>
+              <tr><td>allocations</td><td>Asset positions or fund deployments</td></tr>
+              <tr><td>content</td><td>Document body or article text</td></tr>
+              <tr><td>sections</td><td>Governance document sections or clauses</td></tr>
+            </tbody>
+          </table>
+        </div>
 
-      <h2>3. Kind Identifiers</h2>
-      <p>
-        The <code>metadata.kind</code> field is a reverse-domain identifier that uniquely classifies
-        the type of data. It follows a naming convention inspired by
-        <a href="https://atproto.com/specs/nsid">AT Protocol NSIDs</a>.
-      </p>
-      <h3>3.1. Format</h3>
-      <p>A <code>kind</code> MUST consist of at least three dot-separated segments. The first two SHOULD identify the schema publisher in reverse-domain order.</p>
-      <pre><code>io.denna.defi.prime-config
+        <h2 id="spec-3">3. Kind Identifiers</h2>
+        <p>The <code>metadata.kind</code> field is a reverse-domain identifier that uniquely classifies the type of data. It follows a naming convention inspired by <a href="https://atproto.com/specs/nsid">AT Protocol NSIDs</a>.</p>
+
+        <h3>3.1. Format</h3>
+        <p>A <code>kind</code> MUST consist of at least three dot-separated segments. The first two SHOULD identify the schema publisher in reverse-domain order.</p>
+        <pre><code>io.denna.defi.prime-config
 ^^ ^^^^^ ^^^^ ^^^^^^^^^^^^
 |  |      |    name
 |  |      namespace
 |  domain
 TLD</code></pre>
-      <p>Pattern: <code>^[a-z][a-z0-9]*(\.[a-z][a-z0-9-]*){2,}$</code></p>
+        <p>Pattern: <code>^[a-z][a-z0-9]*(\.[a-z][a-z0-9-]*){2,}$</code></p>
 
-      <h3>3.2. Namespace Conventions</h3>
-      <div class="table-wrap">
-        <table>
-          <thead><tr><th>Namespace</th><th>Usage</th></tr></thead>
-          <tbody>
-            <tr><td>io.denna.*</td><td>Official schemas published by Denna</td></tr>
-            <tr><td>io.denna.defi.*</td><td>DeFi protocol schemas (prime config, rates, allocations)</td></tr>
-            <tr><td>io.denna.governance.*</td><td>Governance and document schemas</td></tr>
-            <tr><td>io.denna.finance.*</td><td>Financial parameter schemas</td></tr>
-            <tr><td>{org-domain}.*</td><td>Custom schemas by an organization</td></tr>
-          </tbody>
-        </table>
-      </div>
+        <h3>3.2. Namespace Conventions</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Namespace</th><th>Usage</th></tr></thead>
+            <tbody>
+              <tr><td>io.denna.*</td><td>Official schemas published by Denna</td></tr>
+              <tr><td>io.denna.defi.*</td><td>DeFi protocol schemas (prime config, rates, allocations)</td></tr>
+              <tr><td>io.denna.governance.*</td><td>Governance and document schemas</td></tr>
+              <tr><td>io.denna.finance.*</td><td>Financial parameter schemas</td></tr>
+              <tr><td>{org-domain}.*</td><td>Custom schemas by an organization</td></tr>
+            </tbody>
+          </table>
+        </div>
 
-      <h2>4. Semantic Value Types</h2>
-      <p>Reusable type definitions are available at <a href="https://spec.denna.io/schemas/v1/denna-types.schema.json">spec.denna.io/schemas/v1/denna-types.schema.json</a>. Import via <code>$ref</code> in domain schemas.</p>
+        <h2 id="spec-4">4. Semantic Value Types</h2>
+        <p>Reusable type definitions are available at <a href="https://spec.denna.io/schemas/v1/denna-types.schema.json">spec.denna.io/schemas/v1/denna-types.schema.json</a>. Import via <code>$ref</code> in domain schemas.</p>
 
-      <h3>4.1. Address</h3>
-      <pre><code>{ <span class="json-key">"value"</span>: <span class="json-str">"0x1601843c5e9bc251a3272907010afa41fa18347e"</span>, <span class="json-key">"format"</span>: <span class="json-str">"evm"</span> }
-{ <span class="json-key">"value"</span>: <span class="json-str">"EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"</span>, <span class="json-key">"format"</span>: <span class="json-str">"solana"</span> }</code></pre>
-      <div class="table-wrap">
-        <table>
-          <thead><tr><th>Format</th><th>Description</th></tr></thead>
-          <tbody>
-            <tr><td>evm</td><td>Ethereum and all EVM-compatible chains (Base, Arbitrum, Optimism, Avalanche…)</td></tr>
-            <tr><td>solana</td><td>Solana. Base58-encoded public key.</td></tr>
-            <tr><td>cosmos</td><td>Cosmos SDK chains. Bech32 with human-readable prefix.</td></tr>
-            <tr><td>bitcoin</td><td>Bitcoin P2PKH, P2SH, or Bech32.</td></tr>
-            <tr><td>aptos</td><td>Aptos. 32-byte hex with <code>0x</code> prefix.</td></tr>
-            <tr><td>sui</td><td>Sui. 32-byte hex with <code>0x</code> prefix.</td></tr>
-            <tr><td>tron</td><td>Tron. Base58Check starting with <code>T</code>.</td></tr>
-          </tbody>
-        </table>
-      </div>
+        <h3>4.1. Address</h3>
+        <pre><code>{ <span class="jk">"value"</span>: <span class="js">"0x1601843c5e9bc251a3272907010afa41fa18347e"</span>, <span class="jk">"format"</span>: <span class="js">"evm"</span> }
+{ <span class="jk">"value"</span>: <span class="js">"EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"</span>, <span class="jk">"format"</span>: <span class="js">"solana"</span> }</code></pre>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Format</th><th>Description</th></tr></thead>
+            <tbody>
+              <tr><td>evm</td><td>Ethereum and all EVM-compatible chains (Base, Arbitrum, Optimism, Avalanche&hellip;)</td></tr>
+              <tr><td>solana</td><td>Solana. Base58-encoded public key.</td></tr>
+              <tr><td>cosmos</td><td>Cosmos SDK chains. Bech32 with human-readable prefix.</td></tr>
+              <tr><td>bitcoin</td><td>Bitcoin P2PKH, P2SH, or Bech32.</td></tr>
+              <tr><td>aptos</td><td>Aptos. 32-byte hex with <code>0x</code> prefix.</td></tr>
+              <tr><td>sui</td><td>Sui. 32-byte hex with <code>0x</code> prefix.</td></tr>
+              <tr><td>tron</td><td>Tron. Base58Check starting with <code>T</code>.</td></tr>
+            </tbody>
+          </table>
+        </div>
 
-      <h3>4.2. Rate</h3>
-      <pre><code>{ <span class="json-key">"value"</span>: <span class="json-num">30</span>, <span class="json-key">"unit"</span>: <span class="json-str">"bps"</span> }      <span class="json-comment">// basis points</span>
-{ <span class="json-key">"value"</span>: <span class="json-num">4.5</span>, <span class="json-key">"unit"</span>: <span class="json-str">"percent"</span> }  <span class="json-comment">// percentage</span></code></pre>
+        <h3>4.2. Rate</h3>
+        <pre><code>{ <span class="jk">"value"</span>: <span class="jn">30</span>,  <span class="jk">"unit"</span>: <span class="js">"bps"</span>     }  <span class="jc">// basis points</span>
+{ <span class="jk">"value"</span>: <span class="jn">4.5</span>, <span class="jk">"unit"</span>: <span class="js">"percent"</span> }  <span class="jc">// percentage</span></code></pre>
 
-      <h3>4.3. Amount</h3>
-      <pre><code>{ <span class="json-key">"value"</span>: <span class="json-num">1000000000</span>, <span class="json-key">"currency"</span>: <span class="json-str">"USD"</span> }</code></pre>
+        <h3>4.3. Amount</h3>
+        <pre><code>{ <span class="jk">"value"</span>: <span class="jn">1000000000</span>, <span class="jk">"currency"</span>: <span class="js">"USD"</span> }</code></pre>
 
-      <h3>4.4. Duration</h3>
-      <pre><code>{ <span class="json-key">"value"</span>: <span class="json-num">24</span>, <span class="json-key">"unit"</span>: <span class="json-str">"months"</span> }
-{ <span class="json-key">"value"</span>: <span class="json-num">7</span>, <span class="json-key">"unit"</span>: <span class="json-str">"days"</span> }</code></pre>
+        <h3>4.4. Duration</h3>
+        <pre><code>{ <span class="jk">"value"</span>: <span class="jn">24</span>, <span class="jk">"unit"</span>: <span class="js">"months"</span> }
+{ <span class="jk">"value"</span>: <span class="jn">7</span>,  <span class="jk">"unit"</span>: <span class="js">"days"</span>   }</code></pre>
 
-      <h3>4.5. Date</h3>
-      <pre><code><span class="json-str">"2026-01-01"</span>  <span class="json-comment">// ISO 8601 — YYYY-MM-DD</span></code></pre>
+        <h3>4.5. Date</h3>
+        <pre><code><span class="js">"2026-01-01"</span>  <span class="jc">// ISO 8601  YYYY-MM-DD</span></code></pre>
 
-      <h3>4.6. Chain Identifier</h3>
-      <pre><code><span class="json-str">"ethereum"</span>  <span class="json-comment">// lowercase: base, arbitrum, optimism, solana, avalanche…</span></code></pre>
+        <h3>4.6. Chain Identifier</h3>
+        <pre><code><span class="js">"ethereum"</span>  <span class="jc">// lowercase: base, arbitrum, optimism, solana, avalanche&hellip;</span></code></pre>
 
-      <h2>5. Domain Schemas</h2>
-      <p>A domain schema is a JSON Schema file that defines the complete structure of a Denna file for a specific use case. Domain schemas:</p>
-      <ol>
-        <li>MUST validate the full file including <code>$schema</code>, <code>metadata</code>, and all domain content fields.</li>
-        <li>SHOULD import shared type definitions via <code>$ref</code> from <code>https://spec.denna.io/schemas/v1/denna-types.schema.json</code>.</li>
-        <li>SHOULD use JSON Schema draft 2020-12 or later.</li>
-        <li>SHOULD be versioned at stable paths (e.g., <code>schemas/v1/</code>, <code>schemas/v2/</code>).</li>
-        <li>MAY be stored in the same repository as data files or published separately at a stable URL.</li>
-      </ol>
+        <h2 id="spec-5">5. Domain Schemas</h2>
+        <p>A domain schema is a JSON Schema file that defines the complete structure of a Denna file for a specific use case. Domain schemas:</p>
+        <ol>
+          <li>MUST validate the full file including <code>$schema</code>, <code>metadata</code>, and all domain content fields.</li>
+          <li>SHOULD import shared type definitions via <code>$ref</code> from <code>https://spec.denna.io/schemas/v1/denna-types.schema.json</code>.</li>
+          <li>SHOULD use JSON Schema draft 2020-12 or later.</li>
+          <li>SHOULD be versioned at stable paths (e.g., <code>schemas/v1/</code>, <code>schemas/v2/</code>).</li>
+          <li>MAY be stored in the same repository as data files or published separately at a stable URL.</li>
+        </ol>
 
-      <h2>6. Schema Ecosystem</h2>
-      <p>Denna Spec is designed around an open schema ecosystem. Any organization can publish schemas. No central registry is required.</p>
-      <ul>
-        <li><strong>Official Denna schemas</strong> — maintained at <code>schemas.denna.io</code>, using the <code>io.denna.*</code> namespace.</li>
-        <li><strong>Custom schemas</strong> — any organization can publish schemas using their reverse-domain namespace, hosted anywhere accessible by URL.</li>
-        <li><strong>Local schemas</strong> — schemas stored in the same repository as data files, referenced with relative paths.</li>
-      </ul>
+        <h2 id="spec-6">6. Schema Ecosystem</h2>
+        <p>Denna Spec is designed around an open schema ecosystem. Any organization can publish schemas. No central registry is required.</p>
+        <ul>
+          <li><strong>Official Denna schemas</strong>  maintained at <code>schemas.denna.io</code>, using the <code>io.denna.*</code> namespace.</li>
+          <li><strong>Custom schemas</strong>  any organization can publish schemas using their reverse-domain namespace, hosted anywhere accessible by URL.</li>
+          <li><strong>Local schemas</strong>  schemas stored in the same repository as data files, referenced with relative paths.</li>
+        </ul>
 
-      <h2>7. Versioning</h2>
-      <ol>
-        <li>The Denna Specification follows <a href="https://semver.org/">Semantic Versioning</a>. Current version: <strong>1.0.0</strong>.</li>
-        <li>Individual data files SHOULD include <code>metadata.version</code> to track data changes over time.</li>
-        <li>Domain schemas SHOULD be versioned at stable paths (<code>schemas/v1/</code>, <code>schemas/v2/</code>).</li>
-      </ol>
+        <h2 id="spec-7">7. Versioning</h2>
+        <ol>
+          <li>The Denna Specification follows <a href="https://semver.org/">Semantic Versioning</a>. Current version: <strong>1.0.0</strong>.</li>
+          <li>Individual data files SHOULD include <code>metadata.version</code> to track data changes over time.</li>
+          <li>Domain schemas SHOULD be versioned at stable paths (<code>schemas/v1/</code>, <code>schemas/v2/</code>).</li>
+        </ol>
 
-      <h2>8. Validation</h2>
-      <ol>
-        <li>A Denna file is valid if and only if it passes JSON Schema validation against the schema in its <code>$schema</code> field.</li>
-        <li>Validators MUST resolve the <code>$schema</code> field and validate the entire file against the resolved schema.</li>
-        <li>If <code>$schema</code> is missing or cannot be resolved, the file MUST be treated as invalid.</li>
-      </ol>
+        <h2 id="spec-8">8. Validation</h2>
+        <ol>
+          <li>A Denna file is valid if and only if it passes JSON Schema validation against the schema in its <code>$schema</code> field.</li>
+          <li>Validators MUST resolve the <code>$schema</code> field and validate the entire file against the resolved schema.</li>
+          <li>If <code>$schema</code> is missing or cannot be resolved, the file MUST be treated as invalid.</li>
+        </ol>
 
-      <h2>Complete Example</h2>
+        <h2 id="spec-example">Complete Example</h2>
 
-      <h3>Prime configuration — <code>spark/config.denna-spec.json</code></h3>
-      <pre><code>{
-  <span class="json-key">"$schema"</span>: <span class="json-str">"https://schemas.denna.io/v1/defi/prime-config.schema.json"</span>,
-  <span class="json-key">"metadata"</span>: {
-    <span class="json-key">"id"</span>: <span class="json-str">"spark-config"</span>,
-    <span class="json-key">"name"</span>: <span class="json-str">"Spark"</span>,
-    <span class="json-key">"kind"</span>: <span class="json-str">"io.denna.defi.prime-config"</span>,
-    <span class="json-key">"version"</span>: <span class="json-str">"1.0.0"</span>,
-    <span class="json-key">"lastUpdated"</span>: <span class="json-str">"2026-02-21"</span>,
-    <span class="json-key">"source"</span>: { <span class="json-key">"repository"</span>: <span class="json-str">"primes-parameters"</span>, <span class="json-key">"references"</span>: [<span class="json-str">"src/lib/constants.ts:12"</span>] }
+        <h3>Prime configuration  <code>spark/config.denna-spec.json</code></h3>
+        <pre><code>{
+  <span class="jk">"$schema"</span>: <span class="js">"https://schemas.denna.io/v1/defi/prime-config.schema.json"</span>,
+  <span class="jk">"metadata"</span>: {
+    <span class="jk">"id"</span>:          <span class="js">"spark-config"</span>,
+    <span class="jk">"name"</span>:        <span class="js">"Spark"</span>,
+    <span class="jk">"kind"</span>:        <span class="js">"io.denna.defi.prime-config"</span>,
+    <span class="jk">"version"</span>:     <span class="js">"1.0.0"</span>,
+    <span class="jk">"lastUpdated"</span>: <span class="js">"2026-02-21"</span>,
+    <span class="jk">"source"</span>: { <span class="jk">"repository"</span>: <span class="js">"primes-parameters"</span>, <span class="jk">"references"</span>: [<span class="js">"src/lib/constants.ts:12"</span>] }
   },
-  <span class="json-key">"chains"</span>: [
+  <span class="jk">"chains"</span>: [
     {
-      <span class="json-key">"id"</span>: <span class="json-str">"ethereum"</span>,
-      <span class="json-key">"almProxy"</span>: { <span class="json-key">"value"</span>: <span class="json-str">"0x1601843c5e9bc251a3272907010afa41fa18347e"</span>, <span class="json-key">"format"</span>: <span class="json-str">"evm"</span> },
-      <span class="json-key">"vaultProxy"</span>: { <span class="json-key">"value"</span>: <span class="json-str">"0x691a6c29e9e96dd897718305427ad5d534db16ba"</span>, <span class="json-key">"format"</span>: <span class="json-str">"evm"</span> },
-      <span class="json-key">"features"</span>: { <span class="json-key">"alm"</span>: <span class="json-bool">true</span>, <span class="json-key">"psm3"</span>: <span class="json-bool">false</span> }
+      <span class="jk">"id"</span>: <span class="js">"ethereum"</span>,
+      <span class="jk">"almProxy"</span>:  { <span class="jk">"value"</span>: <span class="js">"0x1601843c5e9bc251a3272907010afa41fa18347e"</span>, <span class="jk">"format"</span>: <span class="js">"evm"</span> },
+      <span class="jk">"vaultProxy"</span>: { <span class="jk">"value"</span>: <span class="js">"0x691a6c29e9e96dd897718305427ad5d534db16ba"</span>, <span class="jk">"format"</span>: <span class="js">"evm"</span> },
+      <span class="jk">"features"</span>: { <span class="jk">"alm"</span>: <span class="jb">true</span>, <span class="jk">"psm3"</span>: <span class="jb">false</span> }
     }
   ],
-  <span class="json-key">"allocations"</span>: {
-    <span class="json-key">"ethereum"</span>: [
+  <span class="jk">"allocations"</span>: {
+    <span class="jk">"ethereum"</span>: [
       {
-        <span class="json-key">"contract"</span>: { <span class="json-key">"value"</span>: <span class="json-str">"0x4dedf26112b3ec8ec46e7e31ea5e123490b05b8b"</span>, <span class="json-key">"format"</span>: <span class="json-str">"evm"</span> },
-        <span class="json-key">"protocol"</span>: <span class="json-str">"SparkLend"</span>,
-        <span class="json-key">"type"</span>: <span class="json-str">"atoken"</span>,
-        <span class="json-key">"underlying"</span>: <span class="json-str">"DAI"</span>
+        <span class="jk">"contract"</span>:   { <span class="jk">"value"</span>: <span class="js">"0x4dedf26112b3ec8ec46e7e31ea5e123490b05b8b"</span>, <span class="jk">"format"</span>: <span class="js">"evm"</span> },
+        <span class="jk">"protocol"</span>:   <span class="js">"SparkLend"</span>,
+        <span class="jk">"type"</span>:       <span class="js">"atoken"</span>,
+        <span class="jk">"underlying"</span>: <span class="js">"DAI"</span>
       }
     ]
   }
 }</code></pre>
 
-      <h3>Validation workflow — <code>.github/workflows/validate.yml</code></h3>
-      <pre><code>name: Validate Denna Spec Files
+        <h3>Validation workflow  <code>.github/workflows/validate.yml</code></h3>
+        <pre><code>name: Validate Denna Spec Files
 
 on:
   pull_request:
@@ -665,90 +956,102 @@ jobs:
           patterns: "**/*.denna-spec.json"
           exclude: "_template/**"</code></pre>
 
-    </div>
-  </div>
-</section>
+      </div><!-- /spec-content -->
+  </section>
 
-<!-- FAQ -->
-<section id="faq">
-  <div class="container">
-    <p class="section-label">FAQ</p>
-    <h2 class="section-title">Frequently asked questions</h2>
-    <div style="margin-top: 32px;">
+  <!-- ── FAQ ── -->
+  <section class="doc-section">
+    <h2 class="section-heading" id="faq">FAQ</h2>
+    <div class="faq-list">
 
       <div class="faq-item">
         <div class="faq-q" onclick="toggleFaq(this)">
           What is the relationship between Denna and JSON Schema?
-          <svg class="faq-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          <div class="faq-icon">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><line x1="6" y1="2" x2="6" y2="10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="2" y1="6" x2="10" y2="6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </div>
         </div>
         <div class="faq-a">
-          Denna Spec is built on top of JSON Schema. JSON Schema handles all structural validation — types, required fields, patterns, enums, nested objects. Denna Spec adds the conventions JSON Schema cannot express on its own: file naming, a standard metadata block, semantic value types, and a schema ecosystem for interoperability. Think of JSON Schema as the validation engine, and Denna Spec as the convention layer that makes files self-describing and interoperable across tools and protocols.
+          <div class="faq-a-inner">Denna Spec is built on top of JSON Schema. JSON Schema handles all structural validation  types, required fields, patterns, enums, nested objects. Denna Spec adds the conventions JSON Schema cannot express on its own: file naming, a standard metadata block, semantic value types, and a schema ecosystem for interoperability. Think of JSON Schema as the validation engine, and Denna Spec as the convention layer that makes files self-describing and interoperable across tools and protocols.</div>
         </div>
       </div>
 
       <div class="faq-item">
         <div class="faq-q" onclick="toggleFaq(this)">
           Can I use Denna for governance documents, not just parameters?
-          <svg class="faq-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          <div class="faq-icon">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><line x1="6" y1="2" x2="6" y2="10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="2" y1="6" x2="10" y2="6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </div>
         </div>
         <div class="faq-a">
-          Yes. Denna Spec is not limited to configuration parameters. It is designed for any structured data: governance documents, constitutional articles, asset registries, financial reports, or any information your protocol needs to track and audit. The domain schema defines what fields your file contains — use <code>sections</code> for governance documents, <code>rates</code> for financial parameters, <code>chains</code> for protocol configuration.
+          <div class="faq-a-inner">Yes. Denna Spec is not limited to configuration parameters. It is designed for any structured data: governance documents, constitutional articles, asset registries, financial reports, or any information your protocol needs to track and audit. The domain schema defines what fields your file contains  use <code>sections</code> for governance documents, <code>rates</code> for financial parameters, <code>chains</code> for protocol configuration.</div>
         </div>
       </div>
 
       <div class="faq-item">
         <div class="faq-q" onclick="toggleFaq(this)">
           Do I need to be a developer to use Denna?
-          <svg class="faq-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          <div class="faq-icon">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><line x1="6" y1="2" x2="6" y2="10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="2" y1="6" x2="10" y2="6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </div>
         </div>
         <div class="faq-a">
-          The infrastructure — schemas and validation — is set up by developers once. After that, editing a <code>.denna-spec.json</code> file to change a rate or update an address is straightforward. Tools built on top of Denna (like governance UIs) can provide a no-code editing experience, so non-developers can propose changes through a web interface without ever touching JSON directly.
+          <div class="faq-a-inner">The infrastructure  schemas and validation  is set up by developers once. After that, editing a <code>.denna-spec.json</code> file to change a rate or update an address is straightforward. Tools built on top of Denna (like governance UIs) can provide a no-code editing experience, so non-developers can propose changes through a web interface without ever touching JSON directly.</div>
         </div>
       </div>
 
       <div class="faq-item">
         <div class="faq-q" onclick="toggleFaq(this)">
           What happens when someone makes an invalid change?
-          <svg class="faq-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          <div class="faq-icon">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><line x1="6" y1="2" x2="6" y2="10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="2" y1="6" x2="10" y2="6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </div>
         </div>
         <div class="faq-a">
-          The GitHub Action runs automatically on every pull request and validates every changed <code>.denna-spec.json</code> file against its schema. If a change is invalid — a malformed address, a missing required field, a rate in the wrong format — the check fails and the PR cannot be merged until the issue is corrected. This catches errors before they can reach production systems.
+          <div class="faq-a-inner">The GitHub Action runs automatically on every pull request and validates every changed <code>.denna-spec.json</code> file against its schema. If a change is invalid  a malformed address, a missing required field, a rate in the wrong format  the check fails and the PR cannot be merged until the issue is corrected. This catches errors before they can reach production systems.</div>
         </div>
       </div>
 
       <div class="faq-item">
         <div class="faq-q" onclick="toggleFaq(this)">
           Do I need to use official Denna schemas?
-          <svg class="faq-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          <div class="faq-icon">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><line x1="6" y1="2" x2="6" y2="10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="2" y1="6" x2="10" y2="6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </div>
         </div>
         <div class="faq-a">
-          No. Official Denna schemas are a convenience — a starting point so you do not have to write a schema from scratch for common use cases. You can define your own schemas, reference official Denna types as building blocks, host them at any stable URL, and use them in your files. The only requirement is that your <code>.denna-spec.json</code> files have a <code>$schema</code> field pointing to a valid JSON Schema.
+          <div class="faq-a-inner">No. Official Denna schemas are a convenience  a starting point so you do not have to write a schema from scratch for common use cases. You can define your own schemas, reference official Denna types as building blocks, host them at any stable URL, and use them in your files. The only requirement is that your <code>.denna-spec.json</code> files have a <code>$schema</code> field pointing to a valid JSON Schema.</div>
         </div>
       </div>
 
       <div class="faq-item">
         <div class="faq-q" onclick="toggleFaq(this)">
           How is this related to AT Protocol?
-          <svg class="faq-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          <div class="faq-icon">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><line x1="6" y1="2" x2="6" y2="10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="2" y1="6" x2="10" y2="6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </div>
         </div>
         <div class="faq-a">
-          Denna Spec is inspired by AT Protocol's core design principle: standardize how data is described once, and any application built on that standard gains interoperability for free. AT Protocol standardizes social data (posts, profiles) so any social app can read it. Denna Spec standardizes protocol data (parameters, addresses, governance documents) so any governance or analytics tool can work with it. The key difference is storage: AT Protocol uses specialized servers; Denna Spec uses Git repositories — which are already where most protocol teams work.
+          <div class="faq-a-inner">Denna Spec is inspired by AT Protocol's core design principle: standardize how data is described once, and any application built on that standard gains interoperability for free. AT Protocol standardizes social data (posts, profiles) so any social app can read it. Denna Spec standardizes protocol data (parameters, addresses, governance documents) so any governance or analytics tool can work with it. The key difference is storage: AT Protocol uses specialized servers; Denna Spec uses Git repositories  which are already where most protocol teams work.</div>
         </div>
       </div>
 
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- Footer -->
+</div><!-- /doc-wrap -->
+
 <footer>
-  <div class="container">
-    <p>
-      Denna Specification 1.0.0 &nbsp;&middot;&nbsp;
-      <a href="https://spec.denna.io/schemas/v1/denna-types.schema.json">Type definitions</a> &nbsp;&middot;&nbsp;
-      <a href="https://github.com/daocraft/denna-spec">GitHub</a> &nbsp;&middot;&nbsp;
-      <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>
-    </p>
+  <span>Denna Specification 1.0.0 &nbsp;&middot;&nbsp; CC BY 4.0</span>
+  <div class="powered-by">
+    Powered by
+    <a href="https://denna.io" target="_blank"><img class="logo-light" src="public/denna-labs-logo-light.svg" alt="Denna Labs" height="16"></a>
+    <a href="https://denna.io" target="_blank"><img class="logo-dark"  src="public/denna-labs-logo-dark.svg"  alt="Denna Labs" height="16"></a>
+  </div>
+  <div class="footer-links">
+    <a href="https://spec.denna.io/schemas/v1/denna-types.schema.json">Type definitions</a>
+    <a href="https://github.com/daocraft/denna-spec" target="_blank">GitHub</a>
+    <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank">License</a>
   </div>
 </footer>
 
@@ -756,6 +1059,29 @@ jobs:
   function toggleFaq(el) {
     el.parentElement.classList.toggle('open');
   }
+
+  function toggleTheme() {
+    const html = document.documentElement;
+    const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-theme', next);
+    localStorage.setItem('denna-theme', next);
+  }
+
+  const headings = Array.from(document.querySelectorAll('.section-heading[id], .spec-content h2[id]'));
+  const tocLinks = document.querySelectorAll('.sidebar-toc a');
+  function updateToc() {
+    let active = '';
+    const offset = window.innerHeight * 0.18;
+    for (const h of headings) {
+      if (h.getBoundingClientRect().top <= offset) active = h.id;
+    }
+    if (!active && headings.length) active = headings[0].id;
+    tocLinks.forEach(l => {
+      l.classList.toggle('active', l.getAttribute('href') === '#' + active);
+    });
+  }
+  window.addEventListener('scroll', updateToc, { passive: true });
+  updateToc();
 </script>
 
 </body>
