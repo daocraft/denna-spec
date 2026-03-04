@@ -1,0 +1,79 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://spec.denna.io/schemas/v1/governance/registry.schema.json",
+  "title": "io.denna.governance.registry",
+  "description": "A registry of governance participants. Suitable for tracking delegates, committee members, integrators, legal counsels, and other recognized roles within a governance system.",
+  "type": "object",
+  "required": ["$schema", "metadata", "registryType", "entries"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "metadata": {
+      "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/metadata"
+    },
+    "registryType": {
+      "type": "string",
+      "description": "The category of participants in this registry (e.g., aligned-delegates, committee-members, integrators, pioneer-entities, legal-counsels)."
+    },
+    "entries": {
+      "type": "array",
+      "description": "List of participants in this registry.",
+      "items": { "$ref": "#/$defs/registryEntry" }
+    }
+  },
+  "$defs": {
+    "registryEntry": {
+      "type": "object",
+      "required": ["id", "name", "status"],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+          "description": "Unique kebab-case identifier for this participant."
+        },
+        "name": {
+          "type": "string",
+          "description": "Display name of the participant."
+        },
+        "aliases": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Known aliases or alternative names."
+        },
+        "role": {
+          "type": "string",
+          "description": "Specific role within the registry (e.g., chair, co-chair, member)."
+        },
+        "address": {
+          "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/address",
+          "description": "Primary wallet address for this participant."
+        },
+        "status": {
+          "type": "string",
+          "enum": ["active", "inactive", "derecognized"],
+          "description": "Current standing of this participant."
+        },
+        "joinedDate": {
+          "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/date",
+          "description": "Date the participant joined or was recognized."
+        },
+        "exitDate": {
+          "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/date",
+          "description": "Date the participant exited or was derecognized."
+        },
+        "references": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Governance post URLs or document references related to this participant."
+        },
+        "notes": {
+          "type": "string",
+          "description": "Additional notes about this participant."
+        }
+      }
+    }
+  }
+}

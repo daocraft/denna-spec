@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://spec.denna.io/schemas/v1/governance/incident-log.schema.json",
+  "title": "io.denna.governance.incident-log",
+  "description": "A log of governance incidents. Suitable for tracking security incidents, breach registries, dispute resolutions, and other significant events requiring formal documentation.",
+  "type": "object",
+  "required": ["$schema", "metadata", "incidents"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "metadata": {
+      "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/metadata"
+    },
+    "incidents": {
+      "type": "array",
+      "description": "List of documented incidents.",
+      "items": { "$ref": "#/$defs/incident" }
+    }
+  },
+  "$defs": {
+    "incident": {
+      "type": "object",
+      "required": ["id", "date", "type", "parties", "description", "finding"],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+          "description": "Unique kebab-case identifier for this incident."
+        },
+        "date": {
+          "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/date",
+          "description": "Date the incident occurred or was reported."
+        },
+        "type": {
+          "type": "string",
+          "enum": ["security", "breach", "dispute", "other"],
+          "description": "Category of incident."
+        },
+        "parties": {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 1,
+          "description": "Names or identifiers of parties involved in the incident."
+        },
+        "description": {
+          "type": "string",
+          "description": "Factual description of what occurred."
+        },
+        "finding": {
+          "type": "string",
+          "enum": ["resolved", "ongoing", "dismissed", "pending"],
+          "description": "Current status or outcome of the incident."
+        },
+        "resolution": {
+          "type": "string",
+          "description": "Description of how the incident was resolved."
+        },
+        "references": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Governance post URLs or document references related to this incident."
+        },
+        "notes": {
+          "type": "string",
+          "description": "Additional notes or context."
+        }
+      }
+    }
+  }
+}

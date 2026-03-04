@@ -22,14 +22,20 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Copy schemas to docs
-        run: cp -r schemas/* docs/schemas/
+      - name: Assemble site
+        run: |
+          mkdir _site
+          cp index.html _site/
+          cp CNAME _site/
+          cp .nojekyll _site/
+          cp -r public _site/
+          cp -r schemas _site/
 
       - uses: actions/configure-pages@v5
 
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: docs
+          path: _site
 
       - name: Deploy to GitHub Pages
         id: deployment

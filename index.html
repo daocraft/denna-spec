@@ -587,6 +587,7 @@
     <a href="#spec-6" class="sub">6. Schema Ecosystem</a>
     <a href="#spec-7" class="sub">7. Versioning</a>
     <a href="#spec-8" class="sub">8. Validation</a>
+    <a href="#spec-9" class="sub">10. API Profile</a>
     <a href="#spec-example" class="sub">Complete Example</a>
     <a href="#faq">FAQ</a>
   </nav>
@@ -717,26 +718,26 @@ No tool can parse this reliably.</span></code></pre>
   <!-- ── SCHEMA ECOSYSTEM ── -->
   <section class="doc-section narrative">
     <h2 class="section-heading" id="schema-ecosystem">Schema Ecosystem</h2>
-    <p>Use official schemas, extend them, or build your own  no central registry required.</p>
+    <p>Denna ships with 8 canonical kind definitions for web3/DeFi and governance. Tools can rely on these for semantic interoperability without custom integrations.</p>
     <div class="ecosystem-grid">
       <div class="ecosystem-card">
-        <h3>Official  Denna</h3>
-        <p class="eco-sub">Maintained at <code>schemas.denna.io</code>. Uses the <code>io.denna.*</code> namespace.</p>
+        <h3>DeFi  <code>io.denna.defi.*</code></h3>
+        <p class="eco-sub">Published at <code>spec.denna.io/schemas/v1/defi/</code></p>
         <ul class="kind-list">
-          <li><span>io.denna.defi</span>.prime-config</li>
-          <li><span>io.denna.defi</span>.rates</li>
           <li><span>io.denna.defi</span>.address-registry</li>
-          <li><span>io.denna.governance</span>.document</li>
+          <li><span>io.denna.defi</span>.rates</li>
+          <li><span>io.denna.defi</span>.protocol-config</li>
+          <li><span>io.denna.defi</span>.pnl-config</li>
         </ul>
       </div>
       <div class="ecosystem-card">
-        <h3>Custom  Your Protocol</h3>
-        <p class="eco-sub">Your own schemas using your reverse-domain namespace. Host them anywhere accessible by URL.</p>
+        <h3>Governance  <code>io.denna.governance.*</code></h3>
+        <p class="eco-sub">Published at <code>spec.denna.io/schemas/v1/governance/</code></p>
         <ul class="kind-list">
-          <li><span>io.sky</span>.prime.config</li>
-          <li><span>io.sky</span>.atlas.article</li>
-          <li><span>com.spark</span>.pnl.params</li>
-          <li><span>org.myprotocol</span>.governance.vote</li>
+          <li><span>io.denna.governance</span>.document</li>
+          <li><span>io.denna.governance</span>.registry</li>
+          <li><span>io.denna.governance</span>.payment-record</li>
+          <li><span>io.denna.governance</span>.incident-log</li>
         </ul>
       </div>
     </div>
@@ -744,6 +745,7 @@ No tool can parse this reliably.</span></code></pre>
       <strong>Kind identifiers use a reverse-domain convention.</strong>
       The first two segments identify the schema publisher (<code>io.denna</code>, <code>io.sky</code>, <code>com.spark</code>).
       This makes kinds globally unique without a central registry  the same approach used by AT Protocol.
+      Organizations with internal needs SHOULD use their own namespace (e.g., <code>io.sky.*</code>) rather than <code>io.denna.*</code>.
     </div>
   </section>
 
@@ -782,9 +784,9 @@ No tool can parse this reliably.</span></code></pre>
           <table>
             <thead><tr><th>Field</th><th>Type</th><th>Required</th><th>Description</th></tr></thead>
             <tbody>
-              <tr><td>id</td><td>string</td><td><span class="badge badge-req">REQUIRED</span></td><td>Unique kebab-case identifier within the repository. Pattern: <code>^[a-z0-9]+(-[a-z0-9]+)*$</code></td></tr>
-              <tr><td>name</td><td>string</td><td><span class="badge badge-req">REQUIRED</span></td><td>Human-readable display name.</td></tr>
-              <tr><td>kind</td><td>string</td><td><span class="badge badge-req">REQUIRED</span></td><td>Reverse-domain kind identifier. See Section 3.</td></tr>
+              <tr><td>id</td><td>string</td><td><span class="badge badge-req">REQUIRED</span> (file)</td><td>Unique kebab-case identifier within the repository. Pattern: <code>^[a-z0-9]+(-[a-z0-9]+)*$</code>. OPTIONAL in API responses.</td></tr>
+              <tr><td>name</td><td>string</td><td><span class="badge badge-req">REQUIRED</span> (file)</td><td>Human-readable display name. OPTIONAL in API responses.</td></tr>
+              <tr><td>kind</td><td>string</td><td><span class="badge badge-req">REQUIRED</span></td><td>Reverse-domain kind identifier. See Section 3. Required in both files and API responses.</td></tr>
               <tr><td>description</td><td>string</td><td><span class="badge badge-opt">OPTIONAL</span></td><td>Brief description of the file contents.</td></tr>
               <tr><td>version</td><td>string</td><td><span class="badge badge-opt">OPTIONAL</span></td><td>Semantic Version of the data (e.g., <code>1.0.0</code>). SHOULD be incremented when data changes.</td></tr>
               <tr><td>lastUpdated</td><td>date</td><td><span class="badge badge-opt">OPTIONAL</span></td><td>ISO 8601 date when data was last verified (<code>YYYY-MM-DD</code>).</td></tr>
@@ -815,8 +817,8 @@ No tool can parse this reliably.</span></code></pre>
 
         <h3>3.1. Format</h3>
         <p>A <code>kind</code> MUST consist of at least three dot-separated segments. The first two SHOULD identify the schema publisher in reverse-domain order.</p>
-        <pre><code>io.denna.defi.prime-config
-^^ ^^^^^ ^^^^ ^^^^^^^^^^^^
+        <pre><code>io.denna.defi.protocol-config
+^^ ^^^^^ ^^^^ ^^^^^^^^^^^^^
 |  |      |    name
 |  |      namespace
 |  domain
@@ -886,12 +888,30 @@ TLD</code></pre>
         </ol>
 
         <h2 id="spec-6">6. Schema Ecosystem</h2>
-        <p>Denna Spec is designed around an open schema ecosystem. Any organization can publish schemas. No central registry is required.</p>
-        <ul>
-          <li><strong>Official Denna schemas</strong>  maintained at <code>schemas.denna.io</code>, using the <code>io.denna.*</code> namespace.</li>
-          <li><strong>Custom schemas</strong>  any organization can publish schemas using their reverse-domain namespace, hosted anywhere accessible by URL.</li>
-          <li><strong>Local schemas</strong>  schemas stored in the same repository as data files, referenced with relative paths.</li>
-        </ul>
+        <p>Denna Spec ships with a canonical set of kind definitions for web3/DeFi and governance use cases, published at <code>spec.denna.io/schemas/v1/</code>.</p>
+
+        <h3>6.1. Canonical Kind Definitions</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Kind</th><th>Schema URL</th><th>Key Fields</th></tr></thead>
+            <tbody>
+              <tr><td>io.denna.defi.address-registry</td><td><a href="https://spec.denna.io/schemas/v1/defi/address-registry.schema.json">…/defi/address-registry.schema.json</a></td><td><code>addresses</code> (named groups of chain→address entries)</td></tr>
+              <tr><td>io.denna.defi.rates</td><td><a href="https://spec.denna.io/schemas/v1/defi/rates.schema.json">…/defi/rates.schema.json</a></td><td><code>rates</code>, <code>fallbackRates</code>, <code>rateHierarchy</code>, <code>subsidyPrograms</code>, <code>externalDataSources</code></td></tr>
+              <tr><td>io.denna.defi.protocol-config</td><td><a href="https://spec.denna.io/schemas/v1/defi/protocol-config.schema.json">…/defi/protocol-config.schema.json</a></td><td><code>chains</code>, <code>debtSource</code>, <code>allocations</code></td></tr>
+              <tr><td>io.denna.defi.pnl-config</td><td><a href="https://spec.denna.io/schemas/v1/defi/pnl-config.schema.json">…/defi/pnl-config.schema.json</a></td><td><code>calculationModules</code>, <code>assetCaps</code>, <code>addressClassifications</code>, <code>pricingConfig</code></td></tr>
+              <tr><td>io.denna.governance.document</td><td><a href="https://spec.denna.io/schemas/v1/governance/document.schema.json">…/governance/document.schema.json</a></td><td><code>title</code>, <code>effectiveDate</code>, <code>status</code>, <code>sections</code>, <code>definitions</code></td></tr>
+              <tr><td>io.denna.governance.registry</td><td><a href="https://spec.denna.io/schemas/v1/governance/registry.schema.json">…/governance/registry.schema.json</a></td><td><code>registryType</code>, <code>entries[]</code> (id, name, role, address, status)</td></tr>
+              <tr><td>io.denna.governance.payment-record</td><td><a href="https://spec.denna.io/schemas/v1/governance/payment-record.schema.json">…/governance/payment-record.schema.json</a></td><td><code>category</code>, <code>payments[]</code> (period, recipient, amount, status)</td></tr>
+              <tr><td>io.denna.governance.incident-log</td><td><a href="https://spec.denna.io/schemas/v1/governance/incident-log.schema.json">…/governance/incident-log.schema.json</a></td><td><code>incidents[]</code> (date, type, parties, description, finding)</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>6.2. Adding New Kinds</h3>
+        <p>New canonical kinds should be proposed via the spec contribution process, not created ad-hoc. Organizations with internal-only needs SHOULD use their own reverse-domain namespace (e.g., <code>io.sky.*</code>, <code>com.spark.*</code>) rather than <code>io.denna.*</code>.</p>
+
+        <h3>6.3. Local Schemas</h3>
+        <p>During development or for private use cases, schemas MAY be stored locally and referenced with relative paths: <code>"$schema": "../../schemas/protocol-config.schema.json"</code></p>
 
         <h2 id="spec-7">7. Versioning</h2>
         <ol>
@@ -907,15 +927,51 @@ TLD</code></pre>
           <li>If <code>$schema</code> is missing or cannot be resolved, the file MUST be treated as invalid.</li>
         </ol>
 
+        <h2 id="spec-9">10. API Response Profile</h2>
+        <p>The <code>$schema</code> + <code>metadata.kind</code> envelope is equally useful in HTTP API responses. The API Response Profile is a lightweight variant that omits file-centric metadata fields.</p>
+
+        <h3>10.1. Envelope</h3>
+        <p>An API response MUST include <code>metadata.kind</code>. The <code>$schema</code> field SHOULD be included so consumers and tooling can validate the response. All other metadata fields are OPTIONAL and SHOULD be omitted unless meaningful in the API context.</p>
+        <pre><code>{
+  <span class="jk">"$schema"</span>: <span class="js">"https://spec.denna.io/schemas/v1/defi/rates.schema.json"</span>,
+  <span class="jk">"metadata"</span>: {
+    <span class="jk">"kind"</span>: <span class="js">"io.denna.defi.rates"</span>
+  },
+  <span class="jk">"rates"</span>: {
+    <span class="jk">"ssrSpread"</span>:   { <span class="jk">"value"</span>: <span class="jn">30</span>,  <span class="jk">"unit"</span>: <span class="js">"bps"</span>     },
+    <span class="jk">"fallbackSsr"</span>: { <span class="jk">"value"</span>: <span class="jn">4.5</span>, <span class="jk">"unit"</span>: <span class="js">"percent"</span> }
+  }
+}</code></pre>
+
+        <h3>10.2. Metadata Fields in API Responses</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Field</th><th>File Profile</th><th>API Profile</th></tr></thead>
+            <tbody>
+              <tr><td>kind</td><td><span class="badge badge-req">REQUIRED</span></td><td><span class="badge badge-req">REQUIRED</span></td></tr>
+              <tr><td>id</td><td><span class="badge badge-req">REQUIRED</span></td><td><span class="badge badge-opt">OPTIONAL</span> — use if the response represents a named resource</td></tr>
+              <tr><td>name</td><td><span class="badge badge-req">REQUIRED</span></td><td><span class="badge badge-opt">OPTIONAL</span></td></tr>
+              <tr><td>version</td><td><span class="badge badge-opt">OPTIONAL</span></td><td><span class="badge badge-opt">OPTIONAL</span> — useful for cache invalidation</td></tr>
+              <tr><td>description</td><td><span class="badge badge-opt">OPTIONAL</span></td><td><span class="badge badge-opt">OPTIONAL</span></td></tr>
+              <tr><td>lastUpdated</td><td><span class="badge badge-opt">OPTIONAL</span></td><td>OMIT</td></tr>
+              <tr><td>tags</td><td><span class="badge badge-opt">OPTIONAL</span></td><td>OMIT</td></tr>
+              <tr><td>source</td><td><span class="badge badge-opt">OPTIONAL</span></td><td>OMIT</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>10.3. Compatibility</h3>
+        <p>Domain content fields (<code>rates</code>, <code>addresses</code>, <code>chains</code>, etc.) are identical between profiles. Any schema or tool that processes a Denna file of a given <code>kind</code> can process an API response of the same <code>kind</code> without modification. The canonical schemas at <code>spec.denna.io/schemas/v1/</code> validate both.</p>
+
         <h2 id="spec-example">Complete Example</h2>
 
-        <h3>Prime configuration  <code>spark/config.denna-spec.json</code></h3>
+        <h3>Protocol configuration  <code>spark/config.denna-spec.json</code></h3>
         <pre><code>{
-  <span class="jk">"$schema"</span>: <span class="js">"https://schemas.denna.io/v1/defi/prime-config.schema.json"</span>,
+  <span class="jk">"$schema"</span>: <span class="js">"https://spec.denna.io/schemas/v1/defi/protocol-config.schema.json"</span>,
   <span class="jk">"metadata"</span>: {
     <span class="jk">"id"</span>:          <span class="js">"spark-config"</span>,
     <span class="jk">"name"</span>:        <span class="js">"Spark"</span>,
-    <span class="jk">"kind"</span>:        <span class="js">"io.denna.defi.prime-config"</span>,
+    <span class="jk">"kind"</span>:        <span class="js">"io.denna.defi.protocol-config"</span>,
     <span class="jk">"version"</span>:     <span class="js">"1.0.0"</span>,
     <span class="jk">"lastUpdated"</span>: <span class="js">"2026-02-21"</span>,
     <span class="jk">"source"</span>: { <span class="jk">"repository"</span>: <span class="js">"primes-parameters"</span>, <span class="jk">"references"</span>: [<span class="js">"src/lib/constants.ts:12"</span>] }

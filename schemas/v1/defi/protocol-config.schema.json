@@ -1,0 +1,191 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://spec.denna.io/schemas/v1/defi/protocol-config.schema.json",
+  "title": "io.denna.defi.protocol-config",
+  "description": "Configuration for a DeFi protocol entity. Defines the chains it operates on, wallet/proxy addresses per chain, and asset allocation positions.",
+  "type": "object",
+  "required": ["$schema", "metadata"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "URI or relative path to this schema."
+    },
+    "metadata": {
+      "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/metadata"
+    },
+    "chains": {
+      "type": "array",
+      "description": "Chains the entity operates on, with per-chain addresses and feature flags.",
+      "items": { "$ref": "#/$defs/chainEntry" }
+    },
+    "debtSource": {
+      "type": "object",
+      "description": "Where on-chain debt data is sourced from.",
+      "additionalProperties": false,
+      "properties": {
+        "chain": {
+          "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/chain"
+        },
+        "vatAddress": {
+          "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/address"
+        },
+        "notes": { "type": "string" }
+      }
+    },
+    "allocations": {
+      "type": "object",
+      "description": "Asset allocation positions grouped by chain identifier.",
+      "additionalProperties": {
+        "type": "array",
+        "items": { "$ref": "#/$defs/allocation" }
+      }
+    }
+  },
+  "$defs": {
+    "chainEntry": {
+      "type": "object",
+      "required": ["id"],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/chain",
+          "description": "Chain identifier (e.g., ethereum, base, arbitrum)."
+        },
+        "name": {
+          "type": "string",
+          "description": "Human-readable chain name."
+        },
+        "almProxy": {
+          "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/address",
+          "description": "ALM proxy contract address — holds allocated funds on this chain."
+        },
+        "vaultProxy": {
+          "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/address",
+          "description": "Vault proxy contract address (e.g., MCD vault, Ethereum only)."
+        },
+        "psm3Contract": {
+          "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/address",
+          "description": "PSM3 contract address on this chain."
+        },
+        "susdsOracle": {
+          "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/address",
+          "description": "sUSDS price oracle address on this chain (L2 chains where sUSDS is a plain ERC20)."
+        },
+        "features": {
+          "type": "object",
+          "description": "Feature flags for this chain (e.g., alm, psm3, rwa, lending, idleStablecoins, susds, inPnlChains).",
+          "additionalProperties": { "type": "boolean" }
+        },
+        "notes": {
+          "type": "string",
+          "description": "Additional notes about this chain's configuration."
+        }
+      }
+    },
+    "allocation": {
+      "type": "object",
+      "required": ["contract", "protocol", "type"],
+      "additionalProperties": false,
+      "properties": {
+        "contract": {
+          "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/address",
+          "description": "Contract address of the allocation position."
+        },
+        "vaultAddress": {
+          "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/address",
+          "description": "Associated vault address (e.g., Centrifuge vault)."
+        },
+        "protocol": {
+          "type": "string",
+          "description": "Protocol or issuer name (e.g., SparkLend, Morpho, Aave, Centrifuge)."
+        },
+        "type": {
+          "type": "string",
+          "description": "Position type.",
+          "enum": [
+            "atoken",
+            "erc4626",
+            "erc20",
+            "centrifuge",
+            "centrifuge_feeder",
+            "buidl",
+            "superstate",
+            "curve",
+            "uni_v3_pool",
+            "uni_v3_lp",
+            "anchorage",
+            "ethena",
+            "galaxy_clo",
+            "securitize",
+            "maple",
+            "lp"
+          ]
+        },
+        "symbol": {
+          "type": "string",
+          "description": "Token or position symbol (e.g., spDAI, syrupUSDC, JHLCO)."
+        },
+        "underlying": {
+          "type": "string",
+          "description": "Underlying asset symbol (e.g., USDC, DAI, USDS)."
+        },
+        "underlyingAddress": {
+          "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/address",
+          "description": "Underlying asset contract address."
+        },
+        "markets": {
+          "type": "array",
+          "description": "Market IDs for multi-market vaults (e.g., Morpho).",
+          "items": { "type": "string" }
+        },
+        "tags": {
+          "type": "array",
+          "description": "Classification tags governing how this position is treated in calculations.",
+          "items": {
+            "type": "string",
+            "enum": [
+              "idle_lending",
+              "bill_always",
+              "sky_takes_all",
+              "simple_period_return",
+              "direct_rate",
+              "ssr_funded",
+              "ssr_address",
+              "rwa",
+              "psm3",
+              "excluded_spread",
+              "sky_direct_exposure"
+            ]
+          }
+        },
+        "activeFromBlock": {
+          "type": "integer",
+          "description": "Block number from which this position became active."
+        },
+        "activeFromDate": {
+          "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/date",
+          "description": "Date from which this position became active."
+        },
+        "cap": {
+          "type": "object",
+          "description": "USD cap on this position for calculation purposes.",
+          "additionalProperties": false,
+          "properties": {
+            "value": { "type": "number" },
+            "currency": { "type": "string" }
+          }
+        },
+        "notes": {
+          "type": "string",
+          "description": "Additional notes about this position."
+        },
+        "extra": {
+          "type": "object",
+          "description": "Protocol-specific metadata not covered by the standard fields.",
+          "additionalProperties": true
+        }
+      }
+    }
+  }
+}

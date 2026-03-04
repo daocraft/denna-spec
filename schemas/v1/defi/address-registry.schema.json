@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://spec.denna.io/schemas/v1/defi/address-registry.schema.json",
+  "title": "io.denna.defi.address-registry",
+  "description": "A registry of named, multi-chain contract or token addresses. Suitable for tracking token deployments, shared contracts, or protocol infrastructure addresses across multiple blockchains.",
+  "type": "object",
+  "required": ["$schema", "metadata", "addresses"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "metadata": {
+      "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/metadata"
+    },
+    "addresses": {
+      "type": "object",
+      "description": "Named address registries. Each key is a logical name (e.g., USDS, USDC, sUSDS). Each value is an array of per-chain entries.",
+      "additionalProperties": {
+        "$ref": "#/$defs/addressGroup"
+      }
+    }
+  },
+  "$defs": {
+    "addressGroup": {
+      "type": "object",
+      "required": ["entries"],
+      "additionalProperties": false,
+      "properties": {
+        "description": {
+          "type": "string",
+          "description": "What this address group represents."
+        },
+        "source": {
+          "type": "string",
+          "description": "Source code reference (file:line)."
+        },
+        "entries": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["chain", "address"],
+            "additionalProperties": false,
+            "properties": {
+              "chain": {
+                "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/chain"
+              },
+              "address": {
+                "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/address"
+              },
+              "notes": {
+                "type": "string",
+                "description": "Chain-specific notes about this address (e.g., ERC4626 vault, plain ERC20, excluded from spread)."
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://spec.denna.io/schemas/v1/governance/payment-record.schema.json",
+  "title": "io.denna.governance.payment-record",
+  "description": "A record of governance-related payments. Suitable for tracking distribution rewards, integration boosts, governance rewards, and other protocol disbursements.",
+  "type": "object",
+  "required": ["$schema", "metadata", "category", "payments"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "metadata": {
+      "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/metadata"
+    },
+    "category": {
+      "type": "string",
+      "description": "The type of payments in this record (e.g., distribution-reward, integration-boost, governance-reward, operational-expense)."
+    },
+    "payments": {
+      "type": "array",
+      "description": "List of individual payment entries.",
+      "items": { "$ref": "#/$defs/paymentEntry" }
+    }
+  },
+  "$defs": {
+    "paymentEntry": {
+      "type": "object",
+      "required": ["period", "recipient", "amount", "status"],
+      "additionalProperties": false,
+      "properties": {
+        "period": {
+          "type": "string",
+          "description": "The period this payment covers. SHOULD be YYYY-MM or an ISO date range (e.g., 2026-01 or 2026-01-01/2026-01-31)."
+        },
+        "recipient": {
+          "type": "string",
+          "description": "Name or identifier of the payment recipient."
+        },
+        "recipientAddress": {
+          "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/address",
+          "description": "Wallet address of the recipient."
+        },
+        "amount": {
+          "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/amount"
+        },
+        "chain": {
+          "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/chain",
+          "description": "Chain on which the payment was or will be made."
+        },
+        "txHash": {
+          "type": "string",
+          "description": "Transaction hash of the on-chain payment."
+        },
+        "status": {
+          "type": "string",
+          "enum": ["pending", "paid", "cancelled"],
+          "description": "Current status of this payment."
+        },
+        "notes": {
+          "type": "string",
+          "description": "Additional notes about this payment."
+        }
+      }
+    }
+  }
+}

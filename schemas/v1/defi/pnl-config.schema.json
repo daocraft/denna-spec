@@ -1,0 +1,580 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://spec.denna.io/schemas/v1/defi/pnl-config.schema.json",
+  "title": "io.denna.defi.pnl-config",
+  "description": "PnL configuration for a DeFi protocol entity. Covers calculation modules, subsidy programs, address classifications, asset caps, lending protocol configs, LP pool handling, stability module composition, direct exposures, and pricing config.",
+  "type": "object",
+  "required": ["$schema", "metadata", "parameters"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "metadata": {
+      "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/metadata"
+    },
+    "parameters": {
+      "type": "object",
+      "required": ["calculationModules"],
+      "additionalProperties": false,
+      "properties": {
+        "chains": {
+          "type": "array",
+          "description": "Active chains for this entity, with proxy addresses and features.",
+          "items": {
+            "$ref": "#/$defs/chainConfig"
+          }
+        },
+        "debtSource": {
+          "$ref": "#/$defs/debtSourceConfig"
+        },
+        "psm3Chains": {
+          "type": "array",
+          "description": "Chain IDs where PSM3 is processed for debt PnL. May include chains not in the entity's own chain list.",
+          "items": {
+            "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/chain"
+          }
+        },
+        "allocations": {
+          "type": "object",
+          "description": "Allocation positions keyed by chain ID.",
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/allocationPosition"
+            }
+          }
+        },
+        "calculationModules": {
+          "type": "array",
+          "description": "PnL calculation modules and their enabled state.",
+          "items": {
+            "$ref": "#/$defs/calculationModule"
+          }
+        },
+        "subsidyPrograms": {
+          "type": "array",
+          "description": "Subsidy programs this entity participates in.",
+          "items": {
+            "$ref": "#/$defs/subsidyProgram"
+          }
+        },
+        "assetCaps": {
+          "type": "array",
+          "description": "Per-asset allocation caps.",
+          "items": {
+            "$ref": "#/$defs/assetCap"
+          }
+        },
+        "lpPoolHandling": {
+          "type": "array",
+          "description": "Special handling rules for LP pools across protocols.",
+          "items": {
+            "$ref": "#/$defs/lpPoolConfig"
+          }
+        },
+        "oneTimeAdjustments": {
+          "type": "array",
+          "description": "One-time revenue adjustments.",
+          "items": {
+            "$ref": "#/$defs/oneTimeAdjustment"
+          }
+        },
+        "prepayments": {
+          "type": "array",
+          "description": "Prepayment amounts for specific assets.",
+          "items": {
+            "$ref": "#/$defs/prepayment"
+          }
+        },
+        "addressClassifications": {
+          "$ref": "#/$defs/addressClassifications"
+        },
+        "lendingProtocols": {
+          "type": "array",
+          "description": "Lending protocol configurations (SparkLend, Aave, Morpho, etc.).",
+          "items": {
+            "$ref": "#/$defs/lendingProtocolConfig"
+          }
+        },
+        "pricingConfig": {
+          "$ref": "#/$defs/pricingConfig"
+        },
+        "stabilityModules": {
+          "type": "array",
+          "description": "Stability module (PSM-style) token composition configurations.",
+          "items": {
+            "$ref": "#/$defs/stabilityModuleConfig"
+          }
+        },
+        "directExposures": {
+          "type": "array",
+          "description": "Direct exposure positions within stability modules (e.g., USDC within PSM3 treated as direct exposure).",
+          "items": {
+            "$ref": "#/$defs/directExposure"
+          }
+        },
+        "accountingNotes": {
+          "type": "string",
+          "description": "General accounting methodology notes including settlement formulas and asset treatment details."
+        },
+        "knownIssues": {
+          "type": "array",
+          "description": "Documented known issues or bugs.",
+          "items": {
+            "$ref": "#/$defs/knownIssue"
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "chainConfig": {
+      "type": "object",
+      "required": ["id", "name"],
+      "additionalProperties": false,
+      "description": "Chain configuration for an entity: proxy addresses and active features.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Chain identifier (e.g., ethereum, base, avalanche)."
+        },
+        "name": {
+          "type": "string",
+          "description": "Human-readable chain name."
+        },
+        "almProxy": {
+          "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/address",
+          "description": "ALM proxy contract address on this chain."
+        },
+        "vaultProxy": {
+          "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/address",
+          "description": "MCD vault proxy address (Ethereum only)."
+        },
+        "psm3Address": {
+          "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/address",
+          "description": "PSM3 contract address on this chain."
+        },
+        "susdsOracle": {
+          "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/address",
+          "description": "sUSDS price oracle address on this chain (L2 chains where sUSDS is a plain ERC20)."
+        },
+        "features": {
+          "$ref": "#/$defs/chainFeatures"
+        }
+      }
+    },
+    "chainFeatures": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Feature flags for a chain.",
+      "properties": {
+        "alm": {
+          "type": "boolean",
+          "description": "ALM module is active on this chain."
+        },
+        "psm3": {
+          "type": "boolean",
+          "description": "PSM3 is active on this chain."
+        },
+        "rwa": {
+          "type": "boolean",
+          "description": "Real World Asset positions exist on this chain."
+        },
+        "lending": {
+          "type": "boolean",
+          "description": "Lending protocol positions exist on this chain (SparkLend, Aave, Morpho, etc.)."
+        },
+        "idleStablecoins": {
+          "type": "boolean",
+          "description": "Idle stablecoin reimbursement module is active on this chain."
+        },
+        "susds": {
+          "type": "boolean",
+          "description": "sUSDS positions exist on this chain."
+        },
+        "inPnlChains": {
+          "type": "boolean",
+          "description": "Chain is included in the active chains for debt PnL calculations."
+        }
+      }
+    },
+    "debtSourceConfig": {
+      "type": "object",
+      "required": ["chain", "vatAddress"],
+      "additionalProperties": false,
+      "description": "Source of the entity's debt.",
+      "properties": {
+        "chain": {
+          "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/chain"
+        },
+        "vatAddress": {
+          "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/address"
+        }
+      }
+    },
+    "allocationPosition": {
+      "type": "object",
+      "required": ["contract", "protocol", "type"],
+      "additionalProperties": false,
+      "description": "A single allocation position held by the entity.",
+      "properties": {
+        "contract": {
+          "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/address",
+          "description": "Contract address of the position."
+        },
+        "protocol": {
+          "type": "string",
+          "description": "Protocol name (e.g., Centrifuge, Aave, Morpho)."
+        },
+        "type": {
+          "type": "string",
+          "description": "Position type (e.g., centrifuge, atoken, erc4626, erc20, curve, uni_v3_pool)."
+        },
+        "underlying": {
+          "type": "string",
+          "description": "Underlying asset symbol (e.g., USDC, USDS, RLUSD)."
+        },
+        "underlyingAddress": {
+          "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/address",
+          "description": "Underlying asset contract address."
+        },
+        "vaultAddress": {
+          "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/address",
+          "description": "Associated vault address (e.g., Centrifuge vault)."
+        },
+        "activeFromBlock": {
+          "type": "integer",
+          "description": "Block number from which this position is active."
+        },
+        "markets": {
+          "type": "array",
+          "description": "Morpho market IDs for multi-market vaults.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    "calculationModule": {
+      "type": "object",
+      "required": ["id", "name", "enabled"],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Module identifier."
+        },
+        "name": {
+          "type": "string",
+          "description": "Human-readable module name."
+        },
+        "enabled": {
+          "type": "boolean"
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    "subsidyProgram": {
+      "type": "object",
+      "required": ["eligible"],
+      "additionalProperties": false,
+      "description": "A subsidy program this entity participates in.",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Program name or identifier."
+        },
+        "eligible": {
+          "type": "boolean"
+        },
+        "cap": {
+          "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/amount"
+        },
+        "capPeriod": {
+          "type": "string",
+          "description": "Period for the cap (e.g., 'per day')."
+        },
+        "start": {
+          "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/date"
+        },
+        "duration": {
+          "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/duration"
+        }
+      }
+    },
+    "assetCap": {
+      "type": "object",
+      "required": ["asset", "cap"],
+      "additionalProperties": false,
+      "properties": {
+        "asset": {
+          "type": "string",
+          "description": "Asset symbol."
+        },
+        "cap": {
+          "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/amount"
+        },
+        "effect": {
+          "type": "string",
+          "description": "What happens when the cap is exceeded."
+        }
+      }
+    },
+    "lpPoolConfig": {
+      "type": "object",
+      "required": ["lpAddress", "name"],
+      "additionalProperties": false,
+      "description": "Special handling rules for an LP pool.",
+      "properties": {
+        "protocol": {
+          "type": "string",
+          "description": "LP protocol (e.g., curve, uniswap-v3, balancer)."
+        },
+        "name": {
+          "type": "string"
+        },
+        "lpAddress": {
+          "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/address"
+        },
+        "activeFrom": {
+          "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/date"
+        },
+        "treatment": {
+          "type": "string",
+          "description": "How the pool is treated in PnL calculations."
+        }
+      }
+    },
+    "oneTimeAdjustment": {
+      "type": "object",
+      "required": ["month", "address", "amount", "description"],
+      "additionalProperties": false,
+      "properties": {
+        "month": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}$",
+          "description": "Year-month of the adjustment (YYYY-MM)."
+        },
+        "address": {
+          "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/address"
+        },
+        "amount": {
+          "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/amount"
+        },
+        "description": {
+          "type": "string"
+        }
+      }
+    },
+    "prepayment": {
+      "type": "object",
+      "required": ["asset", "address", "amount"],
+      "additionalProperties": false,
+      "properties": {
+        "asset": {
+          "type": "string"
+        },
+        "address": {
+          "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/address"
+        },
+        "amount": {
+          "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/amount"
+        }
+      }
+    },
+    "addressClassifications": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Special address classifications that affect PnL treatment.",
+      "properties": {
+        "billAlways": {
+          "type": "array",
+          "description": "Assets always charged at full base rate regardless of APY.",
+          "items": { "$ref": "#/$defs/classifiedAddress" }
+        },
+        "skyTakesAll": {
+          "type": "array",
+          "description": "Protocol takes all profit; entity doesn't pay for underperformance.",
+          "items": { "$ref": "#/$defs/classifiedAddress" }
+        },
+        "simplePeriodReturn": {
+          "type": "array",
+          "description": "Period return treated as annual rate (not annualized).",
+          "items": { "$ref": "#/$defs/classifiedAddress" }
+        },
+        "directRate": {
+          "type": "array",
+          "description": "Use liquidity index growth instead of borrow rate conversion.",
+          "items": { "$ref": "#/$defs/classifiedAddress" }
+        },
+        "ssrFunded": {
+          "type": "array",
+          "description": "Assets with idle capital SSR cost deducted from entity revenue.",
+          "items": { "$ref": "#/$defs/classifiedAddress" }
+        },
+        "usdsSsr": {
+          "type": "array",
+          "description": "Use sUSDS price growth as custom base rate.",
+          "items": { "$ref": "#/$defs/classifiedAddress" }
+        }
+      }
+    },
+    "classifiedAddress": {
+      "type": "object",
+      "required": ["address", "asset"],
+      "additionalProperties": false,
+      "properties": {
+        "address": {
+          "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/address"
+        },
+        "asset": {
+          "type": "string"
+        },
+        "reason": {
+          "type": "string"
+        }
+      }
+    },
+    "lendingProtocolConfig": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Configuration for a lending protocol integration.",
+      "properties": {
+        "protocol": {
+          "type": "string",
+          "description": "Lending protocol name (e.g., sparklend, aave, morpho)."
+        },
+        "poolAddress": {
+          "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/address",
+          "description": "Lending pool contract address."
+        },
+        "underlyingMappings": {
+          "type": "array",
+          "description": "aToken/spToken to underlying asset mappings.",
+          "items": {
+            "type": "object",
+            "required": ["spToken", "underlying", "symbol"],
+            "additionalProperties": false,
+            "properties": {
+              "spToken": {
+                "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/address"
+              },
+              "underlying": {
+                "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/address"
+              },
+              "symbol": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "pricingConfig": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "sources": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["asset", "source", "method"],
+            "additionalProperties": false,
+            "properties": {
+              "asset": { "type": "string" },
+              "source": { "type": "string" },
+              "method": { "type": "string" }
+            }
+          }
+        },
+        "centrifugeTokenMappings": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["address", "tokenId", "asset"],
+            "additionalProperties": false,
+            "properties": {
+              "address": {
+                "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/address"
+              },
+              "tokenId": { "type": "string" },
+              "asset": { "type": "string" }
+            }
+          }
+        },
+        "prePeriodBuffer": {
+          "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/duration"
+        },
+        "postPeriodBuffer": {
+          "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/duration"
+        }
+      }
+    },
+    "stabilityModuleConfig": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Token composition configuration for a stability module (PSM-style contract).",
+      "properties": {
+        "address": {
+          "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/address",
+          "description": "Stability module contract address."
+        },
+        "chain": {
+          "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/chain"
+        },
+        "tokens": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["token", "module", "treatment"],
+            "additionalProperties": false,
+            "properties": {
+              "token": { "type": "string" },
+              "module": { "type": "string" },
+              "treatment": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    "directExposure": {
+      "type": "object",
+      "required": ["chain", "moduleAddress", "assetAddress"],
+      "additionalProperties": false,
+      "description": "A direct exposure position within a stability module.",
+      "properties": {
+        "chain": {
+          "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/chain"
+        },
+        "moduleAddress": {
+          "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/address",
+          "description": "The stability module contract address."
+        },
+        "assetAddress": {
+          "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/address",
+          "description": "The asset contract address within the module."
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    "knownIssue": {
+      "type": "object",
+      "required": ["id", "description", "status"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string" },
+        "description": { "type": "string" },
+        "source": { "type": "string" },
+        "status": { "type": "string" }
+      }
+    }
+  }
+}

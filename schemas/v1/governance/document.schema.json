@@ -1,0 +1,104 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://spec.denna.io/schemas/v1/governance/document.schema.json",
+  "title": "io.denna.governance.document",
+  "description": "A governance or constitutional document. Suitable for protocol constitutions, governance articles, policy documents, and proposals. Stores structured, versioned governance text that tools and smart contracts can reference.",
+  "type": "object",
+  "required": ["$schema", "metadata", "title", "sections"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "metadata": {
+      "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/metadata"
+    },
+    "title": {
+      "type": "string",
+      "description": "Full title of the document."
+    },
+    "effectiveDate": {
+      "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/date",
+      "description": "Date this document became or becomes effective."
+    },
+    "status": {
+      "type": "string",
+      "description": "Document lifecycle status.",
+      "enum": ["draft", "active", "superseded", "deprecated"]
+    },
+    "supersedes": {
+      "type": "string",
+      "description": "ID of the document this one supersedes."
+    },
+    "sections": {
+      "type": "array",
+      "description": "Ordered sections of the document.",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/section" }
+    },
+    "definitions": {
+      "type": "array",
+      "description": "Defined terms used throughout the document.",
+      "items": {
+        "type": "object",
+        "required": ["term", "definition"],
+        "additionalProperties": false,
+        "properties": {
+          "term": { "type": "string" },
+          "definition": { "type": "string" }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "section": {
+      "type": "object",
+      "required": ["id", "title"],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for this section (e.g., A.3.1, 1.2.3). Used for references and citations.",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$"
+        },
+        "title": {
+          "type": "string",
+          "description": "Section title."
+        },
+        "content": {
+          "type": "string",
+          "description": "Section body text. Plain text or Markdown."
+        },
+        "clauses": {
+          "type": "array",
+          "description": "Numbered or lettered clauses within this section.",
+          "items": {
+            "type": "object",
+            "required": ["id", "text"],
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "Clause identifier (e.g., A.3.1.1).",
+                "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$"
+              },
+              "text": {
+                "type": "string",
+                "description": "Clause text."
+              },
+              "notes": {
+                "type": "string",
+                "description": "Implementation notes or commentary."
+              }
+            }
+          }
+        },
+        "subsections": {
+          "type": "array",
+          "description": "Nested subsections.",
+          "items": { "$ref": "#/$defs/section" }
+        }
+      }
+    }
+  }
+}

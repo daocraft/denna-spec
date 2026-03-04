@@ -51,7 +51,7 @@ An object describing the file's identity and provenance. The following fields ar
 |-------|------|----------|-------------|
 | `id` | string | REQUIRED | A unique identifier for this file within its repository. MUST be kebab-case (`^[a-z0-9]+(-[a-z0-9]+)*$`). |
 | `name` | string | REQUIRED | A human-readable display name. |
-| `kind` | string | REQUIRED | A reverse-domain identifier classifying the type of data (e.g., `io.denna.defi.prime-config`, `io.sky.prime.config`). See [Section 3](#3-kind-identifiers). |
+| `kind` | string | REQUIRED | A reverse-domain identifier classifying the type of data (e.g., `io.denna.defi.protocol-config`, `io.sky.prime.config`). See [Section 3](#3-kind-identifiers). |
 | `description` | string | OPTIONAL | A brief description of what this file contains. |
 | `version` | string | OPTIONAL | A [Semantic Version](https://semver.org/) string for the data. SHOULD be incremented when parameters change. |
 | `lastUpdated` | string | OPTIONAL | An ISO 8601 date (`YYYY-MM-DD`) indicating when the data was last verified or updated. |
@@ -88,8 +88,8 @@ The `metadata.kind` field is a reverse-domain identifier that uniquely classifie
 A `kind` value MUST consist of at least three dot-separated segments. The first two segments SHOULD identify the schema publisher in reverse-domain order.
 
 ```
-io.denna.defi.prime-config
-^^ ^^^^^ ^^^^ ^^^^^^^^^^^
+io.denna.defi.protocol-config
+^^ ^^^^^ ^^^^ ^^^^^^^^^^^^^
 |  |      |    name
 |  |      namespace
 |  publisher domain
@@ -111,11 +111,11 @@ Pattern: `^[a-z][a-z0-9]*(\.[a-z][a-z0-9-]*){2,}$`
 Examples:
 
 ```
-io.denna.defi.prime-config       → official DeFi prime configuration schema
-io.denna.defi.rates             → official DeFi rates schema
-io.denna.governance.document    → official governance document schema
+io.denna.defi.protocol-config    → official DeFi protocol configuration schema
+io.denna.defi.rates              → official DeFi rates schema
+io.denna.governance.document     → official governance document schema
 io.sky.prime.config              → Sky Protocol custom prime config
-com.spark.pnl.params            → Spark custom PnL parameters
+com.spark.pnl.params             → Spark custom PnL parameters
 ```
 
 Organizations SHOULD use a namespace derived from a domain they control (reversed). Custom schemas can reference official Denna types via `$ref`.
@@ -214,7 +214,7 @@ Example of a domain schema importing Denna types:
 ```json
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://schemas.denna.io/v1/defi/prime-config.schema.json",
+  "$id": "https://spec.denna.io/schemas/v1/defi/protocol-config.schema.json",
   "type": "object",
   "required": ["$schema", "metadata", "chains"],
   "properties": {
@@ -242,36 +242,169 @@ Example of a domain schema importing Denna types:
 
 ### 6. Schema Ecosystem
 
-Denna Spec is designed around an open schema ecosystem. Any organization can publish schemas that other Denna Spec files reference. No central registry is required.
+Denna Spec ships with a canonical set of kind definitions for web3/DeFi and governance use cases. These are the official schemas tools can rely on for semantic interoperability.
 
-#### 6.1. Official Schemas (Denna)
+#### 6.1. Canonical Kind Definitions
 
-The Denna project maintains an open-source library of reusable schemas for common use cases, published at `https://schemas.denna.io/`. These use the `io.denna.*` namespace.
+All canonical schemas are published at `https://spec.denna.io/schemas/v1/` and use the `io.denna.*` namespace.
 
-Currently available:
+##### `io.denna.defi.address-registry`
 
-| Schema | Kind | Description |
-|--------|------|-------------|
-| `io.denna.defi.prime-config` | DeFi prime/protocol configuration | Chain configuration, wallet addresses, asset allocations |
-| `io.denna.defi.rates` | Shared rate parameters | Interest rates, spreads, subsidy programs |
-| `io.denna.defi.address-registry` | Address registry | Multi-chain token and contract address sets |
-| `io.denna.governance.document` | Governance document | Articles, clauses, constitutional documents |
+A registry of named, multi-chain contract or token addresses. Suitable for tracking token deployments, shared contracts, or protocol infrastructure addresses across multiple blockchains.
 
-#### 6.2. Custom Schemas
+Schema: `https://spec.denna.io/schemas/v1/defi/address-registry.schema.json`
 
-Organizations are encouraged to publish their own schemas. Custom schemas:
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `addresses` | object | REQUIRED | Named address groups. Each key is a logical name (e.g., USDS, USDC). Each value has `entries[]` with per-chain address objects. |
+| `addresses.{name}.description` | string | OPTIONAL | What this address group represents. |
+| `addresses.{name}.entries[].chain` | chain | REQUIRED | Chain identifier. |
+| `addresses.{name}.entries[].address` | address | REQUIRED | The address on this chain. |
+| `addresses.{name}.entries[].notes` | string | OPTIONAL | Chain-specific notes. |
 
-- MAY reference official Denna types as building blocks
-- SHOULD be hosted at a stable, public URL
-- SHOULD use the organization's reverse-domain namespace
-- MAY extend official schemas with additional fields
+##### `io.denna.defi.rates`
+
+Shared rate parameters, fallback values, and subsidy programs for a DeFi protocol. Suitable for cross-entity rate constants that multiple entities reference.
+
+Schema: `https://spec.denna.io/schemas/v1/defi/rates.schema.json`
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `rates` | object | OPTIONAL | Named rate values (each a `rate` type with `value` + `unit`). |
+| `fallbackRates` | array | OPTIONAL | Fallback rate values used when live data is unavailable. Each has `name`, `rate`, optional `description` and `source`. |
+| `rateHierarchy` | array | OPTIONAL | Documented relationships between rates. Each has `name`, optional `formula`, `value`, `reference`. |
+| `subsidyPrograms` | array | OPTIONAL | Time-bounded subsidy programs. Each has `name`, `start`, optional `duration`, `cap`, `capPeriod`, `eligibleEntities`, `formula`. |
+| `timeConstants` | object | OPTIONAL | Computational time constants (`secondsPerYear`, `secondsPerDay`). |
+| `externalDataSources` | array | OPTIONAL | External APIs or feeds used for rate data. Each has `name`, optional `url`, `field`, `lookbackDays`, `description`. |
+
+##### `io.denna.defi.protocol-config`
+
+Configuration for a DeFi protocol entity. Defines the chains it operates on, wallet/proxy addresses per chain, and asset allocation positions.
+
+Schema: `https://spec.denna.io/schemas/v1/defi/protocol-config.schema.json`
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `chains` | array | OPTIONAL | Chains the entity operates on. Each entry has `id` (chain), optional `name`, `almProxy`, `vaultProxy`, `psm3Contract`, `susdsOracle`, `features`, `notes`. |
+| `debtSource` | object | OPTIONAL | Where on-chain debt data is sourced from. Has `chain`, `vatAddress`, optional `notes`. |
+| `allocations` | object | OPTIONAL | Asset allocation positions grouped by chain identifier. Each value is an array of allocation objects with `contract`, `protocol`, `type` (required), and optional `symbol`, `underlying`, `tags`, `notes`, etc. |
+
+##### `io.denna.defi.pnl-config`
+
+PnL configuration for a DeFi protocol entity. Covers calculation modules, subsidy programs, address classifications, asset caps, lending protocol configs, LP pool handling, stability module composition, direct exposures, and pricing config.
+
+Schema: `https://spec.denna.io/schemas/v1/defi/pnl-config.schema.json`
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `parameters.calculationModules` | array | REQUIRED | PnL calculation modules. Each has `id`, `name`, `enabled`, optional `notes`. |
+| `parameters.chains` | array | OPTIONAL | Active chains with proxy addresses and feature flags. |
+| `parameters.debtSource` | object | OPTIONAL | Debt source config with `chain` and `vatAddress`. |
+| `parameters.allocations` | object | OPTIONAL | Allocation positions keyed by chain ID. |
+| `parameters.subsidyPrograms` | array | OPTIONAL | Subsidy programs this entity participates in. Each has `eligible`, optional `name`, `cap`, `capPeriod`, `start`, `duration`. |
+| `parameters.assetCaps` | array | OPTIONAL | Per-asset allocation caps. Each has `asset`, `cap`, optional `effect`. |
+| `parameters.lpPoolHandling` | array | OPTIONAL | Special handling rules for LP pools. Each has `lpAddress`, `name`, optional `protocol`, `activeFrom`, `treatment`. |
+| `parameters.oneTimeAdjustments` | array | OPTIONAL | One-time revenue adjustments. Each has `month`, `address`, `amount`, `description`. |
+| `parameters.prepayments` | array | OPTIONAL | Prepayment amounts. Each has `asset`, `address`, `amount`. |
+| `parameters.addressClassifications` | object | OPTIONAL | Special address classifications affecting PnL treatment (`billAlways`, `skyTakesAll`, `simplePeriodReturn`, `directRate`, `ssrFunded`, `usdsSsr`). |
+| `parameters.lendingProtocols` | array | OPTIONAL | Lending protocol configs. Each has optional `protocol`, `poolAddress`, `underlyingMappings`. |
+| `parameters.pricingConfig` | object | OPTIONAL | Pricing sources, Centrifuge token mappings, and period buffers. |
+| `parameters.stabilityModules` | array | OPTIONAL | Stability module (PSM-style) token composition configs. Each has optional `address`, `chain`, `tokens`. |
+| `parameters.directExposures` | array | OPTIONAL | Direct exposure positions within stability modules. Each has `chain`, `moduleAddress`, `assetAddress`, optional `notes`. |
+| `parameters.accountingNotes` | string | OPTIONAL | General accounting methodology notes including settlement formulas. |
+| `parameters.knownIssues` | array | OPTIONAL | Documented known issues. Each has `id`, `description`, `status`, optional `source`. |
+
+##### `io.denna.governance.document`
+
+A governance or constitutional document. Suitable for protocol constitutions, governance articles, policy documents, and proposals.
+
+Schema: `https://spec.denna.io/schemas/v1/governance/document.schema.json`
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `title` | string | REQUIRED | Full title of the document. |
+| `sections` | array | REQUIRED | Ordered sections. Each has `id`, `title`, optional `content`, `clauses[]`, `subsections[]`. |
+| `effectiveDate` | date | OPTIONAL | Date this document became or becomes effective. |
+| `status` | string | OPTIONAL | Document lifecycle status: `draft`, `active`, `superseded`, `deprecated`. |
+| `supersedes` | string | OPTIONAL | ID of the document this one supersedes. |
+| `definitions` | array | OPTIONAL | Defined terms. Each has `term` and `definition`. |
+
+##### `io.denna.governance.registry`
+
+A registry of governance participants. Suitable for tracking delegates, committee members, integrators, legal counsels, and other recognized roles.
+
+Schema: `https://spec.denna.io/schemas/v1/governance/registry.schema.json`
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `registryType` | string | REQUIRED | Category of participants (e.g., `aligned-delegates`, `committee-members`, `integrators`). |
+| `entries` | array | REQUIRED | List of participants. |
+| `entries[].id` | string | REQUIRED | Unique kebab-case identifier. |
+| `entries[].name` | string | REQUIRED | Display name. |
+| `entries[].status` | string | REQUIRED | Current standing: `active`, `inactive`, or `derecognized`. |
+| `entries[].aliases` | array | OPTIONAL | Known aliases or alternative names. |
+| `entries[].role` | string | OPTIONAL | Specific role within the registry. |
+| `entries[].address` | address | OPTIONAL | Primary wallet address. |
+| `entries[].joinedDate` | date | OPTIONAL | Date the participant was recognized. |
+| `entries[].exitDate` | date | OPTIONAL | Date the participant exited or was derecognized. |
+| `entries[].references` | array | OPTIONAL | Governance post URLs or document references. |
+| `entries[].notes` | string | OPTIONAL | Additional notes. |
+
+##### `io.denna.governance.payment-record`
+
+A record of governance-related payments. Suitable for tracking distribution rewards, integration boosts, governance rewards, and other protocol disbursements.
+
+Schema: `https://spec.denna.io/schemas/v1/governance/payment-record.schema.json`
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `category` | string | REQUIRED | Type of payments (e.g., `distribution-reward`, `integration-boost`, `governance-reward`). |
+| `payments` | array | REQUIRED | List of payment entries. |
+| `payments[].period` | string | REQUIRED | Coverage period (YYYY-MM or ISO date range). |
+| `payments[].recipient` | string | REQUIRED | Name or identifier of the recipient. |
+| `payments[].amount` | amount | REQUIRED | Payment amount with currency. |
+| `payments[].status` | string | REQUIRED | Payment status: `pending`, `paid`, or `cancelled`. |
+| `payments[].recipientAddress` | address | OPTIONAL | Wallet address of the recipient. |
+| `payments[].chain` | chain | OPTIONAL | Chain on which the payment was made. |
+| `payments[].txHash` | string | OPTIONAL | On-chain transaction hash. |
+| `payments[].notes` | string | OPTIONAL | Additional notes. |
+
+##### `io.denna.governance.incident-log`
+
+A log of governance incidents. Suitable for tracking security incidents, breach registries, dispute resolutions, and other significant events requiring formal documentation.
+
+Schema: `https://spec.denna.io/schemas/v1/governance/incident-log.schema.json`
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `incidents` | array | REQUIRED | List of documented incidents. |
+| `incidents[].id` | string | REQUIRED | Unique kebab-case identifier. |
+| `incidents[].date` | date | REQUIRED | Date the incident occurred or was reported. |
+| `incidents[].type` | string | REQUIRED | Category: `security`, `breach`, `dispute`, or `other`. |
+| `incidents[].parties` | array | REQUIRED | Names or identifiers of involved parties. |
+| `incidents[].description` | string | REQUIRED | Factual description of what occurred. |
+| `incidents[].finding` | string | REQUIRED | Current status: `resolved`, `ongoing`, `dismissed`, or `pending`. |
+| `incidents[].resolution` | string | OPTIONAL | Description of how the incident was resolved. |
+| `incidents[].references` | array | OPTIONAL | Governance post URLs or document references. |
+| `incidents[].notes` | string | OPTIONAL | Additional notes or context. |
+
+#### 6.2. Adding New Kinds
+
+The canonical kinds above cover the core web3/DeFi and governance use cases. New kinds should be proposed via the spec contribution process rather than created ad-hoc. When proposing a new kind:
+
+- Open an issue or PR describing the use case
+- The kind should be generic enough to serve multiple organizations
+- Field names should avoid organization-specific terminology
+- The kind should not duplicate an existing canonical kind
+
+Organizations with internal-only needs SHOULD use a namespace derived from a domain they control (e.g., `io.sky.*`, `com.spark.*`) rather than the `io.denna.*` namespace.
 
 #### 6.3. Local Schemas
 
 During development or for private use cases, schemas MAY be stored locally in the same repository as the data files and referenced with relative paths:
 
 ```json
-{ "$schema": "../../schemas/prime-config.schema.json" }
+{ "$schema": "../../schemas/protocol-config.schema.json" }
 ```
 
 ### 7. File Organization
@@ -296,6 +429,44 @@ Denna does not mandate a directory structure, but RECOMMENDS the following:
 2. Validators MUST resolve the `$schema` field and validate the entire file against the resolved schema.
 3. If the `$schema` field is missing or the referenced schema cannot be resolved, the file MUST be treated as invalid.
 
+### 10. API Response Profile
+
+The `$schema` + `metadata.kind` envelope is equally useful in HTTP API responses. The API Response Profile is a lightweight variant that omits file-centric metadata fields.
+
+#### 10.1. Envelope
+
+An API response MUST include `metadata.kind`. The `$schema` field SHOULD be included so consumers and tooling can validate the response. All other metadata fields are OPTIONAL and SHOULD be omitted unless meaningful in the API context.
+
+```json
+{
+  "$schema": "https://spec.denna.io/schemas/v1/defi/rates.schema.json",
+  "metadata": {
+    "kind": "io.denna.defi.rates"
+  },
+  "rates": {
+    "ssrSpread": { "value": 30, "unit": "bps" },
+    "fallbackSsr": { "value": 4.5, "unit": "percent" }
+  }
+}
+```
+
+#### 10.2. Metadata Fields
+
+| Field | File Profile | API Profile |
+|-------|-------------|-------------|
+| `kind` | REQUIRED | REQUIRED |
+| `id` | REQUIRED | OPTIONAL — use if the response represents a named resource |
+| `name` | REQUIRED | OPTIONAL |
+| `version` | OPTIONAL | OPTIONAL — useful for cache invalidation |
+| `description` | OPTIONAL | OPTIONAL |
+| `lastUpdated` | OPTIONAL | OMIT |
+| `tags` | OPTIONAL | OMIT |
+| `source` | OPTIONAL | OMIT |
+
+#### 10.3. Compatibility
+
+Domain content fields (`rates`, `addresses`, `chains`, etc.) are identical between profiles. Any schema or tool that processes a Denna file of a given `kind` can process an API response of the same `kind` without modification. The canonical schemas at `spec.denna.io/schemas/v1/` validate both.
+
 ## Complete Example
 
 This example shows a DeFi protocol managing chain configuration and rate parameters using Denna.
@@ -305,7 +476,7 @@ This example shows a DeFi protocol managing chain configuration and rate paramet
 ```
 primes-parameters/
 ├── schemas/
-│   ├── prime-config.schema.json        # Defines structure for prime config files
+│   ├── protocol-config.schema.json     # Defines structure for protocol config files
 │   └── shared-rates.schema.json        # Defines structure for shared rate files
 ├── spark/
 │   └── config.denna-spec.json          # Spark's chain config and allocations
@@ -319,11 +490,11 @@ primes-parameters/
 
 ```json
 {
-  "$schema": "../schemas/prime-config.schema.json",
+  "$schema": "../schemas/protocol-config.schema.json",
   "metadata": {
     "id": "spark-config",
     "name": "Spark",
-    "kind": "io.denna.defi.prime-config",
+    "kind": "io.denna.defi.protocol-config",
     "description": "Spark chain configuration, wallets, and allocation positions.",
     "version": "1.0.0",
     "lastUpdated": "2026-02-21",
