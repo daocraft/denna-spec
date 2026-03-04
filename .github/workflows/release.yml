@@ -41,6 +41,7 @@ jobs:
           VERSION=$(bun -e "console.log(require('./package.json').version)")
           MAJOR=$(echo $VERSION | cut -d. -f1)
           git tag -f "v${MAJOR}" HEAD
+          git remote set-url origin "https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }}"
           git push origin "v${MAJOR}" --force
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
