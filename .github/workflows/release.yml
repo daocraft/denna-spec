@@ -27,11 +27,8 @@ jobs:
       - name: Update version in landing page
         run: |
           VERSION=$(bun -e "console.log(require('./package.json').version)")
-          sed -i "s/CURRENT VERSION: [0-9.]*/CURRENT VERSION: $VERSION/g" docs/index.html
-          sed -i "s/v[0-9.]*\s*(latest)/v$VERSION (latest)/g" docs/index.html
-
-      - name: Copy schemas to docs
-        run: cp -r schemas/* docs/schemas/
+          sed -i "s/CURRENT VERSION: [0-9.]*/CURRENT VERSION: $VERSION/g" index.html
+          sed -i "s/v[0-9.]*\s*(latest)/v$VERSION (latest)/g" index.html
 
       - name: Run semantic-release
         env:
