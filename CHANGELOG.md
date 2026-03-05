@@ -1,3 +1,9 @@
+## [1.1.0](https://github.com/daocraft/denna-spec/compare/v1.0.0...v1.1.0) (2026-03-05)
+
+### Features
+
+* 🎸 refactor to canonical defi/web3 specification ([2180c7d](https://github.com/daocraft/denna-spec/commit/2180c7d9576ed835c946949edb1e3854626951e2))
+
 ## 1.0.0 (2026-02-26)
 
 ### Features
