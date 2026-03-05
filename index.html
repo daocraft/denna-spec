@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Denna Specification 1.0.0</title>
-  <link rel="icon" href="public/favicon.ico" sizes="any">
+  <link rel="icon" href="/public/favicon.ico" sizes="any">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
@@ -91,6 +91,9 @@
     }
     .nav-links a:hover { color: var(--text); }
     [data-theme="dark"] .nav-github img { filter: invert(1); }
+    .version-selector {
+      position: relative;
+    }
     .nav-version {
       font-family: var(--mono);
       font-size: 0.688rem;
@@ -100,7 +103,43 @@
       padding: 0.125rem 0.5rem;
       border-radius: 0.188rem;
       letter-spacing: 0.03em;
+      background: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      transition: border-color 0.15s, color 0.15s;
     }
+    .nav-version:hover { border-color: var(--text-3); color: var(--text-2); }
+    .version-chevron { opacity: 0.6; transition: transform 0.15s; flex-shrink: 0; }
+    .version-selector.open .version-chevron { transform: rotate(180deg); }
+    .version-menu {
+      display: none;
+      position: absolute;
+      top: calc(100% + 0.375rem);
+      right: 0;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 0.25rem;
+      min-width: 9rem;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+      z-index: 100;
+      overflow: hidden;
+    }
+    .version-selector.open .version-menu { display: block; }
+    .version-menu a {
+      display: block;
+      padding: 0.375rem 0.75rem;
+      font-family: var(--mono);
+      font-size: 0.688rem;
+      font-weight: 500;
+      color: var(--text-3);
+      text-decoration: none;
+      white-space: nowrap;
+      transition: background 0.1s, color 0.1s;
+    }
+    .version-menu a:hover { background: var(--border); color: var(--text); }
+    .version-menu a.current { color: var(--text); font-weight: 700; }
     .theme-toggle {
       background: none;
       border: 1px solid var(--border);
@@ -537,17 +576,23 @@
 
 <nav class="site-nav">
   <a href="#" class="nav-logo">
-    <img class="logo-light" src="public/denna-spec-logo.svg" alt="Denna" height="40">
-    <img class="logo-dark"  src="public/denna-spec-logo-dark.svg"  alt="Denna" height="40">
+    <img class="logo-light" src="/public/denna-spec-logo.svg" alt="Denna" height="40">
+    <img class="logo-dark"  src="/public/denna-spec-logo-dark.svg"  alt="Denna" height="40">
   </a>
   <div class="nav-right">
     <div class="nav-links">
       <a href="#introduction">Introduction</a>
       <a href="#how-it-works">How It Works</a>
       <a href="#specification">Specification</a>
-      <a href="https://github.com/daocraft/denna-spec" target="_blank" class="nav-github" aria-label="GitHub"><img src="public/github-142-svgrepo-com.svg" alt="GitHub" width="18" height="18"></a>
+      <a href="https://github.com/daocraft/denna-spec" target="_blank" class="nav-github" aria-label="GitHub"><img src="/public/github-142-svgrepo-com.svg" alt="GitHub" width="18" height="18"></a>
     </div>
-    <span class="nav-version">v1.0.0</span>
+    <div class="version-selector" id="version-selector">
+      <button class="nav-version" id="version-btn" onclick="toggleVersionMenu()" aria-haspopup="listbox" aria-expanded="false">
+        <span class="version-text">v1.0.0</span>
+        <svg class="version-chevron" width="8" height="8" viewBox="0 0 8 8" fill="none" aria-hidden="true"><path d="M1.5 3L4 5.5L6.5 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <div class="version-menu" id="version-menu" role="listbox"></div>
+    </div>
     <button class="theme-toggle" aria-label="Toggle theme" onclick="toggleTheme()">
       <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
       <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
@@ -1116,8 +1161,8 @@ jobs:
   <span>Denna Specification 1.0.0 &nbsp;&middot;&nbsp; CC BY 4.0</span>
   <div class="powered-by">
     Powered by
-    <a href="https://denna.io" target="_blank"><img class="logo-light" src="public/denna-labs-logo-light.svg" alt="Denna Labs" height="16"></a>
-    <a href="https://denna.io" target="_blank"><img class="logo-dark"  src="public/denna-labs-logo-dark.svg"  alt="Denna Labs" height="16"></a>
+    <a href="https://denna.io" target="_blank"><img class="logo-light" src="/public/denna-labs-logo-light.svg" alt="Denna Labs" height="16"></a>
+    <a href="https://denna.io" target="_blank"><img class="logo-dark"  src="/public/denna-labs-logo-dark.svg"  alt="Denna Labs" height="16"></a>
   </div>
   <div class="footer-links">
     <a href="https://spec.denna.io/v1/denna-types.schema.json">Type definitions</a>
@@ -1137,6 +1182,52 @@ jobs:
     html.setAttribute('data-theme', next);
     localStorage.setItem('denna-theme', next);
   }
+
+  function toggleVersionMenu() {
+    const sel = document.getElementById('version-selector');
+    const btn = document.getElementById('version-btn');
+    const open = sel.classList.toggle('open');
+    btn.setAttribute('aria-expanded', open);
+    if (open) {
+      const close = (e) => { if (!sel.contains(e.target)) { sel.classList.remove('open'); btn.setAttribute('aria-expanded', false); document.removeEventListener('click', close); } };
+      setTimeout(() => document.addEventListener('click', close), 0);
+    }
+  }
+
+  (async function initVersionSelector() {
+    const match = window.location.pathname.match(/^\/v(\d+\.\d+\.\d+)/);
+    const urlVersion = match ? match[1] : null;
+
+    if (urlVersion) {
+      document.querySelector('.version-text').textContent = 'v' + urlVersion;
+    }
+
+    try {
+      const res = await fetch('https://api.github.com/repos/daocraft/denna-spec/releases');
+      if (!res.ok) return;
+      const releases = await res.json();
+      if (!releases.length) return;
+
+      const menu = document.getElementById('version-menu');
+      const latestTag = releases[0].tag_name; // e.g. "v1.1.0"
+
+      // Latest entry (always links to /)
+      const latestA = document.createElement('a');
+      latestA.href = '/';
+      latestA.textContent = latestTag + ' (latest)';
+      if (!urlVersion) latestA.className = 'current';
+      menu.appendChild(latestA);
+
+      // Older releases
+      releases.slice(1).forEach(r => {
+        const a = document.createElement('a');
+        a.href = '/' + r.tag_name;
+        a.textContent = r.tag_name;
+        if (urlVersion && 'v' + urlVersion === r.tag_name) a.className = 'current';
+        menu.appendChild(a);
+      });
+    } catch (_) { /* fail silently */ }
+  })();
 
   const headings = Array.from(document.querySelectorAll('.section-heading[id], .spec-content h2[id]'));
   const tocLinks = document.querySelectorAll('.sidebar-toc a');
