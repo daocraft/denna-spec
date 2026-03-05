@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://spec.denna.io/schemas/v1/governance/document.schema.json",
+  "$id": "https://spec.denna.io/v1/governance/document.schema.json",
   "title": "io.denna.governance.document",
   "description": "A governance or constitutional document. Suitable for protocol constitutions, governance articles, policy documents, and proposals. Stores structured, versioned governance text that tools and smart contracts can reference.",
   "type": "object",
@@ -11,14 +11,14 @@
       "type": "string"
     },
     "metadata": {
-      "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/metadata"
+      "$ref": "https://spec.denna.io/v1/denna-types.schema.json#/$defs/metadata"
     },
     "title": {
       "type": "string",
       "description": "Full title of the document."
     },
     "effectiveDate": {
-      "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/date",
+      "$ref": "https://spec.denna.io/v1/denna-types.schema.json#/$defs/date",
       "description": "Date this document became or becomes effective."
     },
     "status": {

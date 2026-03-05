@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://spec.denna.io/schemas/v1/denna-types.schema.json",
+  "$id": "https://spec.denna.io/v1/denna-types.schema.json",
   "title": "Denna Spec Shared Type Definitions",
   "description": "Reusable type definitions for Denna Spec files. Import these via $ref in your domain schemas.",
   "$defs": {

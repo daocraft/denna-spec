@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://spec.denna.io/schemas/v1/defi/pnl-config.schema.json",
+  "$id": "https://spec.denna.io/v1/defi/pnl-config.schema.json",
   "title": "io.denna.defi.pnl-config",
   "description": "PnL configuration for a DeFi protocol entity. Covers calculation modules, subsidy programs, address classifications, asset caps, lending protocol configs, LP pool handling, stability module composition, direct exposures, and pricing config.",
   "type": "object",
@@ -11,7 +11,7 @@
       "type": "string"
     },
     "metadata": {
-      "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/metadata"
+      "$ref": "https://spec.denna.io/v1/denna-types.schema.json#/$defs/metadata"
     },
     "parameters": {
       "type": "object",
@@ -32,7 +32,7 @@
           "type": "array",
           "description": "Chain IDs where PSM3 is processed for debt PnL. May include chains not in the entity's own chain list.",
           "items": {
-            "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/chain"
+            "$ref": "https://spec.denna.io/v1/denna-types.schema.json#/$defs/chain"
           }
         },
         "allocations": {
@@ -144,19 +144,19 @@
           "description": "Human-readable chain name."
         },
         "almProxy": {
-          "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/address",
+          "$ref": "https://spec.denna.io/v1/denna-types.schema.json#/$defs/address",
           "description": "ALM proxy contract address on this chain."
         },
         "vaultProxy": {
-          "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/address",
+          "$ref": "https://spec.denna.io/v1/denna-types.schema.json#/$defs/address",
           "description": "MCD vault proxy address (Ethereum only)."
         },
         "psm3Address": {
-          "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/address",
+          "$ref": "https://spec.denna.io/v1/denna-types.schema.json#/$defs/address",
           "description": "PSM3 contract address on this chain."
         },
         "susdsOracle": {
-          "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/address",
+          "$ref": "https://spec.denna.io/v1/denna-types.schema.json#/$defs/address",
           "description": "sUSDS price oracle address on this chain (L2 chains where sUSDS is a plain ERC20)."
         },
         "features": {
@@ -206,10 +206,10 @@
       "description": "Source of the entity's debt.",
       "properties": {
         "chain": {
-          "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/chain"
+          "$ref": "https://spec.denna.io/v1/denna-types.schema.json#/$defs/chain"
         },
         "vatAddress": {
-          "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/address"
+          "$ref": "https://spec.denna.io/v1/denna-types.schema.json#/$defs/address"
         }
       }
     },
@@ -220,7 +220,7 @@
       "description": "A single allocation position held by the entity.",
       "properties": {
         "contract": {
-          "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/address",
+          "$ref": "https://spec.denna.io/v1/denna-types.schema.json#/$defs/address",
           "description": "Contract address of the position."
         },
         "protocol": {
@@ -236,11 +236,11 @@
           "description": "Underlying asset symbol (e.g., USDC, USDS, RLUSD)."
         },
         "underlyingAddress": {
-          "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/address",
+          "$ref": "https://spec.denna.io/v1/denna-types.schema.json#/$defs/address",
           "description": "Underlying asset contract address."
         },
         "vaultAddress": {
-          "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/address",
+          "$ref": "https://spec.denna.io/v1/denna-types.schema.json#/$defs/address",
           "description": "Associated vault address (e.g., Centrifuge vault)."
         },
         "activeFromBlock": {
@@ -294,17 +294,17 @@
           "type": "boolean"
         },
         "cap": {
-          "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/amount"
+          "$ref": "https://spec.denna.io/v1/denna-types.schema.json#/$defs/amount"
         },
         "capPeriod": {
           "type": "string",
           "description": "Period for the cap (e.g., 'per day')."
         },
         "start": {
-          "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/date"
+          "$ref": "https://spec.denna.io/v1/denna-types.schema.json#/$defs/date"
         },
         "duration": {
-          "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/duration"
+          "$ref": "https://spec.denna.io/v1/denna-types.schema.json#/$defs/duration"
         }
       }
     },
@@ -318,7 +318,7 @@
           "description": "Asset symbol."
         },
         "cap": {
-          "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/amount"
+          "$ref": "https://spec.denna.io/v1/denna-types.schema.json#/$defs/amount"
         },
         "effect": {
           "type": "string",
@@ -340,10 +340,10 @@
           "type": "string"
         },
         "lpAddress": {
-          "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/address"
+          "$ref": "https://spec.denna.io/v1/denna-types.schema.json#/$defs/address"
         },
         "activeFrom": {
-          "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/date"
+          "$ref": "https://spec.denna.io/v1/denna-types.schema.json#/$defs/date"
         },
         "treatment": {
           "type": "string",
@@ -362,10 +362,10 @@
           "description": "Year-month of the adjustment (YYYY-MM)."
         },
         "address": {
-          "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/address"
+          "$ref": "https://spec.denna.io/v1/denna-types.schema.json#/$defs/address"
         },
         "amount": {
-          "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/amount"
+          "$ref": "https://spec.denna.io/v1/denna-types.schema.json#/$defs/amount"
         },
         "description": {
           "type": "string"
@@ -381,10 +381,10 @@
           "type": "string"
         },
         "address": {
-          "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/address"
+          "$ref": "https://spec.denna.io/v1/denna-types.schema.json#/$defs/address"
         },
         "amount": {
-          "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/amount"
+          "$ref": "https://spec.denna.io/v1/denna-types.schema.json#/$defs/amount"
         }
       }
     },
@@ -431,7 +431,7 @@
       "additionalProperties": false,
       "properties": {
         "address": {
-          "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/address"
+          "$ref": "https://spec.denna.io/v1/denna-types.schema.json#/$defs/address"
         },
         "asset": {
           "type": "string"
@@ -451,7 +451,7 @@
           "description": "Lending protocol name (e.g., sparklend, aave, morpho)."
         },
         "poolAddress": {
-          "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/address",
+          "$ref": "https://spec.denna.io/v1/denna-types.schema.json#/$defs/address",
           "description": "Lending pool contract address."
         },
         "underlyingMappings": {
@@ -463,10 +463,10 @@
             "additionalProperties": false,
             "properties": {
               "spToken": {
-                "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/address"
+                "$ref": "https://spec.denna.io/v1/denna-types.schema.json#/$defs/address"
               },
               "underlying": {
-                "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/address"
+                "$ref": "https://spec.denna.io/v1/denna-types.schema.json#/$defs/address"
               },
               "symbol": {
                 "type": "string"
@@ -501,7 +501,7 @@
             "additionalProperties": false,
             "properties": {
               "address": {
-                "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/address"
+                "$ref": "https://spec.denna.io/v1/denna-types.schema.json#/$defs/address"
               },
               "tokenId": { "type": "string" },
               "asset": { "type": "string" }
@@ -509,10 +509,10 @@
           }
         },
         "prePeriodBuffer": {
-          "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/duration"
+          "$ref": "https://spec.denna.io/v1/denna-types.schema.json#/$defs/duration"
         },
         "postPeriodBuffer": {
-          "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/duration"
+          "$ref": "https://spec.denna.io/v1/denna-types.schema.json#/$defs/duration"
         }
       }
     },
@@ -522,11 +522,11 @@
       "description": "Token composition configuration for a stability module (PSM-style contract).",
       "properties": {
         "address": {
-          "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/address",
+          "$ref": "https://spec.denna.io/v1/denna-types.schema.json#/$defs/address",
           "description": "Stability module contract address."
         },
         "chain": {
-          "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/chain"
+          "$ref": "https://spec.denna.io/v1/denna-types.schema.json#/$defs/chain"
         },
         "tokens": {
           "type": "array",
@@ -550,14 +550,14 @@
       "description": "A direct exposure position within a stability module.",
       "properties": {
         "chain": {
-          "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/chain"
+          "$ref": "https://spec.denna.io/v1/denna-types.schema.json#/$defs/chain"
         },
         "moduleAddress": {
-          "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/address",
+          "$ref": "https://spec.denna.io/v1/denna-types.schema.json#/$defs/address",
           "description": "The stability module contract address."
         },
         "assetAddress": {
-          "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/address",
+          "$ref": "https://spec.denna.io/v1/denna-types.schema.json#/$defs/address",
           "description": "The asset contract address within the module."
         },
         "notes": {

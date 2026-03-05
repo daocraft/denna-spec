@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://spec.denna.io/schemas/v1/governance/payment-record.schema.json",
+  "$id": "https://spec.denna.io/v1/governance/payment-record.schema.json",
   "title": "io.denna.governance.payment-record",
   "description": "A record of governance-related payments. Suitable for tracking distribution rewards, integration boosts, governance rewards, and other protocol disbursements.",
   "type": "object",
@@ -11,7 +11,7 @@
       "type": "string"
     },
     "metadata": {
-      "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/metadata"
+      "$ref": "https://spec.denna.io/v1/denna-types.schema.json#/$defs/metadata"
     },
     "category": {
       "type": "string",
@@ -38,14 +38,14 @@
           "description": "Name or identifier of the payment recipient."
         },
         "recipientAddress": {
-          "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/address",
+          "$ref": "https://spec.denna.io/v1/denna-types.schema.json#/$defs/address",
           "description": "Wallet address of the recipient."
         },
         "amount": {
-          "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/amount"
+          "$ref": "https://spec.denna.io/v1/denna-types.schema.json#/$defs/amount"
         },
         "chain": {
-          "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/chain",
+          "$ref": "https://spec.denna.io/v1/denna-types.schema.json#/$defs/chain",
           "description": "Chain on which the payment was or will be made."
         },
         "txHash": {

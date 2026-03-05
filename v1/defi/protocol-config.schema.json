@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://spec.denna.io/schemas/v1/defi/protocol-config.schema.json",
+  "$id": "https://spec.denna.io/v1/defi/protocol-config.schema.json",
   "title": "io.denna.defi.protocol-config",
   "description": "Configuration for a DeFi protocol entity. Defines the chains it operates on, wallet/proxy addresses per chain, and asset allocation positions.",
   "type": "object",
@@ -12,7 +12,7 @@
       "description": "URI or relative path to this schema."
     },
     "metadata": {
-      "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/metadata"
+      "$ref": "https://spec.denna.io/v1/denna-types.schema.json#/$defs/metadata"
     },
     "chains": {
       "type": "array",
@@ -25,10 +25,10 @@
       "additionalProperties": false,
       "properties": {
         "chain": {
-          "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/chain"
+          "$ref": "https://spec.denna.io/v1/denna-types.schema.json#/$defs/chain"
         },
         "vatAddress": {
-          "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/address"
+          "$ref": "https://spec.denna.io/v1/denna-types.schema.json#/$defs/address"
         },
         "notes": { "type": "string" }
       }
@@ -49,7 +49,7 @@
       "additionalProperties": false,
       "properties": {
         "id": {
-          "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/chain",
+          "$ref": "https://spec.denna.io/v1/denna-types.schema.json#/$defs/chain",
           "description": "Chain identifier (e.g., ethereum, base, arbitrum)."
         },
         "name": {
@@ -57,19 +57,19 @@
           "description": "Human-readable chain name."
         },
         "almProxy": {
-          "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/address",
+          "$ref": "https://spec.denna.io/v1/denna-types.schema.json#/$defs/address",
           "description": "ALM proxy contract address — holds allocated funds on this chain."
         },
         "vaultProxy": {
-          "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/address",
+          "$ref": "https://spec.denna.io/v1/denna-types.schema.json#/$defs/address",
           "description": "Vault proxy contract address (e.g., MCD vault, Ethereum only)."
         },
         "psm3Contract": {
-          "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/address",
+          "$ref": "https://spec.denna.io/v1/denna-types.schema.json#/$defs/address",
           "description": "PSM3 contract address on this chain."
         },
         "susdsOracle": {
-          "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/address",
+          "$ref": "https://spec.denna.io/v1/denna-types.schema.json#/$defs/address",
           "description": "sUSDS price oracle address on this chain (L2 chains where sUSDS is a plain ERC20)."
         },
         "features": {
@@ -89,11 +89,11 @@
       "additionalProperties": false,
       "properties": {
         "contract": {
-          "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/address",
+          "$ref": "https://spec.denna.io/v1/denna-types.schema.json#/$defs/address",
           "description": "Contract address of the allocation position."
         },
         "vaultAddress": {
-          "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/address",
+          "$ref": "https://spec.denna.io/v1/denna-types.schema.json#/$defs/address",
           "description": "Associated vault address (e.g., Centrifuge vault)."
         },
         "protocol": {
@@ -131,7 +131,7 @@
           "description": "Underlying asset symbol (e.g., USDC, DAI, USDS)."
         },
         "underlyingAddress": {
-          "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/address",
+          "$ref": "https://spec.denna.io/v1/denna-types.schema.json#/$defs/address",
           "description": "Underlying asset contract address."
         },
         "markets": {
@@ -164,7 +164,7 @@
           "description": "Block number from which this position became active."
         },
         "activeFromDate": {
-          "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/date",
+          "$ref": "https://spec.denna.io/v1/denna-types.schema.json#/$defs/date",
           "description": "Date from which this position became active."
         },
         "cap": {

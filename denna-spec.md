@@ -122,7 +122,7 @@ Organizations SHOULD use a namespace derived from a domain they control (reverse
 
 ### 4. Semantic Value Types
 
-When representing the following common value types inside data fields, implementations SHOULD use these conventions. Denna provides reusable JSON Schema definitions at `https://spec.denna.io/schemas/v1/denna-types.schema.json`.
+When representing the following common value types inside data fields, implementations SHOULD use these conventions. Denna provides reusable JSON Schema definitions at `https://spec.denna.io/v1/denna-types.schema.json`.
 
 #### 4.1. Address
 
@@ -204,23 +204,23 @@ Common values: `ethereum`, `base`, `arbitrum`, `optimism`, `unichain`, `avalanch
 A domain schema is a JSON Schema file that defines the complete structure of a Denna file for a specific use case. Domain schemas:
 
 1. MUST validate the full file including `$schema`, `metadata`, and all domain content fields.
-2. SHOULD import shared type definitions from `https://spec.denna.io/schemas/v1/denna-types.schema.json` via `$ref`.
+2. SHOULD import shared type definitions from `https://spec.denna.io/v1/denna-types.schema.json` via `$ref`.
 3. SHOULD use JSON Schema draft 2020-12 or later.
 4. MAY be stored in the same repository as the data files or published separately.
-5. SHOULD be versioned at stable paths (e.g., `schemas/v1/`, `schemas/v2/`).
+5. SHOULD be versioned at stable paths (e.g., `v1/`, `v2/`).
 
 Example of a domain schema importing Denna types:
 
 ```json
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://spec.denna.io/schemas/v1/defi/protocol-config.schema.json",
+  "$id": "https://spec.denna.io/v1/defi/protocol-config.schema.json",
   "type": "object",
   "required": ["$schema", "metadata", "chains"],
   "properties": {
     "$schema": { "type": "string" },
     "metadata": {
-      "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/metadata"
+      "$ref": "https://spec.denna.io/v1/denna-types.schema.json#/$defs/metadata"
     },
     "chains": {
       "type": "array",
@@ -228,10 +228,10 @@ Example of a domain schema importing Denna types:
         "type": "object",
         "properties": {
           "id": {
-            "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/chain"
+            "$ref": "https://spec.denna.io/v1/denna-types.schema.json#/$defs/chain"
           },
           "almProxy": {
-            "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/address"
+            "$ref": "https://spec.denna.io/v1/denna-types.schema.json#/$defs/address"
           }
         }
       }
@@ -246,13 +246,13 @@ Denna Spec ships with a canonical set of kind definitions for web3/DeFi and gove
 
 #### 6.1. Canonical Kind Definitions
 
-All canonical schemas are published at `https://spec.denna.io/schemas/v1/` and use the `io.denna.*` namespace.
+All canonical schemas are published at `https://spec.denna.io/v1/` and use the `io.denna.*` namespace.
 
 ##### `io.denna.defi.address-registry`
 
 A registry of named, multi-chain contract or token addresses. Suitable for tracking token deployments, shared contracts, or protocol infrastructure addresses across multiple blockchains.
 
-Schema: `https://spec.denna.io/schemas/v1/defi/address-registry.schema.json`
+Schema: `https://spec.denna.io/v1/defi/address-registry.schema.json`
 
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
@@ -266,7 +266,7 @@ Schema: `https://spec.denna.io/schemas/v1/defi/address-registry.schema.json`
 
 Shared rate parameters, fallback values, and subsidy programs for a DeFi protocol. Suitable for cross-entity rate constants that multiple entities reference.
 
-Schema: `https://spec.denna.io/schemas/v1/defi/rates.schema.json`
+Schema: `https://spec.denna.io/v1/defi/rates.schema.json`
 
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
@@ -281,7 +281,7 @@ Schema: `https://spec.denna.io/schemas/v1/defi/rates.schema.json`
 
 Configuration for a DeFi protocol entity. Defines the chains it operates on, wallet/proxy addresses per chain, and asset allocation positions.
 
-Schema: `https://spec.denna.io/schemas/v1/defi/protocol-config.schema.json`
+Schema: `https://spec.denna.io/v1/defi/protocol-config.schema.json`
 
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
@@ -293,7 +293,7 @@ Schema: `https://spec.denna.io/schemas/v1/defi/protocol-config.schema.json`
 
 PnL configuration for a DeFi protocol entity. Covers calculation modules, subsidy programs, address classifications, asset caps, lending protocol configs, LP pool handling, stability module composition, direct exposures, and pricing config.
 
-Schema: `https://spec.denna.io/schemas/v1/defi/pnl-config.schema.json`
+Schema: `https://spec.denna.io/v1/defi/pnl-config.schema.json`
 
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
@@ -318,7 +318,7 @@ Schema: `https://spec.denna.io/schemas/v1/defi/pnl-config.schema.json`
 
 A governance or constitutional document. Suitable for protocol constitutions, governance articles, policy documents, and proposals.
 
-Schema: `https://spec.denna.io/schemas/v1/governance/document.schema.json`
+Schema: `https://spec.denna.io/v1/governance/document.schema.json`
 
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
@@ -333,7 +333,7 @@ Schema: `https://spec.denna.io/schemas/v1/governance/document.schema.json`
 
 A registry of governance participants. Suitable for tracking delegates, committee members, integrators, legal counsels, and other recognized roles.
 
-Schema: `https://spec.denna.io/schemas/v1/governance/registry.schema.json`
+Schema: `https://spec.denna.io/v1/governance/registry.schema.json`
 
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
@@ -354,7 +354,7 @@ Schema: `https://spec.denna.io/schemas/v1/governance/registry.schema.json`
 
 A record of governance-related payments. Suitable for tracking distribution rewards, integration boosts, governance rewards, and other protocol disbursements.
 
-Schema: `https://spec.denna.io/schemas/v1/governance/payment-record.schema.json`
+Schema: `https://spec.denna.io/v1/governance/payment-record.schema.json`
 
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
@@ -373,7 +373,7 @@ Schema: `https://spec.denna.io/schemas/v1/governance/payment-record.schema.json`
 
 A log of governance incidents. Suitable for tracking security incidents, breach registries, dispute resolutions, and other significant events requiring formal documentation.
 
-Schema: `https://spec.denna.io/schemas/v1/governance/incident-log.schema.json`
+Schema: `https://spec.denna.io/v1/governance/incident-log.schema.json`
 
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
@@ -420,8 +420,21 @@ Denna does not mandate a directory structure, but RECOMMENDS the following:
 
 1. The Denna Specification itself follows [Semantic Versioning](https://semver.org/). The current version is **1.0.0**.
 2. Individual data files SHOULD include a `metadata.version` field to track parameter changes over time.
-3. Domain schemas SHOULD be versioned at stable paths (`schemas/v1/`, `schemas/v2/`).
-4. A MAJOR version increment in a domain schema indicates breaking changes to the `parameters` structure. Consumers SHOULD check schema compatibility before processing files.
+3. Domain schemas SHOULD be versioned at stable paths (`v1/`, `v2/`). A new folder is introduced only on breaking changes — removing fields, narrowing types, or making optional fields required.
+4. Within a schema folder (e.g., `v1/`), changes are additive only: new kinds may be added and new optional fields may be introduced. The canonical URL at `spec.denna.io/v1/` always serves the latest published v1 schemas.
+
+#### 8.1. Spec Version and Tool Compatibility
+
+The Denna Specification is versioned via semantic release. Each release is tagged (e.g., `v1.2.3`) and corresponds to a known set of canonical kinds and fields. Tool builders SHOULD document which spec version their tool supports.
+
+**Schema URL as version declaration.** The `$schema` field in a Denna file implicitly declares the schema version through its URL:
+
+| `$schema` URL | Meaning |
+|---------------|---------|
+| `https://spec.denna.io/v1/defi/rates.schema.json` | Latest published v1 — tracks new additions |
+| `https://raw.githubusercontent.com/daocraft/denna-spec/v1.2.3/v1/defi/rates.schema.json` | Pinned to spec release v1.2.3 |
+
+Tools that need strict compatibility SHOULD resolve `$schema` against a pinned release tag rather than the live URL. Tools that track the latest SHOULD handle unknown fields and kinds gracefully.
 
 ### 9. Validation
 
@@ -439,7 +452,7 @@ An API response MUST include `metadata.kind`. The `$schema` field SHOULD be incl
 
 ```json
 {
-  "$schema": "https://spec.denna.io/schemas/v1/defi/rates.schema.json",
+  "$schema": "https://spec.denna.io/v1/defi/rates.schema.json",
   "metadata": {
     "kind": "io.denna.defi.rates"
   },
@@ -465,7 +478,7 @@ An API response MUST include `metadata.kind`. The `$schema` field SHOULD be incl
 
 #### 10.3. Compatibility
 
-Domain content fields (`rates`, `addresses`, `chains`, etc.) are identical between profiles. Any schema or tool that processes a Denna file of a given `kind` can process an API response of the same `kind` without modification. The canonical schemas at `spec.denna.io/schemas/v1/` validate both.
+Domain content fields (`rates`, `addresses`, `chains`, etc.) are identical between profiles. Any schema or tool that processes a Denna file of a given `kind` can process an API response of the same `kind` without modification. The canonical schemas at `spec.denna.io/v1/` validate both.
 
 ## Complete Example
 

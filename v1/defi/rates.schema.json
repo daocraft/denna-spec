@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://spec.denna.io/schemas/v1/defi/rates.schema.json",
+  "$id": "https://spec.denna.io/v1/defi/rates.schema.json",
   "title": "io.denna.defi.rates",
   "description": "Shared rate parameters, fallback values, and subsidy programs for a DeFi protocol. Suitable for cross-entity rate constants that multiple entities reference.",
   "type": "object",
@@ -11,13 +11,13 @@
       "type": "string"
     },
     "metadata": {
-      "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/metadata"
+      "$ref": "https://spec.denna.io/v1/denna-types.schema.json#/$defs/metadata"
     },
     "rates": {
       "type": "object",
       "description": "Named rate values. Each rate SHOULD use the Denna rate type.",
       "additionalProperties": {
-        "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/rate"
+        "$ref": "https://spec.denna.io/v1/denna-types.schema.json#/$defs/rate"
       }
     },
     "fallbackRates": {
@@ -29,7 +29,7 @@
         "additionalProperties": false,
         "properties": {
           "name": { "type": "string", "description": "Identifier for this fallback rate." },
-          "rate": { "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/rate" },
+          "rate": { "$ref": "https://spec.denna.io/v1/denna-types.schema.json#/$defs/rate" },
           "description": { "type": "string" },
           "source": { "type": "string" }
         }
@@ -45,7 +45,7 @@
         "properties": {
           "name": { "type": "string", "description": "Rate name." },
           "formula": { "type": "string", "description": "Mathematical formula expressing this rate." },
-          "value": { "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/rate" },
+          "value": { "$ref": "https://spec.denna.io/v1/denna-types.schema.json#/$defs/rate" },
           "reference": { "type": "string", "description": "Governance or methodology reference." }
         }
       }
@@ -59,9 +59,9 @@
         "additionalProperties": false,
         "properties": {
           "name": { "type": "string" },
-          "start": { "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/date" },
-          "duration": { "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/duration" },
-          "cap": { "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/amount" },
+          "start": { "$ref": "https://spec.denna.io/v1/denna-types.schema.json#/$defs/date" },
+          "duration": { "$ref": "https://spec.denna.io/v1/denna-types.schema.json#/$defs/duration" },
+          "cap": { "$ref": "https://spec.denna.io/v1/denna-types.schema.json#/$defs/amount" },
           "capPeriod": { "type": "string", "description": "Period to which the cap applies (e.g., 'per entity per day')." },
           "eligibleEntities": {
             "type": "array",

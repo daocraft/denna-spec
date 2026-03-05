@@ -722,7 +722,7 @@ No tool can parse this reliably.</span></code></pre>
     <div class="ecosystem-grid">
       <div class="ecosystem-card">
         <h3>DeFi  <code>io.denna.defi.*</code></h3>
-        <p class="eco-sub">Published at <code>spec.denna.io/schemas/v1/defi/</code></p>
+        <p class="eco-sub">Published at <code>spec.denna.io/v1/defi/</code></p>
         <ul class="kind-list">
           <li><span>io.denna.defi</span>.address-registry</li>
           <li><span>io.denna.defi</span>.rates</li>
@@ -732,7 +732,7 @@ No tool can parse this reliably.</span></code></pre>
       </div>
       <div class="ecosystem-card">
         <h3>Governance  <code>io.denna.governance.*</code></h3>
-        <p class="eco-sub">Published at <code>spec.denna.io/schemas/v1/governance/</code></p>
+        <p class="eco-sub">Published at <code>spec.denna.io/v1/governance/</code></p>
         <ul class="kind-list">
           <li><span>io.denna.governance</span>.document</li>
           <li><span>io.denna.governance</span>.registry</li>
@@ -840,7 +840,7 @@ TLD</code></pre>
         </div>
 
         <h2 id="spec-4">4. Semantic Value Types</h2>
-        <p>Reusable type definitions are available at <a href="https://spec.denna.io/schemas/v1/denna-types.schema.json">spec.denna.io/schemas/v1/denna-types.schema.json</a>. Import via <code>$ref</code> in domain schemas.</p>
+        <p>Reusable type definitions are available at <a href="https://spec.denna.io/v1/denna-types.schema.json">spec.denna.io/v1/denna-types.schema.json</a>. Import via <code>$ref</code> in domain schemas.</p>
 
         <h3>4.1. Address</h3>
         <pre><code>{ <span class="jk">"value"</span>: <span class="js">"0x1601843c5e9bc251a3272907010afa41fa18347e"</span>, <span class="jk">"format"</span>: <span class="js">"evm"</span> }
@@ -881,28 +881,28 @@ TLD</code></pre>
         <p>A domain schema is a JSON Schema file that defines the complete structure of a Denna file for a specific use case. Domain schemas:</p>
         <ol>
           <li>MUST validate the full file including <code>$schema</code>, <code>metadata</code>, and all domain content fields.</li>
-          <li>SHOULD import shared type definitions via <code>$ref</code> from <code>https://spec.denna.io/schemas/v1/denna-types.schema.json</code>.</li>
+          <li>SHOULD import shared type definitions via <code>$ref</code> from <code>https://spec.denna.io/v1/denna-types.schema.json</code>.</li>
           <li>SHOULD use JSON Schema draft 2020-12 or later.</li>
-          <li>SHOULD be versioned at stable paths (e.g., <code>schemas/v1/</code>, <code>schemas/v2/</code>).</li>
+          <li>SHOULD be versioned at stable paths (e.g., <code>v1/</code>, <code>v2/</code>).</li>
           <li>MAY be stored in the same repository as data files or published separately at a stable URL.</li>
         </ol>
 
         <h2 id="spec-6">6. Schema Ecosystem</h2>
-        <p>Denna Spec ships with a canonical set of kind definitions for web3/DeFi and governance use cases, published at <code>spec.denna.io/schemas/v1/</code>.</p>
+        <p>Denna Spec ships with a canonical set of kind definitions for web3/DeFi and governance use cases, published at <code>spec.denna.io/v1/</code>.</p>
 
         <h3>6.1. Canonical Kind Definitions</h3>
         <div class="table-wrap">
           <table>
             <thead><tr><th>Kind</th><th>Schema URL</th><th>Key Fields</th></tr></thead>
             <tbody>
-              <tr><td>io.denna.defi.address-registry</td><td><a href="https://spec.denna.io/schemas/v1/defi/address-registry.schema.json">…/defi/address-registry.schema.json</a></td><td><code>addresses</code> (named groups of chain→address entries)</td></tr>
-              <tr><td>io.denna.defi.rates</td><td><a href="https://spec.denna.io/schemas/v1/defi/rates.schema.json">…/defi/rates.schema.json</a></td><td><code>rates</code>, <code>fallbackRates</code>, <code>rateHierarchy</code>, <code>subsidyPrograms</code>, <code>externalDataSources</code></td></tr>
-              <tr><td>io.denna.defi.protocol-config</td><td><a href="https://spec.denna.io/schemas/v1/defi/protocol-config.schema.json">…/defi/protocol-config.schema.json</a></td><td><code>chains</code>, <code>debtSource</code>, <code>allocations</code></td></tr>
-              <tr><td>io.denna.defi.pnl-config</td><td><a href="https://spec.denna.io/schemas/v1/defi/pnl-config.schema.json">…/defi/pnl-config.schema.json</a></td><td><code>calculationModules</code>, <code>assetCaps</code>, <code>addressClassifications</code>, <code>pricingConfig</code></td></tr>
-              <tr><td>io.denna.governance.document</td><td><a href="https://spec.denna.io/schemas/v1/governance/document.schema.json">…/governance/document.schema.json</a></td><td><code>title</code>, <code>effectiveDate</code>, <code>status</code>, <code>sections</code>, <code>definitions</code></td></tr>
-              <tr><td>io.denna.governance.registry</td><td><a href="https://spec.denna.io/schemas/v1/governance/registry.schema.json">…/governance/registry.schema.json</a></td><td><code>registryType</code>, <code>entries[]</code> (id, name, role, address, status)</td></tr>
-              <tr><td>io.denna.governance.payment-record</td><td><a href="https://spec.denna.io/schemas/v1/governance/payment-record.schema.json">…/governance/payment-record.schema.json</a></td><td><code>category</code>, <code>payments[]</code> (period, recipient, amount, status)</td></tr>
-              <tr><td>io.denna.governance.incident-log</td><td><a href="https://spec.denna.io/schemas/v1/governance/incident-log.schema.json">…/governance/incident-log.schema.json</a></td><td><code>incidents[]</code> (date, type, parties, description, finding)</td></tr>
+              <tr><td>io.denna.defi.address-registry</td><td><a href="https://spec.denna.io/v1/defi/address-registry.schema.json">…/defi/address-registry.schema.json</a></td><td><code>addresses</code> (named groups of chain→address entries)</td></tr>
+              <tr><td>io.denna.defi.rates</td><td><a href="https://spec.denna.io/v1/defi/rates.schema.json">…/defi/rates.schema.json</a></td><td><code>rates</code>, <code>fallbackRates</code>, <code>rateHierarchy</code>, <code>subsidyPrograms</code>, <code>externalDataSources</code></td></tr>
+              <tr><td>io.denna.defi.protocol-config</td><td><a href="https://spec.denna.io/v1/defi/protocol-config.schema.json">…/defi/protocol-config.schema.json</a></td><td><code>chains</code>, <code>debtSource</code>, <code>allocations</code></td></tr>
+              <tr><td>io.denna.defi.pnl-config</td><td><a href="https://spec.denna.io/v1/defi/pnl-config.schema.json">…/defi/pnl-config.schema.json</a></td><td><code>calculationModules</code>, <code>assetCaps</code>, <code>addressClassifications</code>, <code>pricingConfig</code></td></tr>
+              <tr><td>io.denna.governance.document</td><td><a href="https://spec.denna.io/v1/governance/document.schema.json">…/governance/document.schema.json</a></td><td><code>title</code>, <code>effectiveDate</code>, <code>status</code>, <code>sections</code>, <code>definitions</code></td></tr>
+              <tr><td>io.denna.governance.registry</td><td><a href="https://spec.denna.io/v1/governance/registry.schema.json">…/governance/registry.schema.json</a></td><td><code>registryType</code>, <code>entries[]</code> (id, name, role, address, status)</td></tr>
+              <tr><td>io.denna.governance.payment-record</td><td><a href="https://spec.denna.io/v1/governance/payment-record.schema.json">…/governance/payment-record.schema.json</a></td><td><code>category</code>, <code>payments[]</code> (period, recipient, amount, status)</td></tr>
+              <tr><td>io.denna.governance.incident-log</td><td><a href="https://spec.denna.io/v1/governance/incident-log.schema.json">…/governance/incident-log.schema.json</a></td><td><code>incidents[]</code> (date, type, parties, description, finding)</td></tr>
             </tbody>
           </table>
         </div>
@@ -917,8 +917,22 @@ TLD</code></pre>
         <ol>
           <li>The Denna Specification follows <a href="https://semver.org/">Semantic Versioning</a>. Current version: <strong>1.0.0</strong>.</li>
           <li>Individual data files SHOULD include <code>metadata.version</code> to track data changes over time.</li>
-          <li>Domain schemas SHOULD be versioned at stable paths (<code>schemas/v1/</code>, <code>schemas/v2/</code>).</li>
+          <li>Domain schemas SHOULD be versioned at stable paths (<code>v1/</code>, <code>v2/</code>). A new folder is introduced only on breaking changes — removing fields, narrowing types, or making optional fields required.</li>
+          <li>Within a schema folder, changes are additive only. The canonical URL at <code>spec.denna.io/v1/</code> always serves the latest published v1 schemas.</li>
         </ol>
+
+        <h3>7.1. Spec Version and Tool Compatibility</h3>
+        <p>Each spec release is tagged (e.g., <code>v1.2.3</code>) and corresponds to a known set of canonical kinds and fields. Tool builders SHOULD document which spec version their tool supports. The <code>$schema</code> URL in a Denna file implicitly declares the schema version:</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th><code>$schema</code> URL</th><th>Meaning</th></tr></thead>
+            <tbody>
+              <tr><td>https://spec.denna.io/v1/defi/rates.schema.json</td><td>Latest published v1 — tracks new additions</td></tr>
+              <tr><td>https://raw.githubusercontent.com/daocraft/denna-spec/v1.2.3/v1/defi/rates.schema.json</td><td>Pinned to spec release v1.2.3</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Tools that need strict compatibility SHOULD resolve <code>$schema</code> against a pinned release tag. Tools that track the latest SHOULD handle unknown fields and kinds gracefully.</p>
 
         <h2 id="spec-8">8. Validation</h2>
         <ol>
@@ -933,7 +947,7 @@ TLD</code></pre>
         <h3>10.1. Envelope</h3>
         <p>An API response MUST include <code>metadata.kind</code>. The <code>$schema</code> field SHOULD be included so consumers and tooling can validate the response. All other metadata fields are OPTIONAL and SHOULD be omitted unless meaningful in the API context.</p>
         <pre><code>{
-  <span class="jk">"$schema"</span>: <span class="js">"https://spec.denna.io/schemas/v1/defi/rates.schema.json"</span>,
+  <span class="jk">"$schema"</span>: <span class="js">"https://spec.denna.io/v1/defi/rates.schema.json"</span>,
   <span class="jk">"metadata"</span>: {
     <span class="jk">"kind"</span>: <span class="js">"io.denna.defi.rates"</span>
   },
@@ -961,13 +975,13 @@ TLD</code></pre>
         </div>
 
         <h3>10.3. Compatibility</h3>
-        <p>Domain content fields (<code>rates</code>, <code>addresses</code>, <code>chains</code>, etc.) are identical between profiles. Any schema or tool that processes a Denna file of a given <code>kind</code> can process an API response of the same <code>kind</code> without modification. The canonical schemas at <code>spec.denna.io/schemas/v1/</code> validate both.</p>
+        <p>Domain content fields (<code>rates</code>, <code>addresses</code>, <code>chains</code>, etc.) are identical between profiles. Any schema or tool that processes a Denna file of a given <code>kind</code> can process an API response of the same <code>kind</code> without modification. The canonical schemas at <code>spec.denna.io/v1/</code> validate both.</p>
 
         <h2 id="spec-example">Complete Example</h2>
 
         <h3>Protocol configuration  <code>spark/config.denna-spec.json</code></h3>
         <pre><code>{
-  <span class="jk">"$schema"</span>: <span class="js">"https://spec.denna.io/schemas/v1/defi/protocol-config.schema.json"</span>,
+  <span class="jk">"$schema"</span>: <span class="js">"https://spec.denna.io/v1/defi/protocol-config.schema.json"</span>,
   <span class="jk">"metadata"</span>: {
     <span class="jk">"id"</span>:          <span class="js">"spark-config"</span>,
     <span class="jk">"name"</span>:        <span class="js">"Spark"</span>,
@@ -1106,7 +1120,7 @@ jobs:
     <a href="https://denna.io" target="_blank"><img class="logo-dark"  src="public/denna-labs-logo-dark.svg"  alt="Denna Labs" height="16"></a>
   </div>
   <div class="footer-links">
-    <a href="https://spec.denna.io/schemas/v1/denna-types.schema.json">Type definitions</a>
+    <a href="https://spec.denna.io/v1/denna-types.schema.json">Type definitions</a>
     <a href="https://github.com/daocraft/denna-spec" target="_blank">GitHub</a>
     <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank">License</a>
   </div>

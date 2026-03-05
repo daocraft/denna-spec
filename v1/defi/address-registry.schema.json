@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://spec.denna.io/schemas/v1/defi/address-registry.schema.json",
+  "$id": "https://spec.denna.io/v1/defi/address-registry.schema.json",
   "title": "io.denna.defi.address-registry",
   "description": "A registry of named, multi-chain contract or token addresses. Suitable for tracking token deployments, shared contracts, or protocol infrastructure addresses across multiple blockchains.",
   "type": "object",
@@ -11,7 +11,7 @@
       "type": "string"
     },
     "metadata": {
-      "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/metadata"
+      "$ref": "https://spec.denna.io/v1/denna-types.schema.json#/$defs/metadata"
     },
     "addresses": {
       "type": "object",
@@ -44,10 +44,10 @@
             "additionalProperties": false,
             "properties": {
               "chain": {
-                "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/chain"
+                "$ref": "https://spec.denna.io/v1/denna-types.schema.json#/$defs/chain"
               },
               "address": {
-                "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/address"
+                "$ref": "https://spec.denna.io/v1/denna-types.schema.json#/$defs/address"
               },
               "notes": {
                 "type": "string",

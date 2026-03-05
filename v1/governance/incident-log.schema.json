@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://spec.denna.io/schemas/v1/governance/incident-log.schema.json",
+  "$id": "https://spec.denna.io/v1/governance/incident-log.schema.json",
   "title": "io.denna.governance.incident-log",
   "description": "A log of governance incidents. Suitable for tracking security incidents, breach registries, dispute resolutions, and other significant events requiring formal documentation.",
   "type": "object",
@@ -11,7 +11,7 @@
       "type": "string"
     },
     "metadata": {
-      "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/metadata"
+      "$ref": "https://spec.denna.io/v1/denna-types.schema.json#/$defs/metadata"
     },
     "incidents": {
       "type": "array",
@@ -31,7 +31,7 @@
           "description": "Unique kebab-case identifier for this incident."
         },
         "date": {
-          "$ref": "https://spec.denna.io/schemas/v1/denna-types.schema.json#/$defs/date",
+          "$ref": "https://spec.denna.io/v1/denna-types.schema.json#/$defs/date",
           "description": "Date the incident occurred or was reported."
         },
         "type": {
