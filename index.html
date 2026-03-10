@@ -1198,10 +1198,6 @@ jobs:
     const match = window.location.pathname.match(/^\/v(\d+\.\d+\.\d+)/);
     const urlVersion = match ? match[1] : null;
 
-    if (urlVersion) {
-      document.querySelector('.version-text').textContent = 'v' + urlVersion;
-    }
-
     try {
       const res = await fetch('https://api.github.com/repos/daocraft/denna-spec/releases');
       if (!res.ok) return;
@@ -1210,6 +1206,9 @@ jobs:
 
       const menu = document.getElementById('version-menu');
       const latestTag = releases[0].tag_name; // e.g. "v1.1.0"
+
+      // Update button text: use URL version if on a versioned path, else use latest from API
+      document.querySelector('.version-text').textContent = urlVersion ? 'v' + urlVersion : latestTag;
 
       // Latest entry (always links to /)
       const latestA = document.createElement('a');
