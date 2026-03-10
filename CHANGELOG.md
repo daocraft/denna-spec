@@ -1,3 +1,9 @@
+## [1.1.2](https://github.com/daocraft/denna-spec/compare/v1.1.1...v1.1.2) (2026-03-10)
+
+### Bug Fixes
+
+* 🐛 version selector ([4aa9b63](https://github.com/daocraft/denna-spec/commit/4aa9b633a0a5e7d7586c4016609ca994b1ad5f9a))
+
 ## [1.1.1](https://github.com/daocraft/denna-spec/compare/v1.1.0...v1.1.1) (2026-03-05)
 
 ## [1.1.0](https://github.com/daocraft/denna-spec/compare/v1.0.0...v1.1.0) (2026-03-05)
