@@ -91,7 +91,7 @@
         "additionalProperties": false,
         "properties": {
           "name": { "type": "string" },
-          "url": { "type": "string", "format": "uri" },
+          "url": { "type": "string", "format": "uri-template" },
           "field": { "type": "string", "description": "Specific field or key to extract from the response." },
           "lookbackDays": { "type": "integer", "description": "Maximum days to look back when live data is unavailable." },
           "description": { "type": "string" }
