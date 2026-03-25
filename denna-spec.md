@@ -416,6 +416,56 @@ Denna does not mandate a directory structure, but RECOMMENDS the following:
 3. Place domain schemas in a `schemas/` directory at the repository root.
 4. Use descriptive file names that reflect content: `config.denna-spec.json`, `rates.denna-spec.json`, `allocations.denna-spec.json`.
 
+#### 7.1. Repository Manifest
+
+A parameter repository MAY include a **repository manifest** at its root: `denna-repo.denna-spec.json`. The manifest is a Denna file with kind `io.denna.repository` that declares the repo's version, release strategy, and an explicit list of all data files.
+
+**Purpose:**
+
+- **Discovery:** Consumers read `entries` to know every data file without scanning the filesystem.
+- **Versioning:** `metadata.version` reflects the latest semantic version of the repository.
+- **Consistency:** CI tooling can verify that `entries` matches the actual files on disk.
+
+**Schema:** `https://spec.denna.io/v1/repository.schema.json`
+
+**Required fields beyond the standard metadata block:**
+
+| Field | Type | Constraint |
+|-------|------|------------|
+| `metadata.id` | string | Kebab-case repository identifier |
+| `metadata.name` | string | Human-readable name |
+| `metadata.version` | string | Strict semver: `^\d+\.\d+\.\d+$` |
+| `metadata.kind` | string | Must be `"io.denna.repository"` |
+| `repository.release.strategy` | string | Enum: `"semver"` |
+| `repository.release.convention` | string | Enum: `"conventional-commits"` |
+| `repository.entries` | array | Relative paths ending in `.denna-spec.json`, min 1, unique |
+
+Entries use forward-slash separators and are relative to the repository root. Order is not significant.
+
+**Example:**
+
+```json
+{
+  "$schema": "https://spec.denna.io/v1/repository.schema.json",
+  "metadata": {
+    "id": "sky-parameters",
+    "kind": "io.denna.repository",
+    "name": "Sky Parameters",
+    "version": "1.2.0"
+  },
+  "repository": {
+    "release": {
+      "strategy": "semver",
+      "convention": "conventional-commits"
+    },
+    "entries": [
+      "grove/pnl-config.denna-spec.json",
+      "spark/protocol-config.denna-spec.json"
+    ]
+  }
+}
+```
+
 ### 8. Versioning
 
 1. The Denna Specification itself follows [Semantic Versioning](https://semver.org/). The current version is **1.0.0**.
