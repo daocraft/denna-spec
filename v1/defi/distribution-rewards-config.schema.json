@@ -1,0 +1,161 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://spec.denna.io/v1/defi/distribution-rewards-config.schema.json",
+  "title": "io.denna.defi.distribution-rewards-config",
+  "description": "Shared configuration for distribution rewards: monitored farms, global reward rates, and undistributed reward routing rules.",
+  "type": "object",
+  "required": ["$schema", "metadata", "farms", "rewardRates"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "metadata": {
+      "$ref": "https://spec.denna.io/v1/denna-types.schema.json#/$defs/metadata"
+    },
+    "farms": {
+      "type": "array",
+      "description": "Monitored farm/token contracts. Each entry defines a single farm with its contract addresses, event ABIs, and optional rate overrides.",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/farm" }
+    },
+    "rewardRates": {
+      "$ref": "#/$defs/rewardRates"
+    },
+    "undistributedRewards": {
+      "$ref": "#/$defs/undistributedRewards"
+    }
+  },
+  "$defs": {
+    "farm": {
+      "type": "object",
+      "required": ["id", "network", "token", "contractAddress", "eventAbi"],
+      "additionalProperties": false,
+      "description": "A single monitored farm/token contract.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+          "description": "Unique farm identifier (e.g., susds-ethereum, susds-base)."
+        },
+        "network": {
+          "$ref": "https://spec.denna.io/v1/denna-types.schema.json#/$defs/chain",
+          "description": "Blockchain network this farm operates on."
+        },
+        "token": {
+          "type": "string",
+          "description": "Token symbol monitored on this farm (e.g., USDS, sUSDS, sUSDC)."
+        },
+        "contractAddress": {
+          "$ref": "https://spec.denna.io/v1/denna-types.schema.json#/$defs/address",
+          "description": "Primary contract address to monitor."
+        },
+        "eventAbi": {
+          "type": "array",
+          "description": "ABI event definitions for the primary contract.",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "description": "A Solidity ABI entry."
+          }
+        },
+        "secondaryContract": {
+          "$ref": "https://spec.denna.io/v1/denna-types.schema.json#/$defs/address",
+          "description": "Secondary contract for farms where events come from two contracts (e.g., L2 sUSDS with separate token and farm contracts)."
+        },
+        "secondaryEventAbi": {
+          "type": "array",
+          "description": "ABI event definitions for the secondary contract.",
+          "items": {
+            "type": "object",
+            "description": "A Solidity ABI entry."
+          }
+        },
+        "multiplier": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "default": 1.0,
+          "description": "Reward multiplier for this farm. Defaults to 1.0. Use 0.9 for Savings V2 sp* farms."
+        },
+        "rateOverride": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "Farm-level rate override. When set, this replaces the global reward rate structure for this farm.",
+          "properties": {
+            "totalAPY": {
+              "$ref": "https://spec.denna.io/v1/denna-types.schema.json#/$defs/rate",
+              "description": "Fixed total APY for this farm, replacing base + additional."
+            },
+            "notes": {
+              "type": "string"
+            }
+          }
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    "rewardRates": {
+      "type": "object",
+      "required": ["baseAPY", "defaultAdditionalAPY", "maxAdditionalAPY"],
+      "additionalProperties": false,
+      "description": "Global reward rate structure. Per-partner overrides are in the per-star partner files.",
+      "properties": {
+        "baseAPY": {
+          "$ref": "https://spec.denna.io/v1/denna-types.schema.json#/$defs/rate",
+          "description": "Base APY applied to all partners on all farms."
+        },
+        "defaultAdditionalAPY": {
+          "$ref": "https://spec.denna.io/v1/denna-types.schema.json#/$defs/rate",
+          "description": "Default additional APY for partners without an explicit override."
+        },
+        "maxAdditionalAPY": {
+          "$ref": "https://spec.denna.io/v1/denna-types.schema.json#/$defs/rate",
+          "description": "Hard cap on additional APY."
+        },
+        "conversionFormula": {
+          "type": "string",
+          "description": "Documents the APY-to-daily-rate conversion formula."
+        }
+      }
+    },
+    "undistributedRewards": {
+      "type": "object",
+      "required": ["defaultRecipient"],
+      "additionalProperties": false,
+      "description": "Routing rules for rewards not distributed to a specific partner.",
+      "properties": {
+        "defaultRecipient": {
+          "type": "string",
+          "description": "Default star/entity that receives undistributed rewards."
+        },
+        "farmRules": {
+          "type": "array",
+          "description": "Per-farm routing overrides.",
+          "items": {
+            "type": "object",
+            "required": ["farms", "recipient"],
+            "additionalProperties": false,
+            "properties": {
+              "farms": {
+                "type": "array",
+                "items": { "type": "string" },
+                "minItems": 1,
+                "description": "Farm IDs this rule applies to."
+              },
+              "recipient": {
+                "type": "string",
+                "description": "Star/entity that receives undistributed rewards for these farms."
+              },
+              "notes": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
