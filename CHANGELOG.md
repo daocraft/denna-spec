@@ -1,3 +1,14 @@
+## [1.2.0](https://github.com/daocraft/denna-spec/compare/v1.1.2...v1.2.0) (2026-03-25)
+
+### Features
+
+* add repository manifest schema (v1/repository.schema.json) ([d19d9f3](https://github.com/daocraft/denna-spec/commit/d19d9f3d91b1d7ab44497d5e16a80a39d16de37f))
+
+### Bug Fixes
+
+* change url format from uri to uri-template in rates schema ([7b83605](https://github.com/daocraft/denna-spec/commit/7b836052d557c1b3e169a399331f76926dae0459))
+* update package.json to include ajv and ajv-formats in devDependencies ([f64434d](https://github.com/daocraft/denna-spec/commit/f64434d0682184318c5e2ff61b3982ec69a9945d))
+
 ## [1.1.2](https://github.com/daocraft/denna-spec/compare/v1.1.1...v1.1.2) (2026-03-10)
 
 ### Bug Fixes

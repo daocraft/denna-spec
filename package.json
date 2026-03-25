@@ -1,6 +1,6 @@
 {
   "name": "denna-spec",
-  "version": "1.1.2",
+  "version": "1.2.0",
   "description": "Denna Specification — a convention for structuring protocol parameters as JSON files validated by JSON Schema.",
   "repository": {
     "type": "git",
