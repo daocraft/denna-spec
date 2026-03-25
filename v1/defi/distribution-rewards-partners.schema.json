@@ -17,6 +17,24 @@
       "type": "string",
       "description": "Star/prime identifier. Must match the folder name in the repository (e.g., spark, grove, obex)."
     },
+    "codeRange": {
+      "type": "object",
+      "required": ["from", "to"],
+      "additionalProperties": false,
+      "description": "The referral code range owned by this star. Codes falling within this range are routed to this star.",
+      "properties": {
+        "from": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Start of the referral code range (inclusive)."
+        },
+        "to": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "End of the referral code range (inclusive)."
+        }
+      }
+    },
     "partners": {
       "type": "array",
       "description": "Partners belonging to this star, with referral codes and optional rate overrides.",
