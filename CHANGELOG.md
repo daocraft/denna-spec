@@ -1,3 +1,10 @@
+## [1.3.0](https://github.com/daocraft/denna-spec/compare/v1.2.0...v1.3.0) (2026-03-26)
+
+### Features
+
+* add codeRange field to distribution-rewards-partners schema ([d5b01af](https://github.com/daocraft/denna-spec/commit/d5b01af01e88ba478d0bf60e50ff81a7cb9cedbf))
+* add distribution rewards schemas ([9de01f2](https://github.com/daocraft/denna-spec/commit/9de01f2bb643c428e9cca630b98c6e01c4b43199))
+
 ## [1.2.0](https://github.com/daocraft/denna-spec/compare/v1.1.2...v1.2.0) (2026-03-25)
 
 ### Features
