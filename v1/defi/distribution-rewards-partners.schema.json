@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://spec.denna.io/v1/defi/distribution-rewards-partners.schema.json",
+  "title": "io.denna.defi.distribution-rewards-partners",
+  "description": "Per-star partner list for distribution rewards. Each star maintains its own file with referral codes and per-partner rate overrides.",
+  "type": "object",
+  "required": ["$schema", "metadata", "star", "partners"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "metadata": {
+      "$ref": "https://spec.denna.io/v1/denna-types.schema.json#/$defs/metadata"
+    },
+    "star": {
+      "type": "string",
+      "description": "Star/prime identifier. Must match the folder name in the repository (e.g., spark, grove, obex)."
+    },
+    "codeRange": {
+      "type": "object",
+      "required": ["from", "to"],
+      "additionalProperties": false,
+      "description": "The referral code range owned by this star. Codes falling within this range are routed to this star.",
+      "properties": {
+        "from": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Start of the referral code range (inclusive)."
+        },
+        "to": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "End of the referral code range (inclusive)."
+        }
+      }
+    },
+    "partners": {
+      "type": "array",
+      "description": "Partners belonging to this star, with referral codes and optional rate overrides.",
+      "items": { "$ref": "#/$defs/partner" }
+    }
+  },
+  "$defs": {
+    "partner": {
+      "type": "object",
+      "required": ["name", "referralCode"],
+      "additionalProperties": false,
+      "description": "A partner with a referral code and optional rate override.",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Partner display name."
+        },
+        "referralCode": {
+          "type": "string",
+          "description": "The referral code that identifies this partner's activity on farms."
+        },
+        "additionalAPY": {
+          "$ref": "https://spec.denna.io/v1/denna-types.schema.json#/$defs/rate",
+          "description": "Per-partner additional APY override. If omitted, defaultAdditionalAPY from the shared config applies."
+        },
+        "farms": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Restrict this partner to specific farm IDs. If omitted, partner is active on all farms."
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
