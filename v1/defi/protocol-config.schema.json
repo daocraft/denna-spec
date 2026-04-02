@@ -119,8 +119,15 @@
             "galaxy_clo",
             "securitize",
             "maple",
-            "lp"
+            "lp",
+            "psm3",
+            "proxy"
           ]
+        },
+        "allocationType": {
+          "type": "string",
+          "description": "Structural classification of the position: yield-bearing allocation, base asset, protocol-owned liquidity, or PSM3 position.",
+          "enum": ["allocation", "asset", "pol", "psm3"]
         },
         "symbol": {
           "type": "string",
