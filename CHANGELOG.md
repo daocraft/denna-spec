@@ -1,3 +1,9 @@
+## [1.4.0](https://github.com/daocraft/denna-spec/compare/v1.3.0...v1.4.0) (2026-04-02)
+
+### Features
+
+* add allocationType field and psm3/proxy types to allocation schema ([d5ab4a9](https://github.com/daocraft/denna-spec/commit/d5ab4a9f2ed570c3dd40643035f453203d705e3d))
+
 ## [1.3.0](https://github.com/daocraft/denna-spec/compare/v1.2.0...v1.3.0) (2026-03-26)
 
 ### Features
