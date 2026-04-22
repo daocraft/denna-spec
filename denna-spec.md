@@ -329,7 +329,7 @@ Schema: `https://spec.denna.io/v1/defi/vault-config.schema.json`
 | `attribution` | object | OPTIONAL | Referral/distribution tagging. Has optional `referralCode`, `memoProgram` (address, Solana), `notes`. |
 | `markets` | array | OPTIONAL | Sub-markets or allocation buckets. Each has `id` (kebab-case), `name`, optional `description`, `collateralTypes[]`, `address`. |
 | `fees` | object | OPTIONAL | Vault-level fees. Has optional `current`, `performance` (each a denna `rate`), `notes`. |
-| `compliance` | object | OPTIONAL | Frontend gating. Has optional `termsOfService` (`version`, `required`, optional `url`) and `geoBlocking` (`enabled`, optional `blockedCountries[]` / `allowedCountries[]` as ISO 3166-1 alpha-2, `notes`). |
+| `compliance` | object | OPTIONAL | Frontend gating. Has optional `termsOfService` (`enabled`, `version`, `required`; `url` required when `required` is true) and `geoBlocking` (`enabled`; when `enabled` is true, exactly one of `blockedCountries[]` or `allowedCountries[]` as ISO 3166-1 alpha-2 must be present; optional `notes`). |
 
 ##### `io.denna.governance.document`
 

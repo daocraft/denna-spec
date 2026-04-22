@@ -178,10 +178,14 @@
     },
     "termsOfService": {
       "type": "object",
-      "required": ["version", "required"],
+      "required": ["enabled", "version", "required"],
       "additionalProperties": false,
       "description": "Terms of Service acceptance policy.",
       "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Whether the Terms of Service gate is active. If false, the consumer skips ToS enforcement regardless of the other fields."
+        },
         "version": {
           "type": "string",
           "minLength": 1,
@@ -189,20 +193,29 @@
         },
         "required": {
           "type": "boolean",
-          "description": "Whether ToS acceptance is mandatory before any vault action."
+          "description": "Whether ToS acceptance is mandatory before any vault action. When true, `url` becomes required so users have somewhere to read what they are accepting."
         },
         "url": {
           "type": "string",
           "format": "uri",
-          "description": "URL where the current ToS document can be read."
+          "description": "URL where the current ToS document can be read. Required when `required` is true."
         }
-      }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "required": { "const": true } },
+            "required": ["required"]
+          },
+          "then": { "required": ["url"] }
+        }
+      ]
     },
     "geoBlocking": {
       "type": "object",
       "required": ["enabled"],
       "additionalProperties": false,
-      "description": "IP-based geographic access policy. Implemented by the frontend edge (e.g., Vercel Middleware).",
+      "description": "IP-based geographic access policy. Implemented by the frontend edge (e.g., Vercel Middleware). When `enabled` is true, exactly one of `blockedCountries` or `allowedCountries` must be provided.",
       "properties": {
         "enabled": {
           "type": "boolean",
@@ -215,7 +228,7 @@
             "pattern": "^[A-Z]{2}$"
           },
           "uniqueItems": true,
-          "description": "ISO 3166-1 alpha-2 country codes to block. Mutually exclusive policy with allowedCountries; consumers choose one."
+          "description": "ISO 3166-1 alpha-2 country codes to block. Mutually exclusive with `allowedCountries`; the schema enforces exactly one when `enabled` is true."
         },
         "allowedCountries": {
           "type": "array",
@@ -224,13 +237,27 @@
             "pattern": "^[A-Z]{2}$"
           },
           "uniqueItems": true,
-          "description": "ISO 3166-1 alpha-2 country codes explicitly allowed. When present, all other countries are blocked."
+          "description": "ISO 3166-1 alpha-2 country codes explicitly allowed. When present, all other countries are blocked. Mutually exclusive with `blockedCountries`."
         },
         "notes": {
           "type": "string",
           "description": "Human-readable notes — typically references to the legal basis or the review status of the list."
         }
-      }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "enabled": { "const": true } },
+            "required": ["enabled"]
+          },
+          "then": {
+            "oneOf": [
+              { "required": ["blockedCountries"] },
+              { "required": ["allowedCountries"] }
+            ]
+          }
+        }
+      ]
     }
   }
 }
