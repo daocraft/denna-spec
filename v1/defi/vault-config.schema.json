@@ -1,0 +1,263 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://spec.denna.io/v1/defi/vault-config.schema.json",
+  "title": "io.denna.defi.vault-config",
+  "description": "Frontend-facing configuration for a single DeFi vault. Covers vault identity, share and deposit tokens, deposit/withdraw limits, attribution metadata, sub-markets or allocation buckets, fees, and compliance gating (terms of service, geo-blocking).",
+  "type": "object",
+  "required": ["$schema", "metadata", "vault", "shareToken", "depositToken"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "URI or relative path to this schema."
+    },
+    "metadata": {
+      "$ref": "https://spec.denna.io/v1/denna-types.schema.json#/$defs/metadata"
+    },
+    "vault": { "$ref": "#/$defs/vault" },
+    "shareToken": { "$ref": "#/$defs/token" },
+    "depositToken": { "$ref": "#/$defs/token" },
+    "limits": { "$ref": "#/$defs/limits" },
+    "attribution": { "$ref": "#/$defs/attribution" },
+    "markets": {
+      "type": "array",
+      "description": "Sub-markets or allocation buckets exposed by the vault (e.g., Morpho markets, Kamino reserves, Yearn strategies). Order is meaningful for display.",
+      "items": { "$ref": "#/$defs/market" }
+    },
+    "fees": { "$ref": "#/$defs/fees" },
+    "compliance": { "$ref": "#/$defs/compliance" }
+  },
+  "$defs": {
+    "vault": {
+      "type": "object",
+      "required": ["address", "chain"],
+      "additionalProperties": false,
+      "properties": {
+        "address": {
+          "$ref": "https://spec.denna.io/v1/denna-types.schema.json#/$defs/address",
+          "description": "On-chain vault address or program account identifier."
+        },
+        "chain": {
+          "$ref": "https://spec.denna.io/v1/denna-types.schema.json#/$defs/chain",
+          "description": "Chain the vault is deployed on (e.g., ethereum, base, solana). Mainnet vs. testnet is expressed by the consumer, not here."
+        },
+        "protocol": {
+          "type": "string",
+          "description": "Underlying vault protocol identifier (e.g., kamino, morpho, yearn, erc4626). Use lowercase. Helps consumers route to protocol-specific SDKs."
+        },
+        "notes": {
+          "type": "string",
+          "description": "Additional human-readable notes about the vault."
+        }
+      }
+    },
+    "token": {
+      "type": "object",
+      "required": ["address", "symbol"],
+      "additionalProperties": false,
+      "description": "A token referenced by the vault — its on-chain address and display symbol. The same shape is used for the share token (vault receipt) and the deposit token (underlying asset).",
+      "properties": {
+        "address": {
+          "$ref": "https://spec.denna.io/v1/denna-types.schema.json#/$defs/address",
+          "description": "Token mint (Solana) or contract address (EVM)."
+        },
+        "symbol": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Display symbol (e.g., USDS, kV-KLUSDS, aUSDC)."
+        },
+        "decimals": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 36,
+          "description": "Number of decimal places used on-chain. Present when the frontend cannot resolve it from chain metadata or wants to avoid an RPC round-trip."
+        },
+        "name": {
+          "type": "string",
+          "description": "Optional human-readable token name (e.g., \"USD Savings\")."
+        }
+      }
+    },
+    "limits": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Deposit and withdrawal limits enforced by the frontend. On-chain limits may differ — this block captures the UX policy, not the protocol invariant.",
+      "properties": {
+        "minDeposit": {
+          "$ref": "https://spec.denna.io/v1/denna-types.schema.json#/$defs/amount",
+          "description": "Minimum deposit amount, denominated in the deposit token."
+        },
+        "minWithdraw": {
+          "$ref": "https://spec.denna.io/v1/denna-types.schema.json#/$defs/amount",
+          "description": "Minimum withdrawal amount, denominated in the deposit token."
+        },
+        "maxDeposit": {
+          "$ref": "https://spec.denna.io/v1/denna-types.schema.json#/$defs/amount",
+          "description": "Per-transaction maximum deposit. Omit for no frontend-side cap."
+        }
+      }
+    },
+    "attribution": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Attribution metadata — referral codes, memo programs, and other tagging used to trace deposits back to this frontend or a partner program.",
+      "properties": {
+        "referralCode": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Referral or distribution code attached to deposits (e.g., embedded in an SPL memo or an EVM calldata tag)."
+        },
+        "memoProgram": {
+          "$ref": "https://spec.denna.io/v1/denna-types.schema.json#/$defs/address",
+          "description": "Address of the memo program used to emit attribution (Solana: SPL Memo program). Omit for chains or protocols that use a different attribution mechanism."
+        },
+        "notes": {
+          "type": "string",
+          "description": "Human-readable notes about the attribution scheme."
+        }
+      }
+    },
+    "market": {
+      "type": "object",
+      "required": ["id", "name"],
+      "additionalProperties": false,
+      "description": "A sub-market, reserve, or strategy the vault allocates into.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+          "description": "Kebab-case identifier, stable across releases (e.g., main, prime, onre, maple)."
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Human-readable display name."
+        },
+        "description": {
+          "type": "string",
+          "description": "Short description of the market's strategy or mandate."
+        },
+        "collateralTypes": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "description": "Collateral assets accepted by the market (e.g., [\"SOL\", \"JitoSOL\"], [\"wBTC\", \"wETH\"])."
+        },
+        "address": {
+          "$ref": "https://spec.denna.io/v1/denna-types.schema.json#/$defs/address",
+          "description": "On-chain address of the market/reserve/strategy, when it has a stable address."
+        }
+      }
+    },
+    "fees": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Vault-level fees visible to depositors. Protocol-level fees and per-market fees are out of scope for this block.",
+      "properties": {
+        "current": {
+          "$ref": "https://spec.denna.io/v1/denna-types.schema.json#/$defs/rate",
+          "description": "Currently active fee (e.g., management or performance fee). Use a denna rate with unit bps or percent."
+        },
+        "performance": {
+          "$ref": "https://spec.denna.io/v1/denna-types.schema.json#/$defs/rate",
+          "description": "Performance fee, if distinct from the current/management fee."
+        },
+        "notes": {
+          "type": "string",
+          "description": "Human-readable notes about fee schedule, activation dates, or governance conditions."
+        }
+      }
+    },
+    "compliance": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Compliance gating applied by the frontend before allowing vault interaction.",
+      "properties": {
+        "termsOfService": { "$ref": "#/$defs/termsOfService" },
+        "geoBlocking": { "$ref": "#/$defs/geoBlocking" }
+      }
+    },
+    "termsOfService": {
+      "type": "object",
+      "required": ["enabled", "version", "required"],
+      "additionalProperties": false,
+      "description": "Terms of Service acceptance policy.",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Whether the Terms of Service gate is active. If false, the consumer skips ToS enforcement regardless of the other fields."
+        },
+        "version": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Current ToS version string. Consumers store acceptance keyed by this version so a bump re-prompts users."
+        },
+        "required": {
+          "type": "boolean",
+          "description": "Whether ToS acceptance is mandatory before any vault action. When true, `url` becomes required so users have somewhere to read what they are accepting."
+        },
+        "url": {
+          "type": "string",
+          "format": "uri",
+          "description": "URL where the current ToS document can be read. Required when `required` is true."
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "required": { "const": true } },
+            "required": ["required"]
+          },
+          "then": { "required": ["url"] }
+        }
+      ]
+    },
+    "geoBlocking": {
+      "type": "object",
+      "required": ["enabled"],
+      "additionalProperties": false,
+      "description": "IP-based geographic access policy. Implemented by the frontend edge (e.g., Vercel Middleware). When `enabled` is true, exactly one of `blockedCountries` or `allowedCountries` must be provided.",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Whether geo-blocking is active. If false, the country lists are ignored."
+        },
+        "blockedCountries": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[A-Z]{2}$"
+          },
+          "uniqueItems": true,
+          "description": "ISO 3166-1 alpha-2 country codes to block. Mutually exclusive with `allowedCountries`; the schema enforces exactly one when `enabled` is true."
+        },
+        "allowedCountries": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[A-Z]{2}$"
+          },
+          "uniqueItems": true,
+          "description": "ISO 3166-1 alpha-2 country codes explicitly allowed. When present, all other countries are blocked. Mutually exclusive with `blockedCountries`."
+        },
+        "notes": {
+          "type": "string",
+          "description": "Human-readable notes — typically references to the legal basis or the review status of the list."
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "enabled": { "const": true } },
+            "required": ["enabled"]
+          },
+          "then": {
+            "oneOf": [
+              { "required": ["blockedCountries"] },
+              { "required": ["allowedCountries"] }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

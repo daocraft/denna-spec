@@ -314,6 +314,23 @@ Schema: `https://spec.denna.io/v1/defi/pnl-config.schema.json`
 | `parameters.accountingNotes` | string | OPTIONAL | General accounting methodology notes including settlement formulas. |
 | `parameters.knownIssues` | array | OPTIONAL | Documented known issues. Each has `id`, `description`, `status`, optional `source`. |
 
+##### `io.denna.defi.vault-config`
+
+Frontend-facing configuration for a single DeFi vault. Covers vault identity, share and deposit tokens, deposit/withdraw limits, attribution metadata, sub-markets or allocation buckets, fees, and compliance gating (terms of service, geo-blocking). Designed for frontend consumption — the shape captures what the UI needs to render, validate, and gate vault interactions without hardcoding addresses or business rules.
+
+Schema: `https://spec.denna.io/v1/defi/vault-config.schema.json`
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `vault` | object | REQUIRED | Vault identity. Has `address`, `chain`, optional `protocol` (e.g. `kamino`, `morpho`, `yearn`), `notes`. |
+| `shareToken` | object | REQUIRED | Vault receipt token. Has `address`, `symbol`, optional `decimals`, `name`. |
+| `depositToken` | object | REQUIRED | Underlying asset accepted for deposit. Has `address`, `symbol`, optional `decimals`, `name`. |
+| `limits` | object | OPTIONAL | Frontend-enforced deposit/withdraw limits. Has optional `minDeposit`, `minWithdraw`, `maxDeposit` (each a denna `amount`). |
+| `attribution` | object | OPTIONAL | Referral/distribution tagging. Has optional `referralCode`, `memoProgram` (address, Solana), `notes`. |
+| `markets` | array | OPTIONAL | Sub-markets or allocation buckets. Each has `id` (kebab-case), `name`, optional `description`, `collateralTypes[]`, `address`. |
+| `fees` | object | OPTIONAL | Vault-level fees. Has optional `current`, `performance` (each a denna `rate`), `notes`. |
+| `compliance` | object | OPTIONAL | Frontend gating. Has optional `termsOfService` (`enabled`, `version`, `required`; `url` required when `required` is true) and `geoBlocking` (`enabled`; when `enabled` is true, exactly one of `blockedCountries[]` or `allowedCountries[]` as ISO 3166-1 alpha-2 must be present; optional `notes`). |
+
 ##### `io.denna.governance.document`
 
 A governance or constitutional document. Suitable for protocol constitutions, governance articles, policy documents, and proposals.
