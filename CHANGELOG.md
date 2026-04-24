@@ -1,3 +1,14 @@
+## [1.5.0](https://github.com/daocraft/denna-spec/compare/v1.4.0...v1.5.0) (2026-04-24)
+
+### Features
+
+* 🎸 add vault config schema ([6bd1e3f](https://github.com/daocraft/denna-spec/commit/6bd1e3fe00dc57f2b7b6e251ce2bf8600522ab57))
+* 🎸 add vault config schema ([ffac4b2](https://github.com/daocraft/denna-spec/commit/ffac4b27e30ff6443e44e788caf0801021461586))
+
+### Bug Fixes
+
+* 🐛 apply pr review comments ([f505e83](https://github.com/daocraft/denna-spec/commit/f505e836b1e001b8e0a36ec34877092fbfe437e6))
+
 ## [1.4.0](https://github.com/daocraft/denna-spec/compare/v1.3.0...v1.4.0) (2026-04-02)
 
 ### Features
