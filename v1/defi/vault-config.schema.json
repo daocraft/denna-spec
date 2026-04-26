@@ -121,7 +121,7 @@
       "type": "object",
       "required": ["id", "name"],
       "additionalProperties": false,
-      "description": "A sub-market, reserve, or strategy the vault allocates into.",
+      "description": "A sub-market, reserve, or strategy the vault allocates into. For protocols that distinguish a parent lending market from per-asset reserves (e.g., Kamino, MarginFi), use `lendingMarket` for the parent account and `reserve` for the specific asset slot the vault deposits into. Single-account protocols can use `address` only.",
       "properties": {
         "id": {
           "type": "string",
@@ -144,7 +144,15 @@
         },
         "address": {
           "$ref": "https://spec.denna.io/v1/denna-types.schema.json#/$defs/address",
-          "description": "On-chain address of the market/reserve/strategy, when it has a stable address."
+          "description": "Generic on-chain address of the market/reserve/strategy. Prefer the more specific `lendingMarket` and `reserve` fields when the protocol distinguishes them; `address` is retained for protocols that have a single canonical account or for backward compatibility."
+        },
+        "lendingMarket": {
+          "$ref": "https://spec.denna.io/v1/denna-types.schema.json#/$defs/address",
+          "description": "Parent lending-market account, when the protocol separates the market from its per-asset reserves (e.g., Kamino lending market, MarginFi group)."
+        },
+        "reserve": {
+          "$ref": "https://spec.denna.io/v1/denna-types.schema.json#/$defs/address",
+          "description": "Per-asset reserve account inside the lending market — the on-chain account the vault actually deposits into (e.g., a Kamino USDS reserve). Consumers should prefer `reserve` over `address` when looking up an allocation by on-chain identifier."
         }
       }
     },
