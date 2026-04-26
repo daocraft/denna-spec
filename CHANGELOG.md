@@ -1,3 +1,10 @@
+## [1.6.0](https://github.com/daocraft/denna-spec/compare/v1.5.0...v1.6.0) (2026-04-26)
+
+### Features
+
+* 🎸 extend vault markets type ([1f60741](https://github.com/daocraft/denna-spec/commit/1f60741c992a3fdaca2c27161c74f6d94ff93739))
+* 🎸 extend vault markets type ([e2c6d46](https://github.com/daocraft/denna-spec/commit/e2c6d46ece5774ab88f79ddd6709071c7d03c4ef))
+
 ## [1.5.0](https://github.com/daocraft/denna-spec/compare/v1.4.0...v1.5.0) (2026-04-24)
 
 ### Features
