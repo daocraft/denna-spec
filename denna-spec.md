@@ -327,7 +327,7 @@ Schema: `https://spec.denna.io/v1/defi/vault-config.schema.json`
 | `depositToken` | object | REQUIRED | Underlying asset accepted for deposit. Has `address`, `symbol`, optional `decimals`, `name`. |
 | `limits` | object | OPTIONAL | Frontend-enforced deposit/withdraw limits. Has optional `minDeposit`, `minWithdraw`, `maxDeposit` (each a denna `amount`). |
 | `attribution` | object | OPTIONAL | Referral/distribution tagging. Has optional `referralCode`, `memoProgram` (address, Solana), `notes`. |
-| `markets` | array | OPTIONAL | Sub-markets or allocation buckets. Each has `id` (kebab-case), `name`, optional `description`, `collateralTypes[]`, `address`. |
+| `markets` | array | OPTIONAL | Sub-markets or allocation buckets. Each has `id` (kebab-case), `name`, optional `description`, `collateralTypes[]`, `address`, `lendingMarket`, `reserve`. Use `lendingMarket` + `reserve` for protocols that distinguish a parent market from per-asset reserves (e.g., Kamino, MarginFi); use `address` alone when the market has a single canonical account. |
 | `fees` | object | OPTIONAL | Vault-level fees. Has optional `current`, `performance` (each a denna `rate`), `notes`. |
 | `compliance` | object | OPTIONAL | Frontend gating. Has optional `termsOfService` (`enabled`, `version`, `required`; `url` required when `required` is true) and `geoBlocking` (`enabled`; when `enabled` is true, exactly one of `blockedCountries[]` or `allowedCountries[]` as ISO 3166-1 alpha-2 must be present; optional `notes`). |
 
