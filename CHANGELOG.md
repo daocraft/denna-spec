@@ -1,3 +1,10 @@
+## [1.7.0](https://github.com/daocraft/denna-spec/compare/v1.6.0...v1.7.0) (2026-05-06)
+
+### Features
+
+* 🎸 add canonical ToS schema ([51d8873](https://github.com/daocraft/denna-spec/commit/51d887327e22099299a1f2c14e02e82530fd6940))
+* 🎸 add canonical ToS schema ([#6](https://github.com/daocraft/denna-spec/issues/6)) ([bb62505](https://github.com/daocraft/denna-spec/commit/bb62505c29a8239b386982ef3dc20fd9e3144ce5))
+
 ## [1.6.0](https://github.com/daocraft/denna-spec/compare/v1.5.0...v1.6.0) (2026-04-26)
 
 ### Features
