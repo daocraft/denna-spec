@@ -1,0 +1,238 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://spec.denna.io/v1/legal/terms-of-service.schema.json",
+  "title": "io.denna.legal.terms-of-service",
+  "description": "Canonical Terms of Service document for a website that interacts with on-chain protocols. Captures operator identity, governing law, jurisdictional restrictions, structured section content, and definitions. Designed to be rendered by a frontend, surfaced in an acceptance modal, fetched by external auditors, and machine-verified via signature. Enforcement of geographic blocking lives in `io.denna.defi.vault-config` (compliance.geoBlocking) and is referenced from this document for display only.",
+  "type": "object",
+  "required": [
+    "$schema",
+    "metadata",
+    "title",
+    "effectiveDate",
+    "operator",
+    "governingLaw",
+    "sections"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "URI or relative path to this schema."
+    },
+    "metadata": {
+      "$ref": "https://spec.denna.io/v1/denna-types.schema.json#/$defs/metadata"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Document title as displayed to users (e.g., \"Terms of Service\")."
+    },
+    "effectiveDate": {
+      "$ref": "https://spec.denna.io/v1/denna-types.schema.json#/$defs/date",
+      "description": "Date this version of the Terms became effective."
+    },
+    "status": {
+      "type": "string",
+      "enum": ["draft", "active", "superseded", "deprecated"],
+      "description": "Lifecycle status of the document."
+    },
+    "supersedes": {
+      "type": "string",
+      "description": "ID (metadata.id) of the prior Terms document this one supersedes."
+    },
+    "operator": {
+      "type": "object",
+      "required": ["name"],
+      "additionalProperties": false,
+      "description": "Identity of the entity operating the Site (the \"Site Operator\").",
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Legal or trading name of the operator (e.g., \"Keel Foundation\")."
+        },
+        "domain": {
+          "type": "string",
+          "description": "Primary domain at which the Site is hosted (e.g., \"keel.fi\")."
+        },
+        "contact": {
+          "type": "string",
+          "format": "email",
+          "description": "Email address for legal notices and contact."
+        }
+      }
+    },
+    "governingLaw": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Jurisdiction whose law governs this document (e.g., \"Cayman Islands\")."
+    },
+    "jurisdiction": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Optional dispute-resolution metadata. Display copy lives in the corresponding section blocks; this field is for tooling and indexing.",
+      "properties": {
+        "arbitrationVenue": {
+          "type": "string",
+          "description": "Seat of arbitration (e.g., \"Cayman Islands\")."
+        },
+        "arbitrationRules": {
+          "type": "string",
+          "description": "Arbitration rules referenced (e.g., \"CIMAC rules\")."
+        },
+        "arbitrationLanguage": {
+          "type": "string",
+          "description": "Language of the arbitration proceedings (e.g., \"English\")."
+        }
+      }
+    },
+    "restrictedJurisdictions": {
+      "type": "array",
+      "uniqueItems": true,
+      "description": "Display list of jurisdictions excluded under the Geographic Restrictions section. Note: enforcement lives in `io.denna.defi.vault-config` under compliance.geoBlocking; this list is informational and may include non-ISO regions (e.g., comprehensively sanctioned sub-regions).",
+      "items": {
+        "type": "object",
+        "required": ["code", "name"],
+        "additionalProperties": false,
+        "properties": {
+          "code": {
+            "type": "string",
+            "minLength": 2,
+            "pattern": "^[A-Z][A-Z0-9_-]*$",
+            "description": "ISO 3166-1 alpha-2 country code, or an uppercase identifier for sub-regions (e.g., \"CRIMEA\")."
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Human-readable name (e.g., \"United States of America\", \"Crimea Region\")."
+          },
+          "notes": {
+            "type": "string",
+            "description": "Optional context (e.g., \"OFAC SDN\", \"comprehensive sanctions\")."
+          }
+        }
+      }
+    },
+    "summary": {
+      "type": "array",
+      "minItems": 1,
+      "description": "Short blocks rendered in an acceptance modal or preview surface before the user navigates to the full document.",
+      "items": { "$ref": "#/$defs/block" }
+    },
+    "sections": {
+      "type": "array",
+      "minItems": 1,
+      "description": "Ordered top-level sections of the document.",
+      "items": { "$ref": "#/$defs/section" }
+    },
+    "definitions": {
+      "type": "array",
+      "description": "Defined terms used throughout the document. Renderers may surface these as a glossary.",
+      "items": {
+        "type": "object",
+        "required": ["term", "definition"],
+        "additionalProperties": false,
+        "properties": {
+          "term": { "type": "string", "minLength": 1 },
+          "definition": { "type": "string", "minLength": 1 }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "section": {
+      "type": "object",
+      "required": ["id", "title", "blocks"],
+      "additionalProperties": false,
+      "description": "A top-level section. Sections do not nest in this schema; use ordered/lettered IDs in the title for hierarchy (e.g., \"19. Dispute Resolution\").",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+          "description": "Stable kebab-case anchor used in URLs (e.g., \"governing-law\")."
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Section heading as displayed to users."
+        },
+        "blocks": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/block" }
+        }
+      }
+    },
+    "block": {
+      "oneOf": [
+        { "$ref": "#/$defs/paragraphBlock" },
+        { "$ref": "#/$defs/listBlock" }
+      ],
+      "description": "A renderable block. Either a paragraph (a sequence of styled spans) or a list (bullet or ordered, with each item containing spans)."
+    },
+    "paragraphBlock": {
+      "type": "object",
+      "required": ["type", "spans"],
+      "additionalProperties": false,
+      "properties": {
+        "type": { "const": "paragraph" },
+        "spans": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/span" }
+        }
+      }
+    },
+    "listBlock": {
+      "type": "object",
+      "required": ["type", "style", "items"],
+      "additionalProperties": false,
+      "properties": {
+        "type": { "const": "list" },
+        "style": {
+          "type": "string",
+          "enum": ["bullet", "ordered"],
+          "description": "Marker style. `bullet` renders as an unordered list; `ordered` renders as a numbered list."
+        },
+        "items": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["spans"],
+            "additionalProperties": false,
+            "properties": {
+              "spans": {
+                "type": "array",
+                "minItems": 1,
+                "items": { "$ref": "#/$defs/span" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "span": {
+      "type": "object",
+      "required": ["text"],
+      "additionalProperties": false,
+      "description": "An inline text run. Renderers MUST treat `text` as plain text (no HTML, no Markdown). Optional `style` adds emphasis. Optional `href` turns the span into a link; the href is rendered verbatim by the consumer, who is responsible for any same-origin or scheme allowlisting.",
+      "properties": {
+        "text": {
+          "type": "string",
+          "description": "Plain text content of the span."
+        },
+        "style": {
+          "type": "string",
+          "enum": ["bold", "italic", "code"],
+          "description": "Inline emphasis. `code` is intended for inline monospace (e.g., a domain or address)."
+        },
+        "href": {
+          "type": "string",
+          "minLength": 1,
+          "description": "If set, the span renders as a link. Accepts absolute URLs, relative paths, or `mailto:` URIs. Consumers SHOULD validate the scheme against an allowlist before rendering."
+        }
+      }
+    }
+  }
+}

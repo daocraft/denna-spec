@@ -763,7 +763,7 @@ No tool can parse this reliably.</span></code></pre>
   <!-- ── SCHEMA ECOSYSTEM ── -->
   <section class="doc-section narrative">
     <h2 class="section-heading" id="schema-ecosystem">Schema Ecosystem</h2>
-    <p>Denna ships with 8 canonical kind definitions for web3/DeFi and governance. Tools can rely on these for semantic interoperability without custom integrations.</p>
+    <p>Denna ships with 9 canonical kind definitions for web3/DeFi, governance, and legal. Tools can rely on these for semantic interoperability without custom integrations.</p>
     <div class="ecosystem-grid">
       <div class="ecosystem-card">
         <h3>DeFi  <code>io.denna.defi.*</code></h3>
@@ -783,6 +783,13 @@ No tool can parse this reliably.</span></code></pre>
           <li><span>io.denna.governance</span>.registry</li>
           <li><span>io.denna.governance</span>.payment-record</li>
           <li><span>io.denna.governance</span>.incident-log</li>
+        </ul>
+      </div>
+      <div class="ecosystem-card">
+        <h3>Legal  <code>io.denna.legal.*</code></h3>
+        <p class="eco-sub">Published at <code>spec.denna.io/v1/legal/</code></p>
+        <ul class="kind-list">
+          <li><span>io.denna.legal</span>.terms-of-service</li>
         </ul>
       </div>
     </div>
@@ -948,6 +955,7 @@ TLD</code></pre>
               <tr><td>io.denna.governance.registry</td><td><a href="https://spec.denna.io/v1/governance/registry.schema.json">…/governance/registry.schema.json</a></td><td><code>registryType</code>, <code>entries[]</code> (id, name, role, address, status)</td></tr>
               <tr><td>io.denna.governance.payment-record</td><td><a href="https://spec.denna.io/v1/governance/payment-record.schema.json">…/governance/payment-record.schema.json</a></td><td><code>category</code>, <code>payments[]</code> (period, recipient, amount, status)</td></tr>
               <tr><td>io.denna.governance.incident-log</td><td><a href="https://spec.denna.io/v1/governance/incident-log.schema.json">…/governance/incident-log.schema.json</a></td><td><code>incidents[]</code> (date, type, parties, description, finding)</td></tr>
+              <tr><td>io.denna.legal.terms-of-service</td><td><a href="https://spec.denna.io/v1/legal/terms-of-service.schema.json">…/legal/terms-of-service.schema.json</a></td><td><code>title</code>, <code>effectiveDate</code>, <code>operator</code>, <code>governingLaw</code>, <code>restrictedJurisdictions</code>, <code>summary</code>, <code>sections</code>, <code>definitions</code></td></tr>
             </tbody>
           </table>
         </div>

@@ -70,6 +70,7 @@ The `metadata.kind` field uses a reverse-domain convention (inspired by AT Proto
 | `io.denna.defi.address-registry` | Multi-chain address registries |
 | `io.denna.defi.vault-config` | Frontend config for a DeFi vault (identity, tokens, limits, markets, compliance) |
 | `io.denna.governance.document` | Governance and constitutional documents |
+| `io.denna.legal.terms-of-service` | Canonical Terms of Service document (operator, governing law, restricted jurisdictions, structured sections) |
 
 Use your own namespace for custom schemas: `io.sky.star.config`, `com.spark.pnl.params`, etc.
 
