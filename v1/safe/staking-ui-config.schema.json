@@ -1,0 +1,114 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://spec.denna.io/v1/safe/staking-ui-config.schema.json",
+  "title": "io.safe.staking-ui-config",
+  "description": "Per-chain operator configuration for an independent Safenet Beta staking UI. Holds chain metadata, validators, reward Merkle drop pointers, and feature flags. Contract addresses are kept in a separate io.denna.defi.address-registry file so they can be reused by other tooling (indexers, block explorers, dashboards).",
+  "type": "object",
+  "required": ["$schema", "metadata", "chains"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "URI or relative path to this schema."
+    },
+    "metadata": {
+      "$ref": "https://spec.denna.io/v1/denna-types.schema.json#/$defs/metadata"
+    },
+    "addressRegistry": {
+      "type": "string",
+      "description": "Relative path or URI to the io.denna.defi.address-registry file holding contract addresses. The UI loader reads `staking`, `safeToken`, `sanctionsOracle`, and `merkleDrop` named entries from that file, matched by `chain`."
+    },
+    "chains": {
+      "type": "array",
+      "minItems": 1,
+      "description": "Per-chain operator settings. Each entry matches a `chain` key in the linked address registry.",
+      "items": { "$ref": "#/$defs/chainEntry" }
+    }
+  },
+  "$defs": {
+    "chainEntry": {
+      "type": "object",
+      "required": ["chain", "chainId"],
+      "additionalProperties": false,
+      "properties": {
+        "chain": {
+          "$ref": "https://spec.denna.io/v1/denna-types.schema.json#/$defs/chain",
+          "description": "Chain identifier (e.g., ethereum, sepolia). Must match an entry chain in the linked address registry."
+        },
+        "chainId": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "EIP-155 chain id."
+        },
+        "deployBlock": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Block at which the staking contract was deployed. Scopes event log lookups."
+        },
+        "rpcUrl": {
+          "type": "string",
+          "format": "uri",
+          "description": "Optional default RPC URL. UI prefers VITE_RPC_URL_<chainId> env override."
+        },
+        "validators": {
+          "type": "array",
+          "description": "Validators surfaced in the operator's analytics view. The UI also reads isValidator(address) on-chain for write-flow validation, so this list may differ from the on-chain registry.",
+          "items": { "$ref": "#/$defs/validatorEntry" }
+        },
+        "rewards": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "merkleJsonUrl": {
+              "type": "string",
+              "format": "uri",
+              "description": "URL (ideally an IPFS gateway URL) to the static Merkle proofs JSON. Schema: { root: bytes32, claims: { [address]: { cumulativeAmount: string, proof: bytes32[] } } }."
+            },
+            "claimWindowSeconds": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "Optional UI-side claim window hint for display only — does not change on-chain behavior."
+            }
+          }
+        },
+        "features": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "eip5792Batch": {
+              "type": "boolean",
+              "description": "Batch approve+stake using EIP-5792 wallet_sendCalls when the wallet supports atomicBatch (e.g. Safe)."
+            },
+            "geoBlock": {
+              "type": "boolean",
+              "description": "Enable geo-block hook (operator-provided endpoint or static blocklist)."
+            },
+            "sanctionsGate": {
+              "type": "boolean",
+              "description": "Block writes when the configured sanctions oracle returns true for the connected address."
+            }
+          }
+        }
+      }
+    },
+    "validatorEntry": {
+      "type": "object",
+      "required": ["address", "name"],
+      "additionalProperties": false,
+      "properties": {
+        "address": {
+          "$ref": "https://spec.denna.io/v1/denna-types.schema.json#/$defs/address"
+        },
+        "name": { "type": "string", "minLength": 1 },
+        "websiteUrl": { "type": "string", "format": "uri" },
+        "commissionBps": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 10000,
+          "description": "Validator commission in basis points (0-10000)."
+        },
+        "description": { "type": "string" }
+      }
+    }
+  }
+}
