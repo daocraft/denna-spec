@@ -1,3 +1,10 @@
+## [1.8.0](https://github.com/daocraft/denna-spec/compare/v1.7.0...v1.8.0) (2026-05-17)
+
+### Features
+
+* 🎸 safe staking schema ([a7edcc7](https://github.com/daocraft/denna-spec/commit/a7edcc7118d82016011b220dca4f0461d4102f51))
+* 🎸 safe staking schema ([#7](https://github.com/daocraft/denna-spec/issues/7)) ([a74f9f9](https://github.com/daocraft/denna-spec/commit/a74f9f99fd4a1f6f4ee0ed34d25cdb74989d1a41))
+
 ## [1.7.0](https://github.com/daocraft/denna-spec/compare/v1.6.0...v1.7.0) (2026-05-06)
 
 ### Features
